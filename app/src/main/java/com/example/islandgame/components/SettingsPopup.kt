@@ -1,6 +1,7 @@
 package com.example.islandgame.components
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -16,6 +17,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -23,8 +25,11 @@ import com.example.islandgame.R
 import com.example.islandgame.ui.theme.IslandGameTheme
 
 @Composable
-fun SettingsPopup() {
-        Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+fun SettingsPopup(
+    onDismiss: () -> Unit,
+    onEditProfileClick: () -> Unit
+) {
+        Box(modifier = Modifier.fillMaxSize().background(Color.Black.copy(alpha = 0.6f)) , contentAlignment = Alignment.Center) {
         Image(
             painter = painterResource(id = R.drawable.popup_body),
             contentDescription = null,
@@ -44,9 +49,9 @@ fun SettingsPopup() {
             Image(
                 painter = painterResource(id = R.drawable.cancel),
                 contentDescription = "Close Button",
-                modifier = Modifier.clickable(
-                    onClick = { /* TODO */ }
-                )
+                modifier = Modifier.clickable {
+                    onDismiss()
+                }
             )
         }
 
@@ -91,6 +96,9 @@ fun SettingsPopup() {
                 Image(
                     painter = painterResource(id = R.drawable.edit_profile_icon),
                     contentDescription = "Edit Profile Button",
+                    modifier = Modifier.clickable(
+                        onClick = { onEditProfileClick() }
+                    )
                 )
                 Image(
                     painter = painterResource(id = R.drawable.edit_profile),
@@ -98,13 +106,5 @@ fun SettingsPopup() {
                 )
             }
         }
-    }
-}
-
-@Preview
-@Composable
-fun SettingsPopupPreview() {
-    IslandGameTheme {
-        SettingsPopup()
     }
 }

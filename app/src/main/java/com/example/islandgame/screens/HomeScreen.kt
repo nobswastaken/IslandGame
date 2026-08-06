@@ -22,7 +22,9 @@ import androidx.compose.ui.unit.dp
 import com.example.islandgame.ui.theme.IslandGameTheme
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen(
+    onPlayClick:() -> Unit
+) {
 
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
 
@@ -44,7 +46,7 @@ fun HomeScreen() {
                 painter = painterResource(id = R.drawable.play_button),
                 contentDescription = "Play Button",
                 modifier = Modifier.offset(0.dp, 16.dp).clickable(
-                    onClick = { /* TODO */ }
+                    onClick = { onPlayClick() }
                 )
             )
         }
@@ -67,10 +69,3 @@ fun HomeScreen() {
 }
 
 
-@Preview
-@Composable
-fun HomeScreenPreview() {
-    IslandGameTheme {
-        HomeScreen()
-    }
-}

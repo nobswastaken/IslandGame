@@ -5,7 +5,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -27,24 +27,26 @@ fun FlagIcon(
     contentDescription: String,  // Accessibility description
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
-    size: Dp = 10.dp,    // Easily adjust the overall width
+    size: Dp = 56.dp,    // Easily adjust the overall width
     isSelected: Boolean
 ) {
     val bordercolor by animateColorAsState(
-        targetValue = if (isSelected) Color(0xFF9CFF00) else Color (0xFFE5A91A)
+        targetValue = if (isSelected) Color(0xFF9CFF00) else Color (0xFFFFA800)
     )
 
     Card(
         modifier = modifier
+            .width(size)
+            .aspectRatio(3f / 2f)
             // Creates the subtle outer drop shadow
             .shadow(
                 elevation = 8.dp,
                 shape = RoundedCornerShape(16.dp),
                 clip = false
             )
-            .clickable {onClick()},
-        shape = RoundedCornerShape(16.dp),
-        border = BorderStroke(4.dp, bordercolor),
+            .clickable { onClick() },
+        shape = RoundedCornerShape(8.dp),
+        border = BorderStroke(2.dp, bordercolor),
         colors = CardDefaults.cardColors(
             containerColor = Color.Transparent
         )

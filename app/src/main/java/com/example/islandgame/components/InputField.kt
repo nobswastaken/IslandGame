@@ -28,7 +28,7 @@ import com.example.islandgame.R
 import com.example.islandgame.ui.theme.IslandGameTheme
 
 @Composable
-fun ImageTextInput() {
+fun TextInput() {
     // State to hold the user's typed text
     var textInput by remember { mutableStateOf("") }
 
@@ -39,7 +39,7 @@ fun ImageTextInput() {
         BasicTextField(
             value = textInput,
             onValueChange = { textInput = it },
-            modifier = Modifier.fillMaxSize().background(Color.White, shape = RoundedCornerShape(12.dp)).border(3.dp, Color(0xFFE5A91A), shape = RoundedCornerShape(12.dp)),
+            modifier = Modifier.fillMaxSize().background(Color.White, shape = RoundedCornerShape(12.dp)).border(3.dp, Color(0xFFFFA800), shape = RoundedCornerShape(12.dp)),
             textStyle = TextStyle(
                 color = Color.Black,
                 fontSize = 18.sp,
@@ -55,6 +55,6 @@ fun ImageTextInput() {
 @Composable
 fun InputPreview() {
     IslandGameTheme {
-        ImageTextInput()
+        TextInput()
     }
 }

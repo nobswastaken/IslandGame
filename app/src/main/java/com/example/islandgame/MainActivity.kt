@@ -16,6 +16,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.islandgame.screens.HomeScreen
+import com.example.islandgame.screens.LevelScreen
 import com.example.islandgame.screens.PlayScreen
 import com.example.islandgame.ui.theme.IslandGameTheme
 
@@ -33,10 +34,11 @@ class MainActivity : ComponentActivity() {
                         onPlayClick = { currentScreen = "play" } // Changes screen state on click
                     )
                     "play" -> { PlayScreen(
-                        onHomeClick = { currentScreen = "home"})
-                    }
+                        onHomeClick = { currentScreen = "home"},
+                        onLevelClick = { currentScreen = "levels"}
+                    )}
+                    "levels" -> LevelScreen()
                 }
-
 
             }
         }

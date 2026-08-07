@@ -21,13 +21,16 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.islandgame.R
+import com.example.islandgame.components.BottomNavbar
 import com.example.islandgame.components.EditProfilePopup
+import com.example.islandgame.components.FlagIcon
 import com.example.islandgame.components.SettingsPopup
 import com.example.islandgame.ui.theme.IslandGameTheme
 
 @Composable
 fun PlayScreen(
     onHomeClick: () -> Unit,
+    onLevelClick: () -> Unit,
 ) {
     var showSettingsPopup by remember { mutableStateOf(false) }
     var showEditProfilePopup by remember { mutableStateOf(false) }
@@ -54,12 +57,11 @@ fun PlayScreen(
                 horizontalArrangement = Arrangement.SpaceEvenly,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Image(
-                    painter = painterResource(id = R.drawable.flag),
-                    contentDescription = "Flag Button",
-                    modifier = Modifier.clickable {
-                        showEditProfilePopup = true
-                    }
+                FlagIcon(
+                    drawableId = R.drawable.flag_united_arab_emirates,
+                    contentDescription = "Flag 1",
+                    isSelected = false,
+                    onClick = { showEditProfilePopup = true }
                 )
                 Image(
                     painter = painterResource(id = R.drawable.coins),
@@ -75,37 +77,11 @@ fun PlayScreen(
         }
 
         // BOTTOM NAVIGATION BAR (FIXED: Removed .fillMaxSize() overlay bug)
-        Box(modifier = Modifier.offset(0.dp, 380.dp), contentAlignment = Alignment.Center) {
-            Image(
-                painter = painterResource(id = R.drawable.bottom_navbar),
-                contentDescription = null,
-                modifier = Modifier.fillMaxWidth(),
-            )
-
-            Row(
-                modifier = Modifier.fillMaxWidth().padding(0.dp),
-                horizontalArrangement = Arrangement.SpaceEvenly,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.settings),
-                    contentDescription = "Settings Button",
-                    modifier = Modifier.clickable {
-                        showSettingsPopup = true
-                    }
-                )
-                Image(
-                    painter = painterResource(id = R.drawable.levels),
-                    contentDescription = "Levels Button",
-                    modifier = Modifier.clickable { /* TODO */ }
-                )
-                Image(
-                    painter = painterResource(id = R.drawable.home),
-                    contentDescription = "Home Button",
-                    modifier = Modifier.clickable { onHomeClick() }
-                )
-            }
-        }
+        BottomNavbar(
+            onLevelClick = onLevelClick,
+            onHomeClick = onHomeClick,
+            onSettingsClick = { showSettingsPopup = true },
+        )
 
         // LEVEL AND ZONE BUTTONS
         Row(
@@ -125,9 +101,7 @@ fun PlayScreen(
             )
         }
 
-        // ==========================================
-        // POPUPS PLACED LAST SO THEY OVERLAY EVERYTHING
-        // ==========================================
+
         if (showSettingsPopup) {
             SettingsPopup(
                 onDismiss = { showSettingsPopup = false },
@@ -146,4 +120,14 @@ fun PlayScreen(
     }
 }
 
+@Preview
+@Composable
+fun PlayScreenPreview(){
+    IslandGameTheme() {
+        PlayScreen(
+            onHomeClick = {},
+            onLevelClick = {},
+        )
+    }
+}
 

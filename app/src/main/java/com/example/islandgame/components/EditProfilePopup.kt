@@ -127,7 +127,7 @@ fun EditProfilePopup(
                         contentDescription = "Change Name Label",
                     )
 
-                    ImageTextInput()
+                    TextInput()
 
                     Spacer(modifier = Modifier.height(4.dp))
 

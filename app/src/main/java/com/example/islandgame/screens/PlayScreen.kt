@@ -22,9 +22,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.islandgame.R
 import com.example.islandgame.components.BottomNavbar
-import com.example.islandgame.components.EditProfilePopup
 import com.example.islandgame.components.FlagIcon
-import com.example.islandgame.components.SettingsPopup
+import com.example.islandgame.components.LevelButton
 import com.example.islandgame.ui.theme.IslandGameTheme
 
 @Composable
@@ -66,17 +65,17 @@ fun PlayScreen(
                 Image(
                     painter = painterResource(id = R.drawable.coins),
                     contentDescription = "Coins Button",
-                    modifier = Modifier.clickable { /* TODO */ }
+                    modifier = Modifier.clickable { /* Might be a composable because the numbers will change*/ }
                 )
                 Image(
                     painter = painterResource(id = R.drawable.keys),
                     contentDescription = "Key Button",
-                    modifier = Modifier.clickable { /* TODO */ }
+                    modifier = Modifier.clickable { /* Might be a composable because the numbers will change*/ }
                 )
             }
         }
 
-        // BOTTOM NAVIGATION BAR (FIXED: Removed .fillMaxSize() overlay bug)
+        // BOTTOM NAVIGATION BAR
         BottomNavbar(
             onLevelClick = onLevelClick,
             onHomeClick = onHomeClick,
@@ -89,15 +88,15 @@ fun PlayScreen(
             horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.level_btn),
-                contentDescription = "Level Button",
-                modifier = Modifier.weight(1f).clickable { /* TODO */ }
+            LevelButton(
+                text = "Level 1",
+                onClick = {},
+                modifier = Modifier.weight(1f)
             )
             Image(
                 painter = painterResource(id = R.drawable.default_zone),
                 contentDescription = "Default Zone Button",
-                modifier = Modifier.weight(1f).clickable { /* TODO */ }
+                modifier = Modifier.weight(1f).clickable { /* I'll add logic*/ }
             )
         }
 
@@ -106,7 +105,7 @@ fun PlayScreen(
             SettingsPopup(
                 onDismiss = { showSettingsPopup = false },
                 onEditProfileClick = {
-                    showSettingsPopup = false // Hide the settings popup
+                    showSettingsPopup = false
                     showEditProfilePopup = true
                 }
             )

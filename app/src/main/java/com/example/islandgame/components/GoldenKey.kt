@@ -100,7 +100,7 @@ fun GoldenKey(
             Image(
                 painter = painterResource(id = R.drawable.continue_button),
                 contentDescription = "Continue Button",
-                modifier = Modifier.clickable { /* TODO: Save logic */ }
+                modifier = Modifier.clickable { /* I'll add stuff here */ }
             )
         }
     }

@@ -31,13 +31,16 @@ class MainActivity : ComponentActivity() {
                 // 2. Control which screen is visible based on that variable
                 when (currentScreen) {
                     "home" -> HomeScreen(
-                        onPlayClick = { currentScreen = "play" } // Changes screen state on click
+                        onPlayClick = { currentScreen = "play" } // Changes screen
                     )
                     "play" -> { PlayScreen(
                         onHomeClick = { currentScreen = "home"},
                         onLevelClick = { currentScreen = "levels"}
                     )}
-                    "levels" -> LevelScreen()
+                    "levels" -> LevelScreen(
+                        onHomeClick = { currentScreen = "home"},
+                        onLevelClick = { currentScreen = "play"}
+                    )
                 }
 
             }

@@ -47,6 +47,7 @@ fun BottomNavbar(
                 contentDescription = "Settings Button",
                 modifier = Modifier.clickable {
                     showSettingsPopup = true
+                    onSettingsClick()
                 }
             )
             Image(

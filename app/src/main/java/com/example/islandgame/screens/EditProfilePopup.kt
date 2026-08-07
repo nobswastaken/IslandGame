@@ -1,10 +1,9 @@
-package com.example.islandgame.components
+package com.example.islandgame.screens
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.snapping.SnapPosition
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,9 +13,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -36,10 +33,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.window.DialogProperties
 import com.example.islandgame.Countryflags
 import com.example.islandgame.R
+import com.example.islandgame.components.FlagIcon
+import com.example.islandgame.components.TextInput
 import com.example.islandgame.ui.theme.IslandGameTheme
 
 @Composable
@@ -48,7 +45,7 @@ fun EditProfilePopup(
 ) {
     var selectedFlagId by remember { mutableStateOf<Int?>(null) }
 
-    // Mock data list matching your drawable setup
+
     val flags = remember {
         listOf(
             Countryflags(R.drawable.flag_of_turkmenistan, "Turkmekistan flag"),
@@ -64,12 +61,11 @@ fun EditProfilePopup(
         )
     }
 
-    // The main Box sizes itself to the background asset
+
     Box(
         modifier = Modifier.fillMaxSize().background(Color.Black.copy(alpha = 0.6f)),
         contentAlignment = Alignment.Center
     ) {
-        // 1. Background Scroll Body
         Box(
             modifier = Modifier
                 .wrapContentSize()
@@ -81,16 +77,16 @@ fun EditProfilePopup(
                 modifier = Modifier.wrapContentSize(),
             )
 
-            // 2. Structured Layout Layer (Replaces fragile negative offsets)
+
             Column(
                 modifier = Modifier
-                    .matchParentSize() // Sizes perfectly to the background box
-                    .padding(bottom = 24.dp), // Prevents content from hitting the absolute bottom
+                    .matchParentSize()
+                    .padding(bottom = 24.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.SpaceBetween
             ) {
 
-                // Header Row (Now naturally stays at the top of the scroll)
+
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -113,12 +109,12 @@ fun EditProfilePopup(
                     )
                 }
 
-                // Form Content Area (Centered over the parchment paper area)
+
                 Column(
                     modifier = Modifier
                         .padding(start = 24.dp)
-                        .width(260.dp) // Constrains width to fit inside the paper bounds
-                        .weight(1f, fill = false), // Allows scroll if layout overflows slightly
+                        .width(260.dp)
+                        .weight(1f, fill = false),
                     horizontalAlignment = Alignment.Start,
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
@@ -136,21 +132,20 @@ fun EditProfilePopup(
                         contentDescription = "Change Profile Picture Label",
                     )
 
-                    // TODO: Add your Flags Grid layout component here
+                    //Grid here
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(100.dp) // Bound the grid height so it stays within the form area
+                            .height(100.dp)
                     ) {
                         Card(
                             modifier = Modifier
                                 .width(230.dp)
-                                .height(100.dp), // Fixed height forces the inner items to scroll when they exceed this boundary
+                                .height(100.dp),
                             shape = RoundedCornerShape(12.dp),
-                            // Give it a subtle border frame to match your game style (adjust color as needed)
                             border = BorderStroke(2.dp, Color(0xFFE5A91A)),
                             colors = CardDefaults.cardColors(
-                                containerColor = Color.White // Translucent dark background tint inside the frame
+                                containerColor = Color.White
                             )
                         ) {
                             LazyVerticalGrid(
@@ -175,13 +170,13 @@ fun EditProfilePopup(
 
                     Spacer(modifier = Modifier.height(4.dp))
 
-                    // Accept Button centered relative to the inner content column
+
                     Image(
                         painter = painterResource(id = R.drawable.accept_button),
                         contentDescription = "Accept Changes",
                         modifier = Modifier
                             .align(Alignment.CenterHorizontally)
-                            .clickable { /* TODO: Save logic */ }
+                            .clickable { /* I might have to turn the button to a composable, sigh */ }
                     )
                 }
             }

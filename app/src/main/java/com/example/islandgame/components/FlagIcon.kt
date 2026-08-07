@@ -23,11 +23,11 @@ import com.example.islandgame.ui.theme.IslandGameTheme
 
 @Composable
 fun FlagIcon(
-    drawableId: Int,             // Pass the R.drawable.your_flag id here
-    contentDescription: String,  // Accessibility description
+    drawableId: Int,
+    contentDescription: String,
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
-    size: Dp = 56.dp,    // Easily adjust the overall width
+    size: Dp = 56.dp,
     isSelected: Boolean
 ) {
     val bordercolor by animateColorAsState(
@@ -38,7 +38,7 @@ fun FlagIcon(
         modifier = modifier
             .width(size)
             .aspectRatio(3f / 2f)
-            // Creates the subtle outer drop shadow
+            // drop shadow
             .shadow(
                 elevation = 8.dp,
                 shape = RoundedCornerShape(16.dp),
@@ -54,10 +54,8 @@ fun FlagIcon(
         Image(
             painter = painterResource(id = drawableId),
             contentDescription = contentDescription,
-            // Crops the flag cleanly into the rounded frame
             contentScale = ContentScale.Crop,
             modifier = Modifier
-                // Keeps standard flag aspect ratio proportions
                 .aspectRatio(3f / 2f)
         )
     }
@@ -65,7 +63,7 @@ fun FlagIcon(
 
 @Preview
 @Composable
-fun flagpreview(){
+fun FlagPreview(){
     IslandGameTheme() {
         FlagIcon(
             drawableId = 1,

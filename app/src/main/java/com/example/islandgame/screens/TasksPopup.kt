@@ -1,4 +1,4 @@
-package com.example.islandgame.components
+package com.example.islandgame.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -23,6 +23,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.islandgame.R
+import com.example.islandgame.components.DoItButton
+import com.example.islandgame.components.Tasks
 import com.example.islandgame.ui.theme.IslandGameTheme
 
 @Composable
@@ -34,7 +36,7 @@ fun TasksPopup(
         modifier = modifier.fillMaxSize().background(Color.Black.copy(alpha = 0.6f)),
         contentAlignment = Alignment.Center
     ) {
-        // Background Scroll Body
+
         Box(
             modifier = Modifier
                 .wrapContentSize()
@@ -48,13 +50,12 @@ fun TasksPopup(
 
             Column(
                 modifier = Modifier
-                    .matchParentSize() // Sizes perfectly to the background box
-                    .padding(bottom = 24.dp), // Prevents content from hitting the absolute bottom
+                    .matchParentSize()
+                    .padding(bottom = 24.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.SpaceBetween
             ) {
 
-                // Header Row
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -83,9 +84,17 @@ fun TasksPopup(
                 ) {
                     Tasks(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            Image(painter = painterResource(id = R.drawable.lamp), contentDescription = null, modifier = Modifier.size(40.dp))
+                            Image(
+                                painter = painterResource(id = R.drawable.lamp),
+                                contentDescription = null,
+                                modifier = Modifier.size(40.dp)
+                            )
                             Spacer(modifier = Modifier.width(8.dp))
-                            Image(painter = painterResource(id = R.drawable.lamp_text), contentDescription = null, modifier = Modifier.height(30.dp))
+                            Image(
+                                painter = painterResource(id = R.drawable.lamp_text),
+                                contentDescription = null,
+                                modifier = Modifier.height(30.dp)
+                            )
                             Spacer(modifier = Modifier.width(8.dp))
                             DoItButton(onClick = {})
                         }
@@ -93,9 +102,17 @@ fun TasksPopup(
 
                     Tasks(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            Image(painter = painterResource(id = R.drawable.well), contentDescription = null, modifier = Modifier.size(40.dp))
+                            Image(
+                                painter = painterResource(id = R.drawable.well),
+                                contentDescription = null,
+                                modifier = Modifier.size(40.dp)
+                            )
                             Spacer(modifier = Modifier.width(8.dp))
-                            Image(painter = painterResource(id = R.drawable.well_text), contentDescription = null, modifier = Modifier.height(30.dp))
+                            Image(
+                                painter = painterResource(id = R.drawable.well_text),
+                                contentDescription = null,
+                                modifier = Modifier.height(30.dp)
+                            )
                             Spacer(modifier = Modifier.width(8.dp))
                             DoItButton(onClick = {})
                         }

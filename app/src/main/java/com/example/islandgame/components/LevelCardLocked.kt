@@ -43,7 +43,7 @@ fun LockedLevelCard(
             }
         }
 
-        // Dark red maroon button with lock icon
+        // Level button with lock icon
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier

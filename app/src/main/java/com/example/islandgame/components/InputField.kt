@@ -45,7 +45,6 @@ fun TextInput() {
                 fontSize = 18.sp,
                 textAlign = TextAlign.Left // Centers the typed text inside the rectangle
             ),
-            // Optional: Centers the single-line text vertically inside the box
             singleLine = true
         )
     }

@@ -34,7 +34,7 @@ fun UnlockedLevelCard(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier,
     ) {
-        // Star row: loops 1 to 3 to color them orange or dark grey
+        // Star row: loops 1 to 3 to be filled or empty
         Row(
             horizontalArrangement = Arrangement.spacedBy(0.dp),
             modifier = Modifier.padding(bottom = 0.dp)

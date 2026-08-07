@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
@@ -31,11 +32,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.islandgame.Countryflags
 import com.example.islandgame.R
 import com.example.islandgame.components.FlagIcon
+import com.example.islandgame.components.LevelButton
 import com.example.islandgame.components.TextInput
 import com.example.islandgame.ui.theme.IslandGameTheme
 
@@ -69,84 +73,92 @@ fun EditProfilePopup(
         Box(
             modifier = Modifier
                 .wrapContentSize()
-                .clickable(enabled = true, onClick = {})
+            // Removed clickable from the root background box to prevent accidental background intercepts
         ) {
+            // 1. Core Background Base (Wood Board)
             Image(
                 painter = painterResource(id = R.drawable.popup_body),
                 contentDescription = null,
                 modifier = Modifier.wrapContentSize(),
             )
 
-
+            // 2. Main Content Container
             Column(
                 modifier = Modifier
+                    .width(200.dp)
                     .matchParentSize()
-                    .padding(bottom = 24.dp),
+                    .padding(bottom = 32.dp), // Adjust padding to position elements cleanly over the paper background
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.SpaceBetween
             ) {
 
 
-                Row(
+                Box(
                     modifier = Modifier
+                        .offset(x = (-20).dp, y = (12).dp)
                         .fillMaxWidth()
-                        .padding(16.dp),
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
+                        .padding(top = 12.dp), // Visual offset to align nicely over the wood top
+                    contentAlignment = Alignment.Center
                 ) {
+                    // The banner ribbon stays centered perfectly
                     Image(
                         painter = painterResource(id = R.drawable.edit_profile_header),
                         contentDescription = "Edit Profile Title",
-                        Modifier.padding(12.dp)
+                        modifier = Modifier.wrapContentSize()
                     )
 
+                    // The close cross aligns over the top right section of the ribbon
                     Image(
                         painter = painterResource(id = R.drawable.cancel),
                         contentDescription = "Close Button",
-                        modifier = Modifier.clickable {
-                            onDismiss()
-                        }
+                        modifier = Modifier
+                            .align(Alignment.CenterEnd)
+                            .padding(end = 40.dp) // Offset to push it exactly over the circular anchor point on the ribbon
+                            .clickable { onDismiss() }
                     )
                 }
 
 
                 Column(
                     modifier = Modifier
-                        .padding(start = 24.dp)
-                        .width(260.dp)
+                        .fillMaxWidth(0.60f)
                         .weight(1f, fill = false),
-                    horizontalAlignment = Alignment.Start,
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                    horizontalAlignment = Alignment.CenterHorizontally, // Center everything down the paper axis
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.change_name),
-                        contentDescription = "Change Name Label",
-                    )
 
-                    TextInput()
-
-                    Spacer(modifier = Modifier.height(4.dp))
-
-                    Image(
-                        painter = painterResource(id = R.drawable.change_profile_picture),
-                        contentDescription = "Change Profile Picture Label",
-                    )
-
-                    //Grid here
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(100.dp)
+                    //Name input stack
+                    Column(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalAlignment = Alignment.Start // Keeps the small label left-aligned relative to the field
                     ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.change_name),
+                            contentDescription = "Change Name Label",
+                            modifier = Modifier.padding(start = 12.dp, bottom = 4.dp)
+                        )
+                        TextInput()
+                    }
+
+                    //Flag layout grid
+                    Column(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalAlignment = Alignment.Start
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.change_profile_picture),
+                            contentDescription = "Change Profile Picture Label",
+                            modifier = Modifier.padding(start = 12.dp, bottom = 4.dp)
+                        )
+
+
                         Card(
                             modifier = Modifier
-                                .width(230.dp)
+                                .fillMaxWidth()
                                 .height(100.dp),
                             shape = RoundedCornerShape(12.dp),
                             border = BorderStroke(2.dp, Color(0xFFE5A91A)),
-                            colors = CardDefaults.cardColors(
-                                containerColor = Color.White
-                            )
+                            colors = CardDefaults.cardColors(containerColor = Color.White)
                         ) {
                             LazyVerticalGrid(
                                 columns = GridCells.Fixed(3),
@@ -167,16 +179,17 @@ fun EditProfilePopup(
                         }
                     }
 
+                    Spacer(modifier = Modifier.height(1.dp))
 
-                    Spacer(modifier = Modifier.height(4.dp))
-
-
-                    Image(
-                        painter = painterResource(id = R.drawable.accept_button),
-                        contentDescription = "Accept Changes",
+                    // Accept Button
+                    LevelButton(
+                        text = "Accept",
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold,
+                        onClick = {},
                         modifier = Modifier
-                            .align(Alignment.CenterHorizontally)
-                            .clickable { /* I might have to turn the button to a composable, sigh */ }
+                            .width(100.dp)  
+                            .height(40.dp)
                     )
                 }
             }

@@ -18,8 +18,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.islandgame.R
 import com.example.islandgame.components.BottomNavbar
 import com.example.islandgame.components.FlagIcon
@@ -85,19 +87,25 @@ fun PlayScreen(
         // LEVEL AND ZONE BUTTONS
         Row(
             modifier = Modifier.fillMaxWidth().offset(0.dp, 280.dp).padding(16.dp),
-            horizontalArrangement = Arrangement.SpaceEvenly,
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             LevelButton(
                 text = "Level 1",
                 onClick = {},
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold
             )
-            Image(
-                painter = painterResource(id = R.drawable.default_zone),
-                contentDescription = "Default Zone Button",
-                modifier = Modifier.weight(1f).clickable { /* I'll add logic*/ }
+
+            LevelButton(
+                text = "Level 2",
+                onClick = {},
+                modifier = Modifier.weight(1f),
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold
             )
+
         }
 
 

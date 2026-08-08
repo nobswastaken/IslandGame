@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -97,10 +98,14 @@ fun GoldenKey(
             )
 
 
-            Image(
-                painter = painterResource(id = R.drawable.continue_button),
-                contentDescription = "Continue Button",
-                modifier = Modifier.clickable { /* I'll add stuff here */ }
+            LevelButton(
+                text = "Continue",
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold,
+                onClick = onDismiss,
+                modifier = Modifier
+                    .wrapContentWidth()
+                    .height(40.dp)
             )
         }
     }

@@ -3,6 +3,7 @@ package com.example.islandgame.components
 import android.widget.Button
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -43,6 +44,7 @@ fun LevelButton(
         modifier = modifier.background(btngradient, shape = RoundedCornerShape(4.dp)),
         colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
         shape = RoundedCornerShape(12.dp),
+        contentPadding = PaddingValues(horizontal = 16.dp)
     ) {
             Text(
                 text = text,
@@ -50,7 +52,8 @@ fun LevelButton(
                 fontSize = fontSize,
                 style = TextStyle(
                     brush = textGradient
-                )
+                ),
+                maxLines = 1,
             )
         }
     }

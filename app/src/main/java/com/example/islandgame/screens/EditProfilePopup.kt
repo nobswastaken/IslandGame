@@ -16,7 +16,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -188,8 +190,8 @@ fun EditProfilePopup(
                         fontWeight = FontWeight.Bold,
                         onClick = {},
                         modifier = Modifier
-                            .width(100.dp)  
-                            .height(40.dp)
+                            .wrapContentWidth()
+                            .wrapContentHeight()
                     )
                 }
             }

@@ -26,6 +26,7 @@ import com.example.islandgame.R
 import com.example.islandgame.components.BottomNavbar
 import com.example.islandgame.components.FlagIcon
 import com.example.islandgame.components.LevelButton
+import com.example.islandgame.components.TopNavBar
 import com.example.islandgame.ui.theme.IslandGameTheme
 
 @Composable
@@ -46,39 +47,14 @@ fun PlayScreen(
         )
 
         // TOP NAVIGATION BAR
-        Box(modifier = Modifier.offset(0.dp, (-370).dp), contentAlignment = Alignment.Center) {
-            Image(
-                painter = painterResource(id = R.drawable.wood_topnavbg),
-                contentDescription = null,
-                modifier = Modifier.fillMaxWidth(),
-            )
-
-            Row(
-                modifier = Modifier.fillMaxWidth().padding(4.dp),
-                horizontalArrangement = Arrangement.SpaceEvenly,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                FlagIcon(
-                    drawableId = R.drawable.flag_united_arab_emirates,
-                    contentDescription = "Flag 1",
-                    isSelected = false,
-                    onClick = { showEditProfilePopup = true }
-                )
-                Image(
-                    painter = painterResource(id = R.drawable.coins),
-                    contentDescription = "Coins Button",
-                    modifier = Modifier.clickable { /* Might be a composable because the numbers will change*/ }
-                )
-                Image(
-                    painter = painterResource(id = R.drawable.keys),
-                    contentDescription = "Key Button",
-                    modifier = Modifier.clickable { /* Might be a composable because the numbers will change*/ }
-                )
-            }
-        }
+        TopNavBar(
+            modifier = Modifier.offset(0.dp, (-380).dp),
+            onEditProfileClick = { showEditProfilePopup = true },
+        )
 
         // BOTTOM NAVIGATION BAR
         BottomNavbar(
+            modifier = Modifier.offset(0.dp, 380.dp),
             onLevelClick = onLevelClick,
             onHomeClick = onHomeClick,
             onSettingsClick = { showSettingsPopup = true },

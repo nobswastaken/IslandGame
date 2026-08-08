@@ -24,6 +24,7 @@ import com.example.islandgame.components.BottomNavbar
 import com.example.islandgame.components.FlagIcon
 import com.example.islandgame.components.LevelButton
 import com.example.islandgame.components.LockedLevelCard
+import com.example.islandgame.components.TopNavBar
 import com.example.islandgame.components.UnlockedLevelCard
 
 @Composable
@@ -89,9 +90,18 @@ fun LevelScreen(
                 LockedLevelCard()
             }
         }
+        // TOP NAVIGATION BAR
+        TopNavBar(
+            modifier = Modifier.offset(0.dp, (-380).dp),
+            showFlagsButton = false,
+            showCoinsButton = true,
+            showKeysButton = false,
+        )
 
         // BOTTOM NAVIGATION BAR
         BottomNavbar(
+            modifier = Modifier.offset(0.dp, 370.dp),
+            showLevelsButton = false,
             onLevelClick = onLevelClick,
             onHomeClick = onHomeClick,
             onSettingsClick = { showSettingsPopup = true },

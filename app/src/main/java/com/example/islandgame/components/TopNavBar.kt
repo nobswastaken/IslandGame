@@ -20,64 +20,60 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.islandgame.R
+import com.example.islandgame.screens.EditProfilePopup
+import com.example.islandgame.screens.SettingsPopup
 import com.example.islandgame.ui.theme.IslandGameTheme
 
 @Composable
-fun BottomNavbar(
-    onLevelClick: () -> Unit,
-    onHomeClick: () -> Unit,
-    onSettingsClick: () -> Unit,
+fun TopNavBar(
     modifier: Modifier = Modifier,
-    showLevelsButton: Boolean = true,
+    showFlagsButton: Boolean = true,
+    showKeysButton: Boolean = true,
+    showCoinsButton: Boolean = true,
+    onEditProfileClick: () -> Unit = {},
 ){
+    var showEditProfilePopup by remember { mutableStateOf(false) }
 
-
-    var showSettingsPopup by remember { mutableStateOf(false) }
-
-        Box(modifier = modifier, contentAlignment = Alignment.Center) {
+    Box(modifier = modifier, contentAlignment = Alignment.Center) {
         Image(
-            painter = painterResource(id = R.drawable.bottom_navbar),
+            painter = painterResource(id = R.drawable.wood_topnavbg),
             contentDescription = null,
             modifier = Modifier.fillMaxWidth(),
         )
 
         Row(
-            modifier = Modifier.fillMaxWidth().padding(0.dp),
+            modifier = Modifier.fillMaxWidth().padding(4.dp),
             horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.settings),
-                contentDescription = "Settings Button",
-                modifier = Modifier.clickable {
-                    showSettingsPopup = true
-                    onSettingsClick()
-                }
+            FlagIcon(
+                drawableId = R.drawable.flag_united_arab_emirates,
+                contentDescription = "Flag 1",
+                isSelected = false,
+                onClick = onEditProfileClick,
+                modifier = Modifier.alpha(if (showFlagsButton) 1f else 0f)
             )
-            Image(
-                painter = painterResource(id = R.drawable.levels),
-                contentDescription = "Levels Button",
-                modifier = Modifier
-                    .alpha(if (showLevelsButton) 1f else 0.0f)
-                    .clickable(enabled = showLevelsButton) { onLevelClick() }
+            Coins(
+                modifier = Modifier.alpha(if (showCoinsButton) 1f else 0f)
             )
-            Image(
-                painter = painterResource(id = R.drawable.home),
-                contentDescription = "Home Button",
-                modifier = Modifier.clickable { onHomeClick() }
+            Keys(
+                modifier = Modifier.alpha(if (showKeysButton) 1f else 0f)
             )
         }
+
+        if (showEditProfilePopup) {
+            EditProfilePopup(
+                onDismiss = { showEditProfilePopup = false }
+            )
+        }
+
     }
 }
 
 @Preview
 @Composable
-fun BottomNavbarPreview(){
+fun TopNavBarPreview(){
     IslandGameTheme() {
-        BottomNavbar(
-            onLevelClick = {},
-            onHomeClick = {},
-            onSettingsClick = {},
-        )
+        TopNavBar()
     }
 }

@@ -38,7 +38,6 @@ fun FlagIcon(
         modifier = modifier
             .width(size)
             .aspectRatio(3f / 2f)
-            // drop shadow
             .shadow(
                 elevation = 8.dp,
                 shape = RoundedCornerShape(16.dp),

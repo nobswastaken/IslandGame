@@ -4,11 +4,13 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -37,52 +39,71 @@ fun PlayScreen(
     var showSettingsPopup by remember { mutableStateOf(false) }
     var showEditProfilePopup by remember { mutableStateOf(false) }
 
-    // BACKGROUND IMAGE ROOT
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Image(
-            painter = painterResource(id = R.drawable.playscreen_bg),
-            contentDescription = null,
-            modifier = Modifier.fillMaxSize(),
-            contentScale = ContentScale.Crop
-        )
+    Scaffold(
+        topBar = {
+            TopNavBar(
+                modifier = Modifier,
+                onEditProfileClick = { showEditProfilePopup = true },
+            )
+        },
+        bottomBar = {
+            BottomNavbar(
+                // Removed the manual .offset() so it naturally sits at the absolute bottom
+                modifier = Modifier,
+                onLevelClick = onLevelClick,
+                onHomeClick = onHomeClick,
+                onSettingsClick = { showSettingsPopup = true },
+            )
+        },
+        // Optional: keeps your custom background color transparent if needed
+    ) { innerPadding ->
 
-        // TOP NAVIGATION BAR
-        TopNavBar(
-            modifier = Modifier.offset(0.dp, (-380).dp),
-            onEditProfileClick = { showEditProfilePopup = true },
-        )
-
-        // BOTTOM NAVIGATION BAR
-        BottomNavbar(
-            modifier = Modifier.offset(0.dp, 380.dp),
-            onLevelClick = onLevelClick,
-            onHomeClick = onHomeClick,
-            onSettingsClick = { showSettingsPopup = true },
-        )
-
-        // LEVEL AND ZONE BUTTONS
-        Row(
-            modifier = Modifier.fillMaxWidth().offset(0.dp, 280.dp).padding(16.dp),
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
-            verticalAlignment = Alignment.CenterVertically,
+        // 2. Wrap the middle content in a Box to keep your background image under everything
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding), // Prevents bars from covering your level content
+            contentAlignment = Alignment.Center
         ) {
-            LevelButton(
-                text = "Level 1",
-                onClick = {},
-                modifier = Modifier.weight(1f),
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Bold
+            Image(
+                painter = painterResource(id = R.drawable.playscreen_bg),
+                contentDescription = null,
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Crop
             )
 
-            LevelButton(
-                text = "Level 2",
-                onClick = {},
-                modifier = Modifier.weight(1f),
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Bold
-            )
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Bottom // Elements stack starting from the bottom
+            ) {
+            // LEVEL AND ZONE BUTTONS
+            Row(
+                // Removed massive 280.dp offset so components scale correctly on all screen sizes
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                LevelButton(
+                    text = "Level 1",
+                    onClick = {},
+                    modifier = Modifier.weight(1f),
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold
+                )
 
+                LevelButton(
+                    text = "Level 2",
+                    onClick = {},
+                    modifier = Modifier.weight(1f),
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+            }
         }
+    }
 
 
         if (showSettingsPopup) {
@@ -101,7 +122,8 @@ fun PlayScreen(
             )
         }
     }
-}
+
+
 
 @Preview
 @Composable

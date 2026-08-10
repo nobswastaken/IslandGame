@@ -1,6 +1,7 @@
 package com.example.islandgame.components
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.height
@@ -14,7 +15,9 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.islandgame.R
@@ -25,17 +28,27 @@ fun DoItButton(
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
 ){
+    val btngradient = Brush.horizontalGradient(
+        colors = listOf(Color(0xFF65BA09), Color(0xFF8CE30B))
+    )
+
+    val textGradient = Brush.verticalGradient(
+        colors = listOf(Color(0xFF304F00), Color(0xFF4F8100))
+    )
+
     Button(
         onClick = onClick,
-        modifier = modifier.defaultMinSize(minWidth = 80.dp, minHeight = 50.dp),
-        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF33FF00)),
+        modifier = modifier.defaultMinSize(minWidth = 80.dp, minHeight = 50.dp).background(btngradient, shape = RoundedCornerShape(4.dp)),
+        colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
         shape = RoundedCornerShape(12.dp),
     ) {
 
         Row(){
             Text(
                 text = "Do It",
-                color = Color(0xFF133F0A),
+                style = TextStyle(
+                    brush = textGradient
+                ),
                 fontWeight = FontWeight.Bold,
                 fontSize = 16.sp,
             )
@@ -46,7 +59,9 @@ fun DoItButton(
             )
             Text(
                 text = "1",
-                color = Color(0xFF133F0A),
+                style = TextStyle(
+                    brush = textGradient
+                ),
                 fontWeight = FontWeight.Bold,
                 fontSize = 16.sp,
             )

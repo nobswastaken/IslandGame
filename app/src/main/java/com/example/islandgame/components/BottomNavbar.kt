@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -52,7 +53,7 @@ fun BottomNavbar(
                 modifier = Modifier.clickable {
                     showSettingsPopup = true
                     onSettingsClick()
-                }
+                }.size(60.dp)
             )
             Image(
                 painter = painterResource(id = R.drawable.levels),
@@ -60,11 +61,12 @@ fun BottomNavbar(
                 modifier = Modifier
                     .alpha(if (showLevelsButton) 1f else 0.0f)
                     .clickable(enabled = showLevelsButton) { onLevelClick() }
+                    .size(60.dp)
             )
             Image(
                 painter = painterResource(id = R.drawable.home),
                 contentDescription = "Home Button",
-                modifier = Modifier.clickable { onHomeClick() }
+                modifier = Modifier.clickable { onHomeClick() }.size(60.dp)
             )
         }
     }

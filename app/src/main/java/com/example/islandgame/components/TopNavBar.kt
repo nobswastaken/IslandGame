@@ -42,7 +42,7 @@ fun TopNavBar(
         )
 
         Row(
-            modifier = Modifier.fillMaxWidth().padding(4.dp),
+            modifier = Modifier.fillMaxWidth().padding(top = 24.dp),
             horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.CenterVertically
         ) {

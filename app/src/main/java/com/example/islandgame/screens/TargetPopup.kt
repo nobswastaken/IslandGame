@@ -89,7 +89,7 @@ fun TargetPopup(
                         maxLines = 2,
                         fontSize = 20.sp,
                         textAlign = TextAlign.Center,
-                        fontWeight = FontWeight.Black,
+                        fontWeight = FontWeight.Black
                     )
                 }
             }

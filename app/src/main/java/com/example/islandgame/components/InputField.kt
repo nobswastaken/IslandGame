@@ -43,7 +43,7 @@ fun TextInput() {
             textStyle = TextStyle(
                 color = Color.Black,
                 fontSize = 18.sp,
-                textAlign = TextAlign.Left // Centers the typed text inside the rectangle
+                textAlign = TextAlign.Center // Centers the typed text inside the rectangle
             ),
             singleLine = true
         )

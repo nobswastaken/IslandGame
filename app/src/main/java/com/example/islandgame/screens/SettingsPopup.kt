@@ -18,8 +18,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.islandgame.R
+import com.example.islandgame.ui.theme.IslandGameTheme
 
 @Composable
 fun SettingsPopup(
@@ -34,7 +36,7 @@ fun SettingsPopup(
         )
 
         Row(
-            modifier = Modifier.offset(0.dp, -160.dp).fillMaxSize().padding(16.dp),
+            modifier = Modifier.offset(0.dp, -170.dp).padding(16.dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterHorizontally),
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -105,3 +107,12 @@ fun SettingsPopup(
         }
     }
 }
+
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+fun SettingsPopupPreview(){
+    IslandGameTheme() {
+        SettingsPopup(onDismiss = {}, onEditProfileClick = {})
+    }
+}
+

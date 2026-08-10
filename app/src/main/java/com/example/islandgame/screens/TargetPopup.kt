@@ -5,60 +5,97 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.islandgame.R
 import com.example.islandgame.ui.theme.IslandGameTheme
 
 @Composable
 fun TargetPopup(
     onDismiss: () -> Unit,
-){
+) {
     Box(
         modifier = Modifier.fillMaxSize().background(Color.Black.copy(alpha = 0.6f)),
         contentAlignment = Alignment.Center
     ) {
         Box(
-            modifier = Modifier
-                .wrapContentSize()
-            // Removed clickable from the root background box to prevent accidental background intercepts
+            modifier = Modifier.wrapContentSize(),
+            contentAlignment = Alignment.Center
         ) {
             // 1. Core Background Base (Wood Board)
             Image(
                 painter = painterResource(id = R.drawable.group_4),
-                contentDescription = null,
-                modifier = Modifier.wrapContentSize(),
+                contentDescription = "background",
+                modifier = Modifier.wrapContentSize()
             )
 
-            Column(
+            // 2. Control Layout container layered over the image matching its exact boundaries
+            Row(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
+                    .matchParentSize()
+                    .offset(y = (-85).dp),
+                horizontalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterHorizontally),
+                verticalAlignment = Alignment.CenterVertically,
             ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.target),
+                        contentDescription = "Target Icon",
+                        modifier = Modifier
+                    )
+                    Image(
+                        painter = painterResource(id = R.drawable.cancel),
+                        contentDescription = "Close Button",
+                        modifier = Modifier.clickable { onDismiss() }
+                    )
+                }
 
-//                Image(
-//                    painter = painterResource(id = R.drawable.cancel),
-//                    contentDescription = "Close Button",
-//                    modifier = Modifier
-//                        .padding(end = 40.dp)
-//                        .clickable { onDismiss() }
-//                )
+                Column(
+                    modifier = Modifier.align(Alignment.Center).padding(top = 40.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.blue),
+                        contentDescription = "Target Popup",
+                        modifier = Modifier
+                    )
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    Text(
+                        text = "42",
+                        color = Color(0xFF954B25),
+                        maxLines = 2,
+                        fontSize = 20.sp,
+                        textAlign = TextAlign.Center,
+                        fontWeight = FontWeight.Black,
+                    )
+                }
             }
         }
     }
-}
+
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable

@@ -72,59 +72,37 @@ fun EditProfilePopup(
         modifier = Modifier.fillMaxSize().background(Color.Black.copy(alpha = 0.6f)),
         contentAlignment = Alignment.Center
     ) {
-        Box(
-            modifier = Modifier
-                .wrapContentSize()
-            // Removed clickable from the root background box to prevent accidental background intercepts
+        Image(
+            painter = painterResource(id = R.drawable.popup_body),
+            contentDescription = null,
+            modifier = Modifier.fillMaxWidth(),
+        )
+
+        Row(
+            modifier = Modifier.offset(0.dp, -170.dp).padding(16.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterHorizontally),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            // 1. Core Background Base (Wood Board)
             Image(
-                painter = painterResource(id = R.drawable.popup_body),
-                contentDescription = null,
-                modifier = Modifier.wrapContentSize(),
+                painter = painterResource(id = R.drawable.edit_profile_header),
+                contentDescription = "Edit Profile Title",
             )
 
-            // 2. Main Content Container
-            Column(
-                modifier = Modifier
-                    .width(200.dp)
-                    .matchParentSize()
-                    .padding(bottom = 32.dp), // Adjust padding to position elements cleanly over the paper background
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.SpaceBetween
-            ) {
-
-
-                Box(
-                    modifier = Modifier
-                        .offset(x = (-20).dp, y = (12).dp)
-                        .fillMaxWidth()
-                        .padding(top = 12.dp), // Visual offset to align nicely over the wood top
-                    contentAlignment = Alignment.Center
-                ) {
-                    // The banner ribbon stays centered perfectly
-                    Image(
-                        painter = painterResource(id = R.drawable.edit_profile_header),
-                        contentDescription = "Edit Profile Title",
-                        modifier = Modifier.wrapContentSize()
-                    )
-
-                    // The close cross aligns over the top right section of the ribbon
-                    Image(
-                        painter = painterResource(id = R.drawable.cancel),
-                        contentDescription = "Close Button",
-                        modifier = Modifier
-                            .align(Alignment.CenterEnd)
-                            .padding(end = 40.dp) // Offset to push it exactly over the circular anchor point on the ribbon
-                            .clickable { onDismiss() }
-                    )
+            Image(
+                painter = painterResource(id = R.drawable.cancel),
+                contentDescription = "Close Button",
+                modifier = Modifier.clickable {
+                    onDismiss()
                 }
+            )
+        }
 
-
+            // 2. Main Content Container
                 Column(
                     modifier = Modifier
-                        .fillMaxWidth(0.60f)
-                        .weight(1f, fill = false),
+                        .padding(top = 40.dp)
+                        .fillMaxWidth(0.60f),
+//                        .weight(1f, fill = false),
                     horizontalAlignment = Alignment.CenterHorizontally, // Center everything down the paper axis
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
@@ -196,8 +174,8 @@ fun EditProfilePopup(
                 }
             }
         }
-    }
-}
+
+
 
 
 

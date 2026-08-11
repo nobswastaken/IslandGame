@@ -36,7 +36,7 @@ fun LockedLevelCard(
         ) {
             repeat(3) {
                 Image(
-                    painter = painterResource(id = R.drawable.property_1_free), // 👈 Uses your grey star graphic
+                    painter = painterResource(id = R.drawable.property_1_free),
                     contentDescription = null,
                     modifier = Modifier.size(24.dp)
                 )
@@ -54,7 +54,7 @@ fun LockedLevelCard(
                 contentDescription = "Level Button",
                 modifier = Modifier.size(60.dp)
             )
-            // If the lock icon is also a drawable asset, swap this out for an Image() too!
+
             Image(
                 painter = painterResource(id = R.drawable.vector__1_),
                 contentDescription = "Locked",

@@ -20,34 +20,33 @@ import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.unit.dp
-import com.example.islandgame.R
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.islandgame.R
 import com.example.islandgame.ui.theme.IslandGameTheme
 
 @Composable
-fun WorldProgress(
+fun Zone(
     modifier: Modifier = Modifier,
-    currentProgress: Int ,
-    totalProgress: Int,
+    currentZone: Int ,
+    totalZone: Int,
 ) {
-    val progressPercentage = if (totalProgress > 0) currentProgress.toFloat() / totalProgress.toFloat() else 0f
+    val progressPercentage = if (totalZone > 0) currentZone.toFloat() / totalZone.toFloat() else 0f
 
-    val mainbackgroundColor = Brush.verticalGradient(
-        colors = listOf(Color(0xFFFFE792), Color(0xFFFFC369))
+    val btngradient = Brush.horizontalGradient(
+        colors = listOf(Color(0xFF65BA09), Color(0xFF8CE30B))
     )
     val progressColor = Brush.linearGradient(
-        colors = listOf(Color(0xFFFFC62D), Color(0xFFFF9200))
+        colors = listOf(Color(0xFFFFE792), Color(0xFFFFBC58))
     )
     val bordercolor = Brush.verticalGradient(colors = listOf(Color(0xFFFFA800), Color(0xFFB55700)))
     val textcolor  = Brush.verticalGradient(colors = listOf(Color(0xFF304F00), Color(0xFF4F8100))
@@ -59,18 +58,18 @@ fun WorldProgress(
             modifier
                 .width(220.dp)
                 .height(80.dp)
-                .background(mainbackgroundColor, shape = RoundedCornerShape(12.dp))
-                .border(width = 2.dp, brush = bordercolor, shape = RoundedCornerShape(12.dp))
+                .background(btngradient, shape = RoundedCornerShape(12.dp))
+                .border(width = 2.dp, color = Color.Transparent, shape = RoundedCornerShape(12.dp))
                 .padding(2.dp)
         ){
             Column(
                 modifier.fillMaxSize().padding(start = 8.dp, end = 8.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 horizontalAlignment = Alignment.Start
-                ){
+            ){
 
                 Text(
-                    text = "World Progress",
+                    text = "Zone 1",
                     style = TextStyle(
                         brush = textcolor,
                         fontSize = 18.sp,
@@ -114,7 +113,7 @@ fun WorldProgress(
                     )
 
                     Text(
-                        text = "$currentProgress/$totalProgress",
+                        text = "$currentZone/$totalZone",
                         style = TextStyle(
                             brush = textcolor,
                             fontSize = 16.sp,
@@ -135,12 +134,12 @@ fun WorldProgress(
 
 @Preview
 @Composable
-fun WorldProgressPreview(){
+fun ZonePreview(){
     IslandGameTheme() {
-        WorldProgress(
+        Zone(
             modifier = Modifier,
-            currentProgress = 2,
-            totalProgress = 10,
+            currentZone = 2,
+            totalZone = 10,
         )
     }
 }

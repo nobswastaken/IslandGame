@@ -29,6 +29,7 @@ import com.example.islandgame.components.BottomNavbar
 import com.example.islandgame.components.FlagIcon
 import com.example.islandgame.components.LevelButton
 import com.example.islandgame.components.TopNavBar
+import com.example.islandgame.components.Zone
 import com.example.islandgame.ui.theme.IslandGameTheme
 
 @Composable
@@ -48,21 +49,19 @@ fun PlayScreen(
         },
         bottomBar = {
             BottomNavbar(
-                // Removed the manual .offset() so it naturally sits at the absolute bottom
                 modifier = Modifier,
                 onLevelClick = onLevelClick,
                 onHomeClick = onHomeClick,
                 onSettingsClick = { showSettingsPopup = true },
             )
         },
-        // Optional: keeps your custom background color transparent if needed
     ) { innerPadding ->
 
-        // 2. Wrap the middle content in a Box to keep your background image under everything
+
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(innerPadding), // Prevents bars from covering your level content
+                .padding(innerPadding),
             contentAlignment = Alignment.Center
         ) {
             Image(
@@ -74,11 +73,11 @@ fun PlayScreen(
 
             Column(
                 modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.Bottom // Elements stack starting from the bottom
+                verticalArrangement = Arrangement.Bottom
             ) {
             // LEVEL AND ZONE BUTTONS
             Row(
-                // Removed massive 280.dp offset so components scale correctly on all screen sizes
+
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp),
@@ -93,13 +92,11 @@ fun PlayScreen(
                     fontWeight = FontWeight.Bold
                 )
 
-                LevelButton(
-                    text = "Level 2",
-                    onClick = {},
-                    modifier = Modifier.weight(1f),
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold
-                )
+               Zone(
+                   modifier = Modifier.weight(1f),
+                   currentZone = 2,
+                   totalZone = 10,
+               )
             }
             }
         }

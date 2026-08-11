@@ -19,6 +19,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.islandgame.R
@@ -30,6 +31,7 @@ fun Boost(
     contentDescription: String,
     modifier: Modifier = Modifier,
     count: Int,
+    size: Dp,
     onClick: () -> Unit,
     isSelected: Boolean
 ) {
@@ -56,7 +58,7 @@ fun Boost(
         // 1. MAIN ITEM TILE FRAME
         Box(
             modifier = Modifier
-                .size(48.dp) // FIXED: Increased layout bounds slightly so the asset frame renders legibly
+                .size(size)
                 .background(backgroundBrush, shape = RoundedCornerShape(8.dp))
                 .border(width = 2.dp, brush = borderBrush, shape = RoundedCornerShape(8.dp)),
             contentAlignment = Alignment.Center
@@ -106,7 +108,8 @@ fun BoostPreview(){
             contentDescription = "a boost",
             isSelected = false, // Toggle true / false right here to test your green vs orange frames!
             count = 3,
-            onClick = {}
+            onClick = {},
+            size = 56.dp
         )
     }
 }

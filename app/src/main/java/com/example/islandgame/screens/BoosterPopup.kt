@@ -48,14 +48,14 @@ fun BoosterPopup(
             modifier = Modifier.wrapContentSize(),
             contentAlignment = Alignment.Center
         ) {
-            // 1. BASE BACKGROUND LAYER: Wood board and scroll
+
             Image(
                 painter = painterResource(id = R.drawable.popup_body),
                 contentDescription = "background",
                 modifier = Modifier.wrapContentSize()
             )
 
-            // 2. ABSOLUTE OVERLAY CANVAS: Formed perfectly to match your layout edges
+
             Box(
                 modifier = Modifier.matchParentSize()
             ) {
@@ -84,7 +84,7 @@ fun BoosterPopup(
 
 
 
-                // 3. VERTICAL CONTENT STACK: Text, stars, and boosters perfectly centered on the scroll
+
                 Column(
                     verticalArrangement = Arrangement.spacedBy(16.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
@@ -92,7 +92,7 @@ fun BoosterPopup(
                         .align(Alignment.Center)
                         .padding(top = 44.dp, bottom = 44.dp) // Safety margin clearance
                 ) {
-                    // STARS ROW (Grey/unfilled in your example)
+                    // STARS ROW
                     Row(
                         horizontalArrangement = Arrangement.spacedBy(4.dp),
                         verticalAlignment = Alignment.CenterVertically
@@ -107,7 +107,7 @@ fun BoosterPopup(
                         }
                     }
 
-                    // "SELECT BOOSTS:" TEXT SECTION Label
+
                     Text(
                         text = "Select boosts:",
                         color = Color(0xFF954B25),
@@ -116,19 +116,19 @@ fun BoosterPopup(
                         textAlign = TextAlign.Center
                     )
 
-                    // DYNAMIC REUSABLE BOOSTER CARDS ROW
+                    //Booster row
                     Row(
                         horizontalArrangement = Arrangement.spacedBy(12.dp),
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier.padding(horizontal = 16.dp)
                     ) {
-                        // NOTE: To fix the layout engine crash, verify these items exist exactly as written
-                        // inside your local `res/drawable/` folders.
+
                         Boost(
                             drawableId = R.drawable.bomb,
                             contentDescription = "Bomb booster",
                             isSelected = true,
                             count = 3,
+                            size = 56.dp,
                             onClick = { /* Handle selection toggle logic */ }
                         )
 
@@ -137,6 +137,7 @@ fun BoosterPopup(
                             contentDescription = "Potion booster",
                             isSelected = false,
                             count = 3,
+                            size = 56.dp,
                             onClick = { /* Handle selection toggle logic */ }
                         )
 
@@ -145,12 +146,13 @@ fun BoosterPopup(
                             contentDescription = "Diamond booster",
                             isSelected = false,
                             count = 3,
+                            size = 56.dp,
                             onClick = { /* Handle selection toggle logic */ }
                         )
                     }
                 }
 
-                // 4. FLOATING ACTION FOOTER BUTTON: Perfectly centered over the bottom lip of the scroll
+
                 Image(
                     painter = painterResource(id = R.drawable.playbtn),
                     contentDescription = "Play Button",

@@ -31,3 +31,13 @@ fun Tasks(
     )
 }
 
+@Preview
+@Composable
+fun TasksPreview(){
+    IslandGameTheme() {
+        Tasks(
+            modifier = Modifier,
+            content = {},
+        )
+    }
+}

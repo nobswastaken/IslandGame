@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.islandgame.R
 import com.example.islandgame.ui.theme.IslandGameTheme
@@ -26,7 +27,6 @@ import com.example.islandgame.ui.theme.IslandGameTheme
 @Composable
 fun GameBottomNavbar(
     modifier: Modifier = Modifier,
-    drawableId: Int,
 ){
 
     var showSettingsPopup by remember { mutableStateOf(false) }
@@ -39,13 +39,14 @@ fun GameBottomNavbar(
         )
 
         Row(
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            horizontalArrangement = Arrangement.spacedBy(24.dp),
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.padding(horizontal = 16.dp)
         ) {
 
             Boost(
                 drawableId = R.drawable.hammer,
+                size = 60.dp,
                 contentDescription = "Hammer booster",
                 isSelected = false,
                 count = 4,
@@ -57,6 +58,7 @@ fun GameBottomNavbar(
                 contentDescription = "Arrow booster",
                 isSelected = false,
                 count = 1,
+                size = 60.dp,
                 onClick = { /* Handle selection toggle logic */ }
             )
 
@@ -65,6 +67,15 @@ fun GameBottomNavbar(
                 contentDescription = "Missile booster",
                 isSelected = false,
                 count = 6,
+                size = 60.dp,
+                onClick = { /* Handle selection toggle logic */ }
+            )
+            Boost(
+                drawableId = R.drawable.dice,
+                contentDescription = "Dice booster",
+                isSelected = false,
+                count = 6,
+                size = 60.dp,
                 onClick = { /* Handle selection toggle logic */ }
             )
         }
@@ -76,7 +87,6 @@ fun GameBottomNavbar(
 fun GameBottomNavbarPreview(){
     IslandGameTheme {
         GameBottomNavbar(
-            drawableId = R.drawable.hammer,
         )
     }
 }

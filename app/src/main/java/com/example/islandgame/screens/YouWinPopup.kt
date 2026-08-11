@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
@@ -28,7 +29,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.islandgame.R
-import com.example.islandgame.components.CoinsDisplay
+import com.example.islandgame.components.CoinDisplay
 import com.example.islandgame.ui.theme.IslandGameTheme
 
 @Composable
@@ -41,6 +42,7 @@ fun YouWinPopup(
         colors = listOf(Color(0xFFEE8801), Color(0xFFFFBD14))
     )
 
+
     Box(
         modifier = Modifier.fillMaxSize().background(Color.Black.copy(alpha = 0.6f)),
         contentAlignment = Alignment.Center
@@ -49,39 +51,46 @@ fun YouWinPopup(
             modifier = Modifier.wrapContentSize(),
             contentAlignment = Alignment.Center
         ) {
-            // 1. Core Background Base (Wood Board)
+            // 1. BASE BACKGROUND LAYER: Wood board and scroll
             Image(
                 painter = painterResource(id = R.drawable.popup_body),
                 contentDescription = "background",
                 modifier = Modifier.wrapContentSize()
             )
-
-            Row(
-                modifier = Modifier.offset(0.dp, -170.dp).padding(16.dp),
-                horizontalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterHorizontally),
-                verticalAlignment = Alignment.CenterVertically
+            Box(
+                modifier = Modifier.matchParentSize()
             ) {
-                Image(
-                    painter = painterResource(id = R.drawable.settings_text),
-                    contentDescription = "Settings Button",
-                )
 
-                Image(
-                    painter = painterResource(id = R.drawable.cancel),
-                    contentDescription = "Close Button",
-                    modifier = Modifier.clickable {
-                        onDismiss()
-                    }
-                )
+                Row(
+                    modifier = Modifier.align(Alignment.TopCenter).offset(y = 20.dp),
+                    horizontalArrangement = Arrangement.spacedBy(24.dp, Alignment.CenterHorizontally),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "You Win",
+                        color = Color.White,
+                        fontSize = 28.sp,
+                        fontWeight = FontWeight.Black,
+                        textAlign = TextAlign.Center
+                    )
+                    Image(
+                        painter = painterResource(id = R.drawable.cancel),
+                        contentDescription = "Close Button",
+                        modifier = Modifier
+                            .size(30.dp)
+                            .clickable { onDismiss() }
+                    )
+                }
             }
 
             Column(
-                verticalArrangement = Arrangement.Top,
-                modifier = modifier,
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = modifier.padding(top = 40.dp),
             ) {
                 // Star row: loops 1 to 3 to be filled or empty
                 Row(
-                    horizontalArrangement = Arrangement.spacedBy(0.dp),
+                    horizontalArrangement = Arrangement.Center,
                     modifier = Modifier.padding(bottom = 0.dp)
                 ) {
                     for (i in 1..3) {
@@ -148,7 +157,31 @@ fun YouWinPopup(
                         )
                     }
                 }
-                CoinsDisplay()
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                CoinDisplay()
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Row(
+                    modifier = Modifier,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.group__1_),
+                        contentDescription = "Levels Button",
+                    )
+                    Image(
+                        painter = painterResource(id = R.drawable.playbtn),
+                        contentDescription = "Play Button",
+                    )
+                    Image(
+                        painter = painterResource(id = R.drawable.replaybtn),
+                        contentDescription = "Replay Button",
+                    )
+                }
             }
         }
     }

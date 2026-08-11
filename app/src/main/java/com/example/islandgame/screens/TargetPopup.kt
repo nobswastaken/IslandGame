@@ -43,32 +43,37 @@ fun TargetPopup(
             modifier = Modifier.wrapContentSize(),
             contentAlignment = Alignment.Center
         ) {
-            // 1. Core Background Base (Wood Board)
+            // 1. BASE BACKGROUND LAYER: Wood board and scroll
             Image(
                 painter = painterResource(id = R.drawable.group_4),
                 contentDescription = "background",
                 modifier = Modifier.wrapContentSize()
             )
-
-            // 2. Control Layout container layered over the image matching its exact boundaries
-            Row(
-                modifier = Modifier
-                    .matchParentSize()
-                    .offset(y = (-85).dp),
-                horizontalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterHorizontally),
-                verticalAlignment = Alignment.CenterVertically,
+            Box(
+                modifier = Modifier.matchParentSize()
             ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.target),
-                        contentDescription = "Target Icon",
-                        modifier = Modifier
+
+                Row(
+                    modifier = Modifier.align(Alignment.TopCenter).offset(y = 20.dp),
+                    horizontalArrangement = Arrangement.spacedBy(24.dp, Alignment.CenterHorizontally),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "Target",
+                        color = Color.White,
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.Black,
+                        textAlign = TextAlign.Center,
                     )
                     Image(
                         painter = painterResource(id = R.drawable.cancel),
                         contentDescription = "Close Button",
-                        modifier = Modifier.clickable { onDismiss() }
+                        modifier = Modifier
+                            .size(28.dp)
+                            .clickable { onDismiss() }
                     )
                 }
+            }
 
                 Column(
                     modifier = Modifier.align(Alignment.Center).padding(top = 40.dp),

@@ -18,6 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.islandgame.screens.HomeScreen
 import com.example.islandgame.screens.LevelScreen
 import com.example.islandgame.screens.PlayScreen
+import com.example.islandgame.screens.YouWinPopup
 import com.example.islandgame.ui.theme.IslandGameTheme
 
 class MainActivity : ComponentActivity() {

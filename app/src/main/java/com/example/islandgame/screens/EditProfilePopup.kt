@@ -15,7 +15,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.layout.wrapContentWidth
@@ -25,6 +25,7 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -35,10 +36,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.islandgame.Countryflags
+import com.example.islandgame.data.Countryflags
 import com.example.islandgame.R
 import com.example.islandgame.components.FlagIcon
 import com.example.islandgame.components.LevelButton
@@ -72,30 +74,41 @@ fun EditProfilePopup(
         modifier = Modifier.fillMaxSize().background(Color.Black.copy(alpha = 0.6f)),
         contentAlignment = Alignment.Center
     ) {
-        Image(
-            painter = painterResource(id = R.drawable.popup_body),
-            contentDescription = null,
-            modifier = Modifier.fillMaxWidth(),
-        )
-
-        Row(
-            modifier = Modifier.offset(0.dp, -170.dp).padding(16.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterHorizontally),
-            verticalAlignment = Alignment.CenterVertically
+        Box(
+            modifier = Modifier.wrapContentSize(),
+            contentAlignment = Alignment.Center
         ) {
+            // 1. BASE BACKGROUND LAYER: Wood board and scroll
             Image(
-                painter = painterResource(id = R.drawable.edit_profile_header),
-                contentDescription = "Edit Profile Title",
+                painter = painterResource(id = R.drawable.popup_body),
+                contentDescription = "background",
+                modifier = Modifier.wrapContentSize()
             )
+            Box(
+                modifier = Modifier.matchParentSize()
+            ) {
 
-            Image(
-                painter = painterResource(id = R.drawable.cancel),
-                contentDescription = "Close Button",
-                modifier = Modifier.clickable {
-                    onDismiss()
+                Row(
+                    modifier = Modifier.align(Alignment.TopCenter).offset(y = 20.dp),
+                    horizontalArrangement = Arrangement.spacedBy(24.dp, Alignment.CenterHorizontally),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "Edit Profile",
+                        color = Color.White,
+                        fontSize = 28.sp,
+                        fontWeight = FontWeight.Black,
+                        textAlign = TextAlign.Center
+                    )
+                    Image(
+                        painter = painterResource(id = R.drawable.cancel),
+                        contentDescription = "Close Button",
+                        modifier = Modifier
+                            .size(30.dp)
+                            .clickable { onDismiss() }
+                    )
                 }
-            )
-        }
+            }
 
             // 2. Main Content Container
                 Column(
@@ -174,6 +187,8 @@ fun EditProfilePopup(
                 }
             }
         }
+    }
+
 
 
 

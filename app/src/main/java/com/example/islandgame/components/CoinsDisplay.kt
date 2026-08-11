@@ -28,7 +28,7 @@ import com.example.islandgame.R
 import com.example.islandgame.ui.theme.IslandGameTheme
 
 @Composable
-fun CoinsDisplay(modifier: Modifier = Modifier){
+fun CoinDisplay(modifier: Modifier = Modifier){
 
     val fillGradient  = listOf(Color(0xFFEDD6B9), Color(0xFFD4B492))
 
@@ -72,6 +72,6 @@ fun CoinsDisplay(modifier: Modifier = Modifier){
 @Composable
 fun CoinsDisplayPreview(){
     IslandGameTheme() {
-        CoinsDisplay()
+        CoinDisplay()
     }
 }

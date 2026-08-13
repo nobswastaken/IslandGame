@@ -30,6 +30,7 @@ import com.example.islandgame.data.Gems
 import com.example.islandgame.ui.theme.IslandGameTheme
 
 import androidx.compose.material3.Scaffold // Ensure you have this import
+import com.example.islandgame.components.TopNavbarGameplay
 
 @Composable
 fun GameScreen() {
@@ -37,6 +38,16 @@ fun GameScreen() {
 
 
     Scaffold(
+        topBar = {
+            TopNavbarGameplay(
+                score = 100,
+                targetCount = 5,
+                movesLeft = 10,
+                starProgress = 0.7f,
+            )
+        },
+
+
         bottomBar = {
             GameBottomNavbar(
                 modifier = Modifier.fillMaxWidth()
@@ -51,7 +62,7 @@ fun GameScreen() {
             contentAlignment = Alignment.Center
         ) {
             Image(
-                painter = painterResource(id = R.drawable.bg),
+                painter = painterResource(id = R.drawable.game_bg),
                 contentDescription = "Game Background",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.fillMaxSize()

@@ -33,7 +33,7 @@ import com.example.islandgame.ui.theme.IslandGameTheme
 
 @Composable
 fun BoosterPopup(
-    levelNumber: Int = 1, // Added parameter to cleanly print your "Level X" ribbon text
+    levelNumber: Int = 1,
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
     stars: Int
@@ -79,7 +79,7 @@ fun BoosterPopup(
                             .clickable { onDismiss() }
                     )
                 }
-//
+
 
 
 
@@ -90,7 +90,7 @@ fun BoosterPopup(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier
                         .align(Alignment.Center)
-                        .padding(top = 44.dp, bottom = 44.dp) // Safety margin clearance
+                        .padding(top = 44.dp, bottom = 44.dp)
                 ) {
                     // STARS ROW
                     Row(
@@ -174,7 +174,7 @@ fun BoosterPopupPreview(){
             levelNumber = 1,
             onDismiss = {},
             modifier = Modifier,
-            stars = 0 // Using 0 to check the default gray stars configuration layout
+            stars = 0
         )
     }
 }

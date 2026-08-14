@@ -38,11 +38,11 @@ fun LevelScreen(
     var showSettingsPopup by remember { mutableStateOf(false) }
     var showEditProfilePopup by remember { mutableStateOf(false) }
 
-    // THE ROOT: Must be a full-screen Box with NO content alignment restrictions
+
     Scaffold(
         topBar = {
             TopNavBar(
-                modifier = Modifier, // Removed negative offset
+                modifier = Modifier,
                 showFlagsButton = false,
                 showCoinsButton = true,
                 showKeysButton = false,
@@ -50,14 +50,14 @@ fun LevelScreen(
         },
         bottomBar = {
             BottomNavbar(
-                modifier = Modifier, // Removed positive offset
+                modifier = Modifier,
                 showLevelsButton = false,
                 onLevelClick = onLevelClick,
                 onHomeClick = onHomeClick,
                 onSettingsClick = { showSettingsPopup = true },
             )
         },
-        containerColor = Color.Transparent // Ensures your custom background image shows through
+        containerColor = Color.Transparent
     ) { innerPadding ->
 
         Box(
@@ -72,7 +72,7 @@ fun LevelScreen(
                 contentScale = ContentScale.Crop
             )
 
-            // MAIN SCROLLABLE CONTENT
+            // MAIN CONTENT
             Column(
                 modifier = Modifier
                     .fillMaxSize()

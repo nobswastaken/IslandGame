@@ -6,6 +6,8 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,6 +16,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.LinearProgressIndicator
@@ -37,8 +40,9 @@ import com.example.islandgame.ui.theme.IslandGameTheme
 @Composable
 fun Zone(
     modifier: Modifier = Modifier,
-    currentZone: Int ,
+    currentZone: Int,
     totalZone: Int,
+
 ) {
     val progressPercentage = if (totalZone > 0) currentZone.toFloat() / totalZone.toFloat() else 0f
 
@@ -52,85 +56,69 @@ fun Zone(
     val textcolor  = Brush.verticalGradient(colors = listOf(Color(0xFF304F00), Color(0xFF4F8100))
     )
 
-    Box(modifier.wrapContentSize(), contentAlignment = Alignment.Center){
-
         Box(
-            modifier
-                .width(220.dp)
-                .height(80.dp)
-                .background(btngradient, shape = RoundedCornerShape(12.dp))
-                .border(width = 2.dp, color = Color.Transparent, shape = RoundedCornerShape(12.dp))
-                .padding(2.dp)
+            modifier = Modifier
+                .width(160.dp)
+                .height(50.dp)
+                .wrapContentHeight(),
+            contentAlignment = Alignment.Center
         ){
             Column(
-                modifier.fillMaxSize().padding(start = 8.dp, end = 8.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(50.dp)
+                    .background(btngradient, shape = RoundedCornerShape(12.dp))
+                    .padding(6.dp),
+                verticalArrangement = Arrangement.SpaceBetween,
                 horizontalAlignment = Alignment.Start
             ){
-
                 Text(
-                    text = "Zone 1",
+                    text = "Zone $currentZone",
                     style = TextStyle(
                         brush = textcolor,
-                        fontSize = 18.sp,
+                        fontSize = 14.sp,
                         fontWeight = FontWeight.Black,
-                    ),
-                    modifier = Modifier.padding(top = 8.dp)
+                    )
                 )
 
                 Box(
-                    modifier
+                    modifier = Modifier
                         .fillMaxWidth()
-                        .height(20.dp)
-                        .background(Color.White, shape = RoundedCornerShape(12.dp))
-                        .border(
-                            width = 2.dp,
-                            color = Color.White,
-                            shape = RoundedCornerShape(12.dp)
-                        ),
-                    contentAlignment = Alignment.Center,
+                        .height(18.dp)
+                        .background(Color.White, shape = RoundedCornerShape(12.dp)),
+                    contentAlignment = Alignment.CenterStart
                 ) {
-
-                    LinearProgressIndicator(
-                        progress = {progressPercentage},
-                        modifier
-                            .fillMaxWidth()
-                            .padding(2.dp)
-                            .clip(RoundedCornerShape(12.dp)),
-                        color = Color.Transparent,
-                        trackColor = Color.White,
-                        gapSize = 0.dp,
-                        drawStopIndicator = { }
-                    )
-
-                    Box(modifier
-                        .fillMaxWidth(progressPercentage)
-                        .fillMaxHeight()
-                        .padding(2.dp)
-                        .align(Alignment.CenterStart)
-                        .background(brush = progressColor, shape = RoundedCornerShape(10.dp))
-                        .border(width = 2.dp, color = Color.Transparent, shape = RoundedCornerShape(10.dp))
-                    )
-
-                    Text(
-                        text = "$currentZone/$totalZone",
-                        style = TextStyle(
-                            brush = textcolor,
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.Black,
+                    if(progressPercentage > 0f){
+                       Box(
+                            modifier = Modifier
+                                .fillMaxWidth(progressPercentage)
+                                .fillMaxHeight()
+                                .background(brush = progressColor, shape = RoundedCornerShape(10.dp)),
                         )
-                    )
-                }
-            }
+                    }
+                        Text(
+                            text = "$currentZone/$totalZone",
+                            style = TextStyle(
+                                brush = textcolor,
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Black
+                            ),
+                            modifier = Modifier.align(Alignment.Center)
+                        )
+                       }
+                    }
+
+            Image(
+                painter = painterResource(id = R.drawable.treasure_small),
+                contentDescription = "Treasure",
+                modifier = Modifier
+                    .size(40.dp)
+                    .align(Alignment.CenterEnd)
+                    .offset(x = -4.dp, y = 4.dp)
+            )
         }
-        Image(
-            painter = painterResource(id = R.drawable.treasure_small),
-            contentDescription = "Treasure",
-            modifier.size(60.dp).align(Alignment.CenterEnd).offset(x = 0.dp, y = 12.dp)
-        )
     }
 
-}
 
 @Preview
 @Composable

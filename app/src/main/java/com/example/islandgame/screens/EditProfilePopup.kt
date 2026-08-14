@@ -78,7 +78,7 @@ fun EditProfilePopup(
             modifier = Modifier.wrapContentSize(),
             contentAlignment = Alignment.Center
         ) {
-            // 1. BASE BACKGROUND LAYER: Wood board and scroll
+            // BACKGROUND IMAGE
             Image(
                 painter = painterResource(id = R.drawable.popup_body),
                 contentDescription = "background",
@@ -116,14 +116,14 @@ fun EditProfilePopup(
                         .padding(top = 40.dp)
                         .fillMaxWidth(0.60f),
 //                        .weight(1f, fill = false),
-                    horizontalAlignment = Alignment.CenterHorizontally, // Center everything down the paper axis
+                    horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
 
-                    //Name input stack
+                    //Name input
                     Column(
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalAlignment = Alignment.Start // Keeps the small label left-aligned relative to the field
+                        horizontalAlignment = Alignment.Start
                     ) {
                         Image(
                             painter = painterResource(id = R.drawable.change_name),

@@ -12,7 +12,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -29,92 +31,106 @@ import com.example.islandgame.R
 import com.example.islandgame.ui.theme.IslandGameTheme
 
 @Composable
-fun GoldenKey(
+fun GoldenKeyPopup(
     onDismiss: () -> Unit
-){
+) {
 
     Box(modifier = Modifier.fillMaxSize().background(Color.Black.copy(alpha = 0.6f)) , contentAlignment = Alignment.Center) {
-        Image(
-            painter = painterResource(id = R.drawable.popup_body),
-            contentDescription = null,
-            modifier = Modifier.fillMaxWidth(),
-        )
-
-        Row(
-            modifier = Modifier.offset(0.dp, -160.dp).fillMaxSize().padding(16.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterHorizontally),
-            verticalAlignment = Alignment.CenterVertically
+        Box(
+            modifier = Modifier.wrapContentSize(),
+            contentAlignment = Alignment.Center
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.golden_key),
-                contentDescription = "Golden Key",
-            )
 
             Image(
-                painter = painterResource(id = R.drawable.cancel),
-                contentDescription = "Close Button",
-                modifier = Modifier.clickable {
-                    onDismiss()
+                painter = painterResource(id = R.drawable.popup_body),
+                contentDescription = "background",
+                modifier = Modifier.wrapContentSize()
+            )
+            Box(
+                modifier = Modifier.matchParentSize()
+            ) {
+                Row(
+                    modifier = Modifier.align(Alignment.TopCenter).offset(y = 20.dp),
+                    horizontalArrangement = Arrangement.spacedBy(24.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "Golden Key",
+                        color = Color.White,
+                        fontSize = 28.sp,
+                        fontWeight = FontWeight.Black,
+                        textAlign = TextAlign.Center,
+                    )
+                    Image(
+                        painter = painterResource(id = R.drawable.cancel),
+                        contentDescription = "Close Button",
+                        modifier = Modifier
+                            .size(30.dp)
+                            .clickable { onDismiss() }
+                    )
                 }
-            )
-        }
-
-        Column(
-            modifier = Modifier.fillMaxWidth().padding(top = 32.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceEvenly,
-            ){
-                Image(
-                    painter = painterResource(id = R.drawable.frame_1),
-                    contentDescription = "Image",
-                    modifier = Modifier.width(100.dp).height(100.dp)
-                )
-
-                Image(
-                    painter = painterResource(id = R.drawable.group),
-                    contentDescription = "Arrow",
-                )
-
-                Image(
-                    painter = painterResource(id = R.drawable.key),
-                    contentDescription = "Golden Key",
-                )
             }
 
-            Text(
-                text = "Beat more levels to earn a Golden Key!",
+
+            Column(
                 modifier = Modifier
-                    .width(220.dp)
-                    .padding(all = 16.dp),
-                color = Color(0xFFE5A91A),
-                maxLines = 2, // Fixed capital 'L'
-                fontSize = 20.sp,
-                textAlign = TextAlign.Center,
-                fontWeight = FontWeight.Bold,
-            )
+                    .wrapContentSize()
+                    .padding(top = 40.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.frame_1),
+                        contentDescription = "Grid",
+                        modifier = Modifier.size(100.dp)
+                    )
+
+                    Image(
+                        painter = painterResource(id = R.drawable.group),
+                        contentDescription = "Arrow",
+                    )
+
+                    Image(
+                        painter = painterResource(id = R.drawable.key),
+                        contentDescription = "Golden Key",
+                    )
+                }
 
 
-            LevelButton(
-                text = "Continue",
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Bold,
-                onClick = onDismiss,
-                modifier = Modifier
-                    .wrapContentWidth()
-                    .height(40.dp)
-            )
+                Text(
+                    text = "Beat more levels to earn a Golden Key!",
+                    modifier = Modifier.width(220.dp),
+                    color = Color(0xFFE5A91A),
+                    maxLines = 2,
+                    fontSize = 20.sp,
+                    textAlign = TextAlign.Center,
+                    fontWeight = FontWeight.Bold,
+                )
+
+
+                LevelButton(
+                    text = "Continue",
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
+                    onClick = onDismiss,
+                    modifier = Modifier
+                        .wrapContentWidth()
+                        .height(40.dp)
+                )
+            }
         }
     }
 }
 
+
 @Composable
-@Preview
+@Preview(showBackground = true, showSystemUi = true)
 fun GoldenKeyprev(){
     IslandGameTheme() {
-        GoldenKey(onDismiss = {})
+        GoldenKeyPopup(onDismiss = {})
     }
 }

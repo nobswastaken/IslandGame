@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.sp
 import com.example.islandgame.R
 import com.example.islandgame.components.BottomNavbar
 import com.example.islandgame.components.FlagIcon
+import com.example.islandgame.components.GoldenKeyPopup
 import com.example.islandgame.components.LevelButton
 import com.example.islandgame.components.TopNavBar
 import com.example.islandgame.components.Zone
@@ -46,68 +47,72 @@ fun PlayScreen(
 ) {
     var showSettingsPopup by remember { mutableStateOf(false) }
     var showEditProfilePopup by remember { mutableStateOf(false) }
-
-    Scaffold(
-        topBar = {
-            TopNavBar(
-                modifier = Modifier,
-                onEditProfileClick = { showEditProfilePopup = true },
-            )
-        },
-        bottomBar = {
-            BottomNavbar(
-                modifier = Modifier,
-                onLevelClick = onLevelClick,
-                onHomeClick = onHomeClick,
-                onSettingsClick = { showSettingsPopup = true },
-            )
-        },
-    ) { innerPadding ->
+    var showKeysPopup by remember { mutableStateOf(false) }
 
 
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding),
-            contentAlignment = Alignment.Center
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.playscreen_bg),
-                contentDescription = null,
-                modifier = Modifier.fillMaxSize(),
-                contentScale = ContentScale.Crop
-            )
+    Box(modifier = Modifier.fillMaxSize()) {
 
-            Column(
-                modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.Bottom
-            ) {
-            // LEVEL AND ZONE BUTTONS
-            Row(
 
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
-                verticalAlignment = Alignment.Bottom,
-            ) {
-                LevelButton(
-                    text = "Level 1",
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold,
-                    onClick = {},
-                    modifier = Modifier.weight(1f)
+        Image(
+            painter = painterResource(id = R.drawable.playscreen_bg),
+            contentDescription = null,
+            modifier = Modifier.fillMaxSize(),
+            contentScale = ContentScale.Crop
+        )
+
+        Scaffold(
+            containerColor = Color.Transparent,
+            topBar = {
+                TopNavBar(
+                    modifier = Modifier,
+                    onEditProfileClick = { showEditProfilePopup = true },
+                    onKeysClick = { showKeysPopup = true }
                 )
+            },
+            bottomBar = {
+                BottomNavbar(
+                    modifier = Modifier,
+                    onLevelClick = onLevelClick,
+                    onHomeClick = onHomeClick,
+                    onSettingsClick = { showSettingsPopup = true },
+                )
+            },
+        ) { innerPadding ->
 
-               Zone(
-                   modifier = Modifier.weight(1f),
-                   currentZone = 2,
-                   totalZone = 10,
-               )
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding),
+                contentAlignment = Alignment.Center
+            ) {
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.Bottom
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        horizontalArrangement = Arrangement.spacedBy(12.dp),
+                        verticalAlignment = Alignment.Bottom,
+                    ) {
+                        LevelButton(
+                            text = "Level 1",
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold,
+                            onClick = {},
+                            modifier = Modifier.weight(1f)
+                        )
+
+                        Zone(
+                            modifier = Modifier.weight(1f),
+                            currentZone = 2,
+                            totalZone = 10,
+                        )
+                    }
+                }
             }
         }
-    }
-}
 
 
         if (showSettingsPopup) {
@@ -125,7 +130,18 @@ fun PlayScreen(
                 onDismiss = { showEditProfilePopup = false }
             )
         }
+
+        if (showKeysPopup) {
+            GoldenKeyPopup(
+                onDismiss = { showKeysPopup = false }
+            )
+        }
+
     }
+}
+
+
+
 
 
 

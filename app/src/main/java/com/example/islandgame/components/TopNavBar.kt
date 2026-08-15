@@ -30,9 +30,12 @@ fun TopNavBar(
     showFlagsButton: Boolean = true,
     showKeysButton: Boolean = true,
     showCoinsButton: Boolean = true,
-    onEditProfileClick: () -> Unit = {},
+    onKeysClick: () -> Unit = {},
+    onEditProfileClick: () -> Unit = {}
+
 ){
     var showEditProfilePopup by remember { mutableStateOf(false) }
+    var showKeysPopup by remember { mutableStateOf(false) }
 
     Box(modifier = modifier, contentAlignment = Alignment.Center) {
         Image(
@@ -57,7 +60,8 @@ fun TopNavBar(
                 modifier = Modifier.alpha(if (showCoinsButton) 1f else 0f)
             )
             Keys(
-                modifier = Modifier.alpha(if (showKeysButton) 1f else 0f)
+                modifier = Modifier.alpha(if (showKeysButton) 1f else 0f),
+                onKeysClick = onKeysClick,
             )
         }
 
@@ -66,7 +70,11 @@ fun TopNavBar(
                 onDismiss = { showEditProfilePopup = false }
             )
         }
-
+        if (showKeysPopup) {
+            GoldenKeyPopup(
+                onDismiss = { showKeysPopup = false }
+            )
+        }
     }
 }
 

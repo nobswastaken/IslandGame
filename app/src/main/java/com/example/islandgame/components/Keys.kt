@@ -1,5 +1,6 @@
 package com.example.islandgame.components
 
+import android.R.attr.onClick
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -29,10 +30,13 @@ import com.example.islandgame.R
 import com.example.islandgame.ui.theme.IslandGameTheme
 
 @Composable
-fun Keys(modifier: Modifier = Modifier){
+fun Keys(
+    modifier: Modifier = Modifier,
+    onKeysClick: () -> Unit,
+){
 
     Box(
-        modifier = modifier.wrapContentSize(),
+        modifier = modifier.wrapContentSize().clickable { onKeysClick() },
         contentAlignment = Alignment.Center
     ){
         Row(
@@ -71,6 +75,6 @@ fun Keys(modifier: Modifier = Modifier){
 @Composable
 fun KeysPreview(){
     IslandGameTheme() {
-        Keys()
+        Keys(onKeysClick = {})
     }
 }

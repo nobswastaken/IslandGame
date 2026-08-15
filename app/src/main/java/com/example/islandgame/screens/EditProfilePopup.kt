@@ -45,29 +45,20 @@ import com.example.islandgame.R
 import com.example.islandgame.components.FlagIcon
 import com.example.islandgame.components.LevelButton
 import com.example.islandgame.components.TextInput
+import com.example.islandgame.data.flags
 import com.example.islandgame.ui.theme.IslandGameTheme
 
 @Composable
 fun EditProfilePopup(
-    onDismiss:() -> Unit
+    onDismiss:() -> Unit,
+    currentCountryid: String,
+    currentName: String,
+    onAccept: (String, String) -> Unit
 ) {
-    var selectedFlagId by remember { mutableStateOf<Int?>(null) }
+    var selectedFlagId by remember { mutableStateOf(currentCountryid) }
+    var name by remember { mutableStateOf(currentName) }
 
 
-    val flags = remember {
-        listOf(
-            Countryflags(R.drawable.flag_of_turkmenistan, "Turkmekistan flag"),
-            Countryflags(R.drawable.flag_brazil, "Brazil flag"),
-            Countryflags(R.drawable.flag_canada, "Canada flag"),
-            Countryflags(R.drawable.flag_mexico, "Mexico flag"),
-            Countryflags(R.drawable.flag_of_germany_svg, "Germany flag"),
-            Countryflags(R.drawable.flag_of_the_netherlands_svg, "Netherlands flag"),
-            Countryflags(R.drawable.flag_united_arab_emirates, "UAE flag"),
-            Countryflags(R.drawable.switzerland, "Switzerland flag"),
-            Countryflags(R.drawable.uk_flag, "UK flag")
-
-        )
-    }
 
 
     Box(
@@ -130,7 +121,10 @@ fun EditProfilePopup(
                             contentDescription = "Change Name Label",
                             modifier = Modifier.padding(start = 12.dp, bottom = 4.dp)
                         )
-                        TextInput()
+                        TextInput(
+                            text = name,
+                            onTextChange = {name = it}
+                        )
                     }
 
                     //Flag layout grid
@@ -161,11 +155,12 @@ fun EditProfilePopup(
                                 horizontalArrangement = Arrangement.spacedBy(8.dp)
                             ) {
                                 items(flags) { flag ->
+
                                     FlagIcon(
-                                        drawableId = flag.id,
-                                        contentDescription = flag.contentDescription,
-                                        isSelected = selectedFlagId == flag.id,
-                                        onClick = { selectedFlagId = flag.id }
+                                        drawableId = flag.drawable,
+                                        contentDescription = flag.countryname,
+                                        isSelected = flag.countryname == selectedFlagId,
+                                        onClick = { selectedFlagId = flag.countryname }
                                     )
                                 }
                             }
@@ -179,7 +174,8 @@ fun EditProfilePopup(
                         text = "Accept",
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold,
-                        onClick = {},
+                        onClick = { onAccept(name, selectedFlagId)
+                                  onDismiss()},
                         modifier = Modifier
                             .wrapContentWidth()
                             .wrapContentHeight()
@@ -198,6 +194,11 @@ fun EditProfilePopup(
 @Composable
 fun editpreview(){
     IslandGameTheme() {
-        EditProfilePopup {  }
+        EditProfilePopup(
+            currentCountryid = "UAE",
+            currentName = "James Bond",
+            onDismiss = {},
+            onAccept = {_,_ -> }
+        )
     }
 }

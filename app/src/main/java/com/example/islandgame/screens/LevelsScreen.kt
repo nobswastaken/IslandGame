@@ -20,6 +20,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.islandgame.R
 import com.example.islandgame.components.ArrowButtonRight
 import com.example.islandgame.components.ArrowButtonLeft
@@ -29,14 +30,19 @@ import com.example.islandgame.components.LevelButton
 import com.example.islandgame.components.LockedLevelCard
 import com.example.islandgame.components.TopNavBar
 import com.example.islandgame.components.UnlockedLevelCard
+import com.example.islandgame.viewmodel.ProfileViewmodel
 
 @Composable
 fun LevelScreen(
     onHomeClick: () -> Unit,
     onLevelClick: () -> Unit,
+    profileViewModel: ProfileViewmodel = viewModel()
 ) {
     var showSettingsPopup by remember { mutableStateOf(false) }
     var showEditProfilePopup by remember { mutableStateOf(false) }
+
+    val username by profileViewModel.username.collectAsState()
+    val countryId by profileViewModel.country.collectAsState()
 
 
     Scaffold(
@@ -139,27 +145,30 @@ fun LevelScreen(
         }
     }
 
-        if (showSettingsPopup) {
-            SettingsPopup(
-                onDismiss = { showSettingsPopup = false },
-                onEditProfileClick = {
-                    showSettingsPopup = false
-                    showEditProfilePopup = true
-                }
-            )
-        }
-
-        if (showEditProfilePopup) {
-            EditProfilePopup(
-                onDismiss = { showEditProfilePopup = false }
-            )
-        }
+    if (showSettingsPopup) {
+        SettingsPopup(
+            onDismiss = { showSettingsPopup = false },
+            onEditProfileClick = {
+                showSettingsPopup = false
+                showEditProfilePopup = true
+            }
+        )
     }
 
 
+    if (showEditProfilePopup) {
 
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun LevelScreenCleanPreview() {
-    LevelScreen(onHomeClick = {}, onLevelClick = {})
+        EditProfilePopup(
+            currentName = username,
+            currentCountryid = countryId,
+            onDismiss = { showEditProfilePopup = false },
+            onAccept = { newName, selectedFlagId ->
+
+                profileViewModel.updateprofile(newName, selectedFlagId)
+            }
+        )
+    }
 }
+
+
+

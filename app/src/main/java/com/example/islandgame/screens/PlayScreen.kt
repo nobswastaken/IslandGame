@@ -1,5 +1,6 @@
 package com.example.islandgame.screens
 
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -31,6 +32,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.islandgame.R
 import com.example.islandgame.components.BottomNavbar
 import com.example.islandgame.components.FlagIcon
@@ -38,18 +43,25 @@ import com.example.islandgame.components.GoldenKeyPopup
 import com.example.islandgame.components.LevelButton
 import com.example.islandgame.components.TopNavBar
 import com.example.islandgame.components.Zone
+import com.example.islandgame.repository.ProfileRepo
 import com.example.islandgame.ui.theme.IslandGameTheme
+import com.example.islandgame.viewmodel.ProfileViewmodel
 
 @Composable
 fun PlayScreen(
     onHomeClick: () -> Unit,
     onLevelClick: () -> Unit,
+    profileViewModel: ProfileViewmodel = viewModel()
 ) {
+
     var showSettingsPopup by remember { mutableStateOf(false) }
     var showEditProfilePopup by remember { mutableStateOf(false) }
     var showKeysPopup by remember { mutableStateOf(false) }
     var showTaskPopup by remember { mutableStateOf(false) }
     var showPrelevelPopup by remember { mutableStateOf(false) }
+
+    val username by profileViewModel.username.collectAsState()
+    val countryId by profileViewModel.country.collectAsState()
 
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -67,8 +79,13 @@ fun PlayScreen(
             topBar = {
                 TopNavBar(
                     modifier = Modifier,
+                    onKeysClick = { showKeysPopup = true },
+                    currentCountryId = countryId,
+                    currentName = username,
                     onEditProfileClick = { showEditProfilePopup = true },
-                    onKeysClick = { showKeysPopup = true }
+
+
+
                 )
             },
             bottomBar = {
@@ -129,8 +146,15 @@ fun PlayScreen(
         }
 
         if (showEditProfilePopup) {
+
             EditProfilePopup(
-                onDismiss = { showEditProfilePopup = false }
+                currentName = username,
+                currentCountryid = countryId,
+                onDismiss = { showEditProfilePopup = false },
+                onAccept = { newName, selectedFlagId ->
+
+                    profileViewModel.updateprofile(newName, selectedFlagId)
+                }
             )
         }
 

@@ -28,17 +28,18 @@ import com.example.islandgame.R
 import com.example.islandgame.ui.theme.IslandGameTheme
 
 @Composable
-fun TextInput() {
-    // State to hold the user's typed text
-    var textInput by remember { mutableStateOf("") }
+fun TextInput(
+    text: String,
+    onTextChange: (String) -> Unit
+) {
 
     Box(
         modifier = Modifier.size(width = 200.dp, height = 50.dp),
         contentAlignment = Alignment.Center
     ) {
         BasicTextField(
-            value = textInput,
-            onValueChange = { textInput = it },
+            value = text,
+            onValueChange = onTextChange,
             modifier = Modifier.fillMaxSize().background(Color.White, shape = RoundedCornerShape(12.dp)).border(3.dp, Color(0xFFFFA800), shape = RoundedCornerShape(12.dp)),
             textStyle = TextStyle(
                 color = Color.Black,
@@ -47,13 +48,5 @@ fun TextInput() {
             ),
             singleLine = true
         )
-    }
-}
-
-@Preview
-@Composable
-fun InputPreview() {
-    IslandGameTheme {
-        TextInput()
     }
 }

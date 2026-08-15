@@ -20,6 +20,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.islandgame.R
+import com.example.islandgame.data.flags
 import com.example.islandgame.screens.EditProfilePopup
 import com.example.islandgame.screens.SettingsPopup
 import com.example.islandgame.ui.theme.IslandGameTheme
@@ -31,11 +32,13 @@ fun TopNavBar(
     showKeysButton: Boolean = true,
     showCoinsButton: Boolean = true,
     onKeysClick: () -> Unit = {},
+    currentCountryId: String = "Brazil",
+    currentName: String = "Player 1",
     onEditProfileClick: () -> Unit = {}
 
 ){
-    var showEditProfilePopup by remember { mutableStateOf(false) }
-    var showKeysPopup by remember { mutableStateOf(false) }
+    val activeFlag = flags.find { it.countryname.equals(currentCountryId, ignoreCase = true) }?.drawable
+        ?: R.drawable.flag_united_arab_emirates
 
     Box(modifier = modifier, contentAlignment = Alignment.Center) {
         Image(
@@ -50,8 +53,8 @@ fun TopNavBar(
             verticalAlignment = Alignment.CenterVertically
         ) {
             FlagIcon(
-                drawableId = R.drawable.flag_united_arab_emirates,
-                contentDescription = "Flag 1",
+                drawableId = activeFlag,
+                contentDescription = "Flag",
                 isSelected = false,
                 onClick = onEditProfileClick,
                 modifier = Modifier.alpha(if (showFlagsButton) 1f else 0f)
@@ -65,16 +68,6 @@ fun TopNavBar(
             )
         }
 
-        if (showEditProfilePopup) {
-            EditProfilePopup(
-                onDismiss = { showEditProfilePopup = false }
-            )
-        }
-        if (showKeysPopup) {
-            GoldenKeyPopup(
-                onDismiss = { showKeysPopup = false }
-            )
-        }
     }
 }
 

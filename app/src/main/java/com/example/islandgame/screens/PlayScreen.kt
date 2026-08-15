@@ -49,6 +49,7 @@ fun PlayScreen(
     var showEditProfilePopup by remember { mutableStateOf(false) }
     var showKeysPopup by remember { mutableStateOf(false) }
     var showTaskPopup by remember { mutableStateOf(false) }
+    var showPrelevelPopup by remember { mutableStateOf(false) }
 
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -101,7 +102,7 @@ fun PlayScreen(
                             text = "Level 1",
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Bold,
-                            onClick = {},
+                            onClick = { showPrelevelPopup = true},
                             modifier = Modifier.weight(1f)
                         )
 
@@ -142,6 +143,13 @@ fun PlayScreen(
         if (showTaskPopup) {
             TasksPopup(
                 onDismiss = { showTaskPopup = false }
+            )
+        }
+
+        if (showPrelevelPopup) {
+            PreLevelPopup(
+                onDismiss = { showPrelevelPopup = false },
+                stars = 0
             )
         }
 

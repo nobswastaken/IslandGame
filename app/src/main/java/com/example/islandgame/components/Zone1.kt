@@ -3,6 +3,7 @@ package com.example.islandgame.components
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -42,6 +43,7 @@ fun Zone(
     modifier: Modifier = Modifier,
     currentZone: Int,
     totalZone: Int,
+    onZoneClick: () -> Unit,
 
 ) {
     val progressPercentage = if (totalZone > 0) currentZone.toFloat() / totalZone.toFloat() else 0f
@@ -58,6 +60,7 @@ fun Zone(
 
         Box(
             modifier = Modifier
+                .clickable{onZoneClick()}
                 .width(160.dp)
                 .height(50.dp)
                 .wrapContentHeight(),
@@ -128,6 +131,7 @@ fun ZonePreview(){
             modifier = Modifier,
             currentZone = 2,
             totalZone = 10,
+            onZoneClick = {}
         )
     }
 }

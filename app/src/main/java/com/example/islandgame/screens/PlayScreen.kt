@@ -48,6 +48,7 @@ fun PlayScreen(
     var showSettingsPopup by remember { mutableStateOf(false) }
     var showEditProfilePopup by remember { mutableStateOf(false) }
     var showKeysPopup by remember { mutableStateOf(false) }
+    var showTaskPopup by remember { mutableStateOf(false) }
 
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -108,6 +109,7 @@ fun PlayScreen(
                             modifier = Modifier.weight(1f),
                             currentZone = 2,
                             totalZone = 10,
+                            onZoneClick = { showTaskPopup = true }
                         )
                     }
                 }
@@ -134,6 +136,12 @@ fun PlayScreen(
         if (showKeysPopup) {
             GoldenKeyPopup(
                 onDismiss = { showKeysPopup = false }
+            )
+        }
+
+        if (showTaskPopup) {
+            TasksPopup(
+                onDismiss = { showTaskPopup = false }
             )
         }
 

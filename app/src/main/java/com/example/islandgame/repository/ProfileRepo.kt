@@ -4,30 +4,40 @@ import android.content.Context
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import com.example.islandgame.databasestuff.GameDatabase
+import com.example.islandgame.databasestuff.UserProfileEntity
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 
-private val Context.dataStore by preferencesDataStore(name = "user_profile")
 
 class ProfileRepo(private val context: Context){
-    companion object {
-        val KEY_NAME = stringPreferencesKey("username")
-        val KEY_COUNTRY = stringPreferencesKey("country")
-    }
+    private val dao = GameDatabase.getDatabase(context).userProfileDao()
 
-    val usernameFlow: Flow<String> = context.dataStore.data.map { prefs ->
-        prefs [KEY_NAME] ?: "Player 1"
-    }
+    val usernameFlow: Flow<String> = dao.getProfileFlow()
+        .map { entity -> entity?.username ?: "Player 1" }
+        .flowOn(Dispatchers.IO)
 
-    val countryFlow: Flow<String> = context.dataStore.data.map { prefs ->
-        prefs [KEY_COUNTRY] ?: "Brazil"
-    }
+    val countryFlow: Flow<String> = dao.getProfileFlow()
+        .map { entity -> entity?.country ?: "Brazil" }
+        .flowOn(Dispatchers.IO)
 
-    suspend fun saveProfile (username: String, country: String){
-        context.dataStore.edit { prefs ->
-            prefs [KEY_NAME] = username
-            prefs [KEY_COUNTRY] = country
+   suspend fun ProfileExists() {
+       val profile = dao.getProfileFlow().first()
 
-        }
+       if (profile == null) {
+           dao.saveProfile(UserProfileEntity())
+       }
+   }
+
+    suspend fun saveProfile(username: String, country: String) {
+        val updatedProfile = UserProfileEntity(
+            id = 1,
+            username = username,
+            country = country
+        )
+        dao.saveProfile(updatedProfile)
     }
 }

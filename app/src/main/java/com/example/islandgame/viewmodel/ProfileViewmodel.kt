@@ -13,6 +13,12 @@ import kotlinx.coroutines.launch
 
 class ProfileViewmodel (private val repository: ProfileRepo) : ViewModel(){
 
+    init {
+        viewModelScope.launch {
+            repository.ProfileExists()
+        }
+    }
+
     val username: StateFlow<String> = repository.usernameFlow
         .stateIn(
             scope = viewModelScope,

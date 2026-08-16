@@ -16,12 +16,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.islandgame.repository.ProfileRepo
+import com.example.islandgame.repository.SettingsRepo
 import com.example.islandgame.screens.HomeScreen
 import com.example.islandgame.screens.LevelScreen
 import com.example.islandgame.screens.PlayScreen
 import com.example.islandgame.screens.YouWinPopup
 import com.example.islandgame.ui.theme.IslandGameTheme
 import com.example.islandgame.viewmodel.ProfileViewmodel
+import com.example.islandgame.viewmodel.SettingsViewmodel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,6 +32,9 @@ class MainActivity : ComponentActivity() {
 
         val profileRepository = ProfileRepo(applicationContext)
         val profileViewmodel = ProfileViewmodel(profileRepository)
+
+        val settingsRepository = SettingsRepo(applicationContext)
+        val settingsViewModel = SettingsViewmodel(settingsRepository)
 
         setContent {
             IslandGameTheme {
@@ -43,11 +48,13 @@ class MainActivity : ComponentActivity() {
                     "play" -> { PlayScreen(
                         onHomeClick = { currentScreen = "home"},
                         onLevelClick = { currentScreen = "levels"},
-                        profileViewModel = profileViewmodel
+                        profileViewModel = profileViewmodel,
+                        settingsVM = settingsViewModel
                     )}
                     "levels" -> LevelScreen(
                         onHomeClick = { currentScreen = "home"},
-                        onLevelClick = { currentScreen = "play"}
+                        onLevelClick = { currentScreen = "play"},
+                        settingsVM = settingsViewModel
                     )
                 }
 

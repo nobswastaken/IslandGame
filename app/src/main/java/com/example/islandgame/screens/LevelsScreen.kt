@@ -31,12 +31,14 @@ import com.example.islandgame.components.LockedLevelCard
 import com.example.islandgame.components.TopNavBar
 import com.example.islandgame.components.UnlockedLevelCard
 import com.example.islandgame.viewmodel.ProfileViewmodel
+import com.example.islandgame.viewmodel.SettingsViewmodel
 
 @Composable
 fun LevelScreen(
     onHomeClick: () -> Unit,
     onLevelClick: () -> Unit,
-    profileViewModel: ProfileViewmodel = viewModel()
+    profileViewModel: ProfileViewmodel = viewModel(),
+    settingsVM: SettingsViewmodel = viewModel(),
 ) {
     var showSettingsPopup by remember { mutableStateOf(false) }
     var showEditProfilePopup by remember { mutableStateOf(false) }
@@ -151,7 +153,8 @@ fun LevelScreen(
             onEditProfileClick = {
                 showSettingsPopup = false
                 showEditProfilePopup = true
-            }
+            },
+            settingsVM = settingsVM
         )
     }
 

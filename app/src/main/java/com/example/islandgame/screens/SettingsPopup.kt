@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -28,13 +29,23 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.islandgame.R
 import com.example.islandgame.ui.theme.IslandGameTheme
+import com.example.islandgame.viewmodel.SettingsViewmodel
+import androidx.compose.runtime.getValue
 
 @Composable
 fun SettingsPopup(
     onDismiss: () -> Unit,
-    onEditProfileClick: () -> Unit
+    onEditProfileClick: () -> Unit,
+    settingsVM: SettingsViewmodel
 ) {
-        Box(modifier = Modifier.fillMaxSize().background(Color.Black.copy(alpha = 0.6f)) , contentAlignment = Alignment.Center) {
+    val settings by settingsVM.settingsFlow.collectAsState()
+
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Black.copy(alpha = 0.6f)),
+            contentAlignment = Alignment.Center
+        ) {
             Box(
                 modifier = Modifier.wrapContentSize(),
                 contentAlignment = Alignment.Center
@@ -87,9 +98,15 @@ fun SettingsPopup(
                         ),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            modifier = Modifier.clickable {
+                                settingsVM.toggleSound(!settings.sound)
+                            }
+                        ) {
                             Image(
-                                painter = painterResource(id = R.drawable.sound_icon),
+                                painter = painterResource(id = if(settings.sound) R.drawable.sound_icon
+                                else R.drawable.no_sound_icon),
                                 contentDescription = "Sound Button",
                             )
                             Image(
@@ -97,9 +114,15 @@ fun SettingsPopup(
                                 contentDescription = "Sound text",
                             )
                         }
-                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            modifier = Modifier.clickable {
+                                settingsVM.toggleMusic(!settings.music)
+                            }
+                        ) {
                             Image(
-                                painter = painterResource(id = R.drawable.music_icon),
+                                painter = painterResource(id = if(settings.music) R.drawable.music_icon
+                                else R.drawable.no_music_icon),
                                 contentDescription = "Music Button",
                             )
                             Image(
@@ -132,11 +155,4 @@ fun SettingsPopup(
         }
 }
 
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun SettingsPopupPreview(){
-    IslandGameTheme() {
-        SettingsPopup(onDismiss = {}, onEditProfileClick = {})
-    }
-}
 

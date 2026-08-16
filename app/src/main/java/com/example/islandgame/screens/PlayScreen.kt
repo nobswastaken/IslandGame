@@ -2,22 +2,14 @@ package com.example.islandgame.screens
 
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -33,25 +25,22 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.runtime.collectAsState
-import androidx.compose.ui.platform.LocalContext
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.islandgame.R
 import com.example.islandgame.components.BottomNavbar
-import com.example.islandgame.components.FlagIcon
 import com.example.islandgame.components.GoldenKeyPopup
 import com.example.islandgame.components.LevelButton
 import com.example.islandgame.components.TopNavBar
 import com.example.islandgame.components.Zone
-import com.example.islandgame.repository.ProfileRepo
 import com.example.islandgame.ui.theme.IslandGameTheme
 import com.example.islandgame.viewmodel.ProfileViewmodel
+import com.example.islandgame.viewmodel.SettingsViewmodel
 
 @Composable
 fun PlayScreen(
     onHomeClick: () -> Unit,
     onLevelClick: () -> Unit,
-    profileViewModel: ProfileViewmodel = viewModel()
+    profileViewModel: ProfileViewmodel,
+    settingsVM: SettingsViewmodel,
 ) {
 
     var showSettingsPopup by remember { mutableStateOf(false) }
@@ -141,7 +130,8 @@ fun PlayScreen(
                 onEditProfileClick = {
                     showSettingsPopup = false
                     showEditProfilePopup = true
-                }
+                },
+                settingsVM = settingsVM
             )
         }
 
@@ -185,14 +175,5 @@ fun PlayScreen(
 
 
 
-@Preview
-@Composable
-fun PlayScreenPreview(){
-    IslandGameTheme() {
-        PlayScreen(
-            onHomeClick = {},
-            onLevelClick = {},
-        )
-    }
-}
+
 

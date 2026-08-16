@@ -4,12 +4,21 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.example.islandgame.daos.SettingsDao
 import com.example.islandgame.daos.UserProfileDao
 
 
-@Database(entities = [UserProfileEntity::class], version = 1, exportSchema = false)
+@Database(
+    entities = [
+        UserProfileEntity::class,
+        SettingsEntity::class
+    ],
+    version = 2,
+    exportSchema = false
+)
 abstract class GameDatabase : RoomDatabase() {
     abstract fun userProfileDao(): UserProfileDao
+    abstract fun settingsDao(): SettingsDao
 
     companion object {
         @Volatile
@@ -21,11 +30,12 @@ abstract class GameDatabase : RoomDatabase() {
                     context.applicationContext,
                     GameDatabase::class.java,
                     "game_database"
-                ).build()
+                )
+                    .fallbackToDestructiveMigration(false)
+                    .build()
                 INSTANCE = instance
                 instance
             }
         }
-
     }
 }

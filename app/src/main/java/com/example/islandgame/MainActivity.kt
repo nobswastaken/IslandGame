@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.islandgame.repository.ProfileRepo
 import com.example.islandgame.repository.SettingsRepo
+import com.example.islandgame.screens.GameScreen
 import com.example.islandgame.screens.HomeScreen
 import com.example.islandgame.screens.LevelScreen
 import com.example.islandgame.screens.PlayScreen
@@ -71,9 +72,17 @@ class MainActivity : ComponentActivity() {
                         settingsVM = settingsViewModel,
                         soundManager = soundManager
                     )}
+
+                    "games" -> GameScreen(
+                        onHomeClick = { currentScreen = "home"},
+                        onThisLevelClick = { currentScreen = "games"},
+
+                    )
                     "levels" -> LevelScreen(
                         onHomeClick = { currentScreen = "home"},
                         onLevelClick = { currentScreen = "play"},
+                        onThisLevelClick = { currentScreen = "games"},
+                        profileViewModel = profileViewmodel,
                         settingsVM = settingsViewModel,
                         soundManager = soundManager
                     )

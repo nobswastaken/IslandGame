@@ -3,6 +3,7 @@ package com.example.islandgame.components
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -27,6 +28,7 @@ import com.example.islandgame.ui.theme.IslandGameTheme
 @Composable
 fun UnlockedLevelCard(
     modifier: Modifier = Modifier,
+    onThisLevelClick: () -> Unit,
     number: String,
     stars: Int,
 ) {
@@ -59,7 +61,7 @@ fun UnlockedLevelCard(
             Image(
                 painter = painterResource(id = R.drawable.unlockedlevel),
                 contentDescription = "Level Button",
-                modifier = Modifier.size(60.dp)
+                modifier = Modifier.size(60.dp).clickable { onThisLevelClick() }
             )
 
             Text(
@@ -80,6 +82,7 @@ fun UnlockedLevelCardPreview(){
             modifier = Modifier,
             number = "1",
             stars = 3,
+            onThisLevelClick = {},
         )
     }
 }

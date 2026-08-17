@@ -33,7 +33,10 @@ import androidx.compose.material3.Scaffold // Ensure you have this import
 import com.example.islandgame.components.TopNavbarGameplay
 
 @Composable
-fun GameScreen() {
+fun GameScreen(
+    onHomeClick: () -> Unit,
+    onThisLevelClick: () -> Unit,
+) {
     val engine = remember { GamePlay() }
 
 
@@ -109,10 +112,10 @@ fun GameScreen() {
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun GameScreenPreview(){
-    IslandGameTheme {
-        GameScreen()
-    }
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun GameScreenPreview(){
+//    IslandGameTheme {
+//        GameScreen()
+//    }
+//}

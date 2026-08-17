@@ -38,6 +38,7 @@ import com.example.islandgame.viewmodel.SettingsViewmodel
 fun LevelScreen(
     onHomeClick: () -> Unit,
     onLevelClick: () -> Unit,
+    onThisLevelClick: () -> Unit,
     profileViewModel: ProfileViewmodel = viewModel(),
     settingsVM: SettingsViewmodel = viewModel(),
     soundManager: SoundManager
@@ -96,22 +97,22 @@ fun LevelScreen(
 
                 // Row 1
                 Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                    UnlockedLevelCard(number = "1", stars = 3)
-                    UnlockedLevelCard(number = "2", stars = 3)
-                    UnlockedLevelCard(number = "3", stars = 3)
-                    UnlockedLevelCard(number = "4", stars = 2)
+                    UnlockedLevelCard(number = "1", stars = 3, onThisLevelClick = onThisLevelClick)
+                    UnlockedLevelCard(number = "2", stars = 3, onThisLevelClick = onThisLevelClick)
+                    UnlockedLevelCard(number = "3", stars = 3, onThisLevelClick = onThisLevelClick)
+                    UnlockedLevelCard(number = "4", stars = 2, onThisLevelClick = onThisLevelClick)
                 }
                 // Row 2
                 Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                    UnlockedLevelCard(number = "5", stars = 2)
-                    UnlockedLevelCard(number = "6", stars = 2)
-                    UnlockedLevelCard(number = "7", stars = 1)
-                    UnlockedLevelCard(number = "8", stars = 2)
+                    UnlockedLevelCard(number = "5", stars = 2, onThisLevelClick = onThisLevelClick)
+                    UnlockedLevelCard(number = "6", stars = 2, onThisLevelClick = onThisLevelClick)
+                    UnlockedLevelCard(number = "7", stars = 1, onThisLevelClick = onThisLevelClick)
+                    UnlockedLevelCard(number = "8", stars = 2, onThisLevelClick = onThisLevelClick)
                 }
                 // Row 3
                 Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                    UnlockedLevelCard(number = "9", stars = 1)
-                    UnlockedLevelCard(number = "10", stars = 0)
+                    UnlockedLevelCard(number = "9", stars = 1, onThisLevelClick = onThisLevelClick)
+                    UnlockedLevelCard(number = "10", stars = 0, onThisLevelClick = onThisLevelClick)
                     LockedLevelCard()
                     LockedLevelCard()
                 }

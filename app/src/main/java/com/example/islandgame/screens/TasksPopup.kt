@@ -31,11 +31,13 @@ import com.example.islandgame.R
 import com.example.islandgame.components.DoItButton
 import com.example.islandgame.components.Tasks
 import com.example.islandgame.components.WorldProgress
+import com.example.islandgame.sounds.SoundManager
 import com.example.islandgame.ui.theme.IslandGameTheme
 
 @Composable
 fun TasksPopup(
     onDismiss: () -> Unit,
+    soundManager: SoundManager,
     modifier: Modifier = Modifier,
 ) {
     Box(
@@ -74,7 +76,9 @@ fun TasksPopup(
                         contentDescription = "Close Button",
                         modifier = Modifier
                             .size(30.dp)
-                            .clickable { onDismiss() }
+                            .clickable { onDismiss()
+                                        soundManager.playSound()
+                                    }
                     )
                 }
 
@@ -142,10 +146,10 @@ fun TasksPopup(
 
 
 
-@Preview
-@Composable
-fun TasksPopupPreview(){
-    IslandGameTheme() {
-        TasksPopup(onDismiss = {})
-    }
-}
+//@Preview
+//@Composable
+//fun TasksPopupPreview(){
+//    IslandGameTheme() {
+//        TasksPopup(onDismiss = {})
+//    }
+//}

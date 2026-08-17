@@ -30,6 +30,7 @@ import com.example.islandgame.components.LevelButton
 import com.example.islandgame.components.LockedLevelCard
 import com.example.islandgame.components.TopNavBar
 import com.example.islandgame.components.UnlockedLevelCard
+import com.example.islandgame.sounds.SoundManager
 import com.example.islandgame.viewmodel.ProfileViewmodel
 import com.example.islandgame.viewmodel.SettingsViewmodel
 
@@ -39,6 +40,7 @@ fun LevelScreen(
     onLevelClick: () -> Unit,
     profileViewModel: ProfileViewmodel = viewModel(),
     settingsVM: SettingsViewmodel = viewModel(),
+    soundManager: SoundManager
 ) {
     var showSettingsPopup by remember { mutableStateOf(false) }
     var showEditProfilePopup by remember { mutableStateOf(false) }
@@ -154,7 +156,8 @@ fun LevelScreen(
                 showSettingsPopup = false
                 showEditProfilePopup = true
             },
-            settingsVM = settingsVM
+            settingsVM = settingsVM,
+            soundManager = soundManager
         )
     }
 
@@ -164,10 +167,11 @@ fun LevelScreen(
         EditProfilePopup(
             currentName = username,
             currentCountryid = countryId,
+            soundManager = soundManager,
             onDismiss = { showEditProfilePopup = false },
             onAccept = { newName, selectedFlagId ->
-
                 profileViewModel.updateprofile(newName, selectedFlagId)
+                soundManager.playSound()
             }
         )
     }

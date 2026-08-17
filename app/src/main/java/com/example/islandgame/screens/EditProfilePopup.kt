@@ -46,6 +46,7 @@ import com.example.islandgame.components.FlagIcon
 import com.example.islandgame.components.LevelButton
 import com.example.islandgame.components.TextInput
 import com.example.islandgame.data.flags
+import com.example.islandgame.sounds.SoundManager
 import com.example.islandgame.ui.theme.IslandGameTheme
 
 @Composable
@@ -53,6 +54,7 @@ fun EditProfilePopup(
     onDismiss:() -> Unit,
     currentCountryid: String,
     currentName: String,
+    soundManager: SoundManager,
     onAccept: (String, String) -> Unit
 ) {
     var selectedFlagId by remember { mutableStateOf(currentCountryid) }
@@ -96,7 +98,9 @@ fun EditProfilePopup(
                         contentDescription = "Close Button",
                         modifier = Modifier
                             .size(30.dp)
-                            .clickable { onDismiss() }
+                            .clickable { onDismiss()
+                                soundManager.playSound()
+                            }
                     )
                 }
             }
@@ -175,7 +179,9 @@ fun EditProfilePopup(
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold,
                         onClick = { onAccept(name, selectedFlagId)
-                                  onDismiss()},
+                                  onDismiss()
+                                  soundManager.playSound()
+                        },
                         modifier = Modifier
                             .wrapContentWidth()
                             .wrapContentHeight()
@@ -190,15 +196,15 @@ fun EditProfilePopup(
 
 
 
-@Preview
-@Composable
-fun editpreview(){
-    IslandGameTheme() {
-        EditProfilePopup(
-            currentCountryid = "UAE",
-            currentName = "James Bond",
-            onDismiss = {},
-            onAccept = {_,_ -> }
-        )
-    }
-}
+//@Preview
+//@Composable
+//fun editpreview(){
+//    IslandGameTheme() {
+//        EditProfilePopup(
+//            currentCountryid = "UAE",
+//            currentName = "James Bond",
+//            onDismiss = {},
+//            onAccept = {_,_ -> }
+//        )
+//    }
+//}

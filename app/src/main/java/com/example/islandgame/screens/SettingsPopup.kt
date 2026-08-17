@@ -31,10 +31,12 @@ import com.example.islandgame.R
 import com.example.islandgame.ui.theme.IslandGameTheme
 import com.example.islandgame.viewmodel.SettingsViewmodel
 import androidx.compose.runtime.getValue
+import com.example.islandgame.sounds.SoundManager
 
 @Composable
 fun SettingsPopup(
     onDismiss: () -> Unit,
+    soundManager: SoundManager,
     onEditProfileClick: () -> Unit,
     settingsVM: SettingsViewmodel
 ) {
@@ -80,7 +82,9 @@ fun SettingsPopup(
                             contentDescription = "Close Button",
                             modifier = Modifier
                                 .size(30.dp)
-                                .clickable { onDismiss() }
+                                .clickable { onDismiss()
+                                            soundManager.playSound()
+                                        }
                         )
                     }
                 }

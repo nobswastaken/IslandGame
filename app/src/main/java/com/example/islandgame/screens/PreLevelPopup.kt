@@ -25,12 +25,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.islandgame.R
 import com.example.islandgame.components.Boost
+import com.example.islandgame.sounds.SoundManager
 import com.example.islandgame.ui.theme.IslandGameTheme
 
 @Composable
 fun PreLevelPopup(
     levelNumber: Int = 1,
     onDismiss: () -> Unit,
+    soundManager: SoundManager,
     modifier: Modifier = Modifier,
     stars: Int
 ) {
@@ -72,7 +74,9 @@ fun PreLevelPopup(
                         contentDescription = "Close Button",
                         modifier = Modifier
                             .size(30.dp)
-                            .clickable { onDismiss() }
+                            .clickable { onDismiss()
+                                        soundManager.playSound()
+                                    }
                     )
                 }
 
@@ -162,15 +166,15 @@ fun PreLevelPopup(
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun BoosterPopupPreview(){
-    IslandGameTheme {
-        PreLevelPopup(
-            levelNumber = 1,
-            onDismiss = {},
-            modifier = Modifier,
-            stars = 0
-        )
-    }
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun BoosterPopupPreview(){
+//    IslandGameTheme {
+//        PreLevelPopup(
+//            levelNumber = 1,
+//            onDismiss = {},
+//            modifier = Modifier,
+//            stars = 0
+//        )
+//    }
+//}

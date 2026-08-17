@@ -31,6 +31,7 @@ import com.example.islandgame.components.GoldenKeyPopup
 import com.example.islandgame.components.LevelButton
 import com.example.islandgame.components.TopNavBar
 import com.example.islandgame.components.Zone
+import com.example.islandgame.sounds.SoundManager
 import com.example.islandgame.ui.theme.IslandGameTheme
 import com.example.islandgame.viewmodel.ProfileViewmodel
 import com.example.islandgame.viewmodel.SettingsViewmodel
@@ -39,6 +40,7 @@ import com.example.islandgame.viewmodel.SettingsViewmodel
 fun PlayScreen(
     onHomeClick: () -> Unit,
     onLevelClick: () -> Unit,
+    soundManager: SoundManager,
     profileViewModel: ProfileViewmodel,
     settingsVM: SettingsViewmodel,
 ) {
@@ -131,7 +133,8 @@ fun PlayScreen(
                     showSettingsPopup = false
                     showEditProfilePopup = true
                 },
-                settingsVM = settingsVM
+                settingsVM = settingsVM,
+                soundManager = soundManager
             )
         }
 
@@ -140,30 +143,35 @@ fun PlayScreen(
             EditProfilePopup(
                 currentName = username,
                 currentCountryid = countryId,
+                soundManager = soundManager,
                 onDismiss = { showEditProfilePopup = false },
                 onAccept = { newName, selectedFlagId ->
-
                     profileViewModel.updateprofile(newName, selectedFlagId)
+                    soundManager.playSound()
+
                 }
             )
         }
 
         if (showKeysPopup) {
             GoldenKeyPopup(
-                onDismiss = { showKeysPopup = false }
+                onDismiss = { showKeysPopup = false },
+                soundManager = soundManager
             )
         }
 
         if (showTaskPopup) {
             TasksPopup(
-                onDismiss = { showTaskPopup = false }
+                onDismiss = { showTaskPopup = false},
+                soundManager = soundManager
             )
         }
 
         if (showPrelevelPopup) {
             PreLevelPopup(
                 onDismiss = { showPrelevelPopup = false },
-                stars = 0
+                stars = 0,
+                soundManager = soundManager
             )
         }
 

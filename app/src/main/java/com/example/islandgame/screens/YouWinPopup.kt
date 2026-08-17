@@ -30,11 +30,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.islandgame.R
 import com.example.islandgame.components.CoinDisplay
+import com.example.islandgame.sounds.SoundManager
 import com.example.islandgame.ui.theme.IslandGameTheme
 
 @Composable
 fun YouWinPopup(
     onDismiss: () -> Unit,
+    soundManager: SoundManager,
     modifier: Modifier,
     stars: Int
 ) {
@@ -78,7 +80,9 @@ fun YouWinPopup(
                         contentDescription = "Close Button",
                         modifier = Modifier
                             .size(30.dp)
-                            .clickable { onDismiss() }
+                            .clickable { onDismiss()
+                                        soundManager.playSound()
+                                    }
                     )
                 }
             }
@@ -188,10 +192,10 @@ fun YouWinPopup(
 }
 
 
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun YouWinPopupPreview(){
-    IslandGameTheme() {
-        YouWinPopup (onDismiss = {}, modifier = Modifier, stars = 3)
-    }
-}
+//@Preview(showBackground = true, showSystemUi = true)
+//@Composable
+//fun YouWinPopupPreview(){
+//    IslandGameTheme() {
+//        YouWinPopup (onDismiss = {}, modifier = Modifier, stars = 3)
+//    }
+//}

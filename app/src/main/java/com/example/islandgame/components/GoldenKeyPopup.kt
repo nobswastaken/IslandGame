@@ -28,12 +28,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.islandgame.R
+import com.example.islandgame.sounds.SoundManager
 import com.example.islandgame.ui.theme.IslandGameTheme
 
 @Composable
 fun GoldenKeyPopup(
-    onDismiss: () -> Unit
-) {
+    onDismiss: () -> Unit,
+    soundManager: SoundManager,
+
+    ) {
 
     Box(modifier = Modifier.fillMaxSize().background(Color.Black.copy(alpha = 0.6f)) , contentAlignment = Alignment.Center) {
         Box(
@@ -66,7 +69,9 @@ fun GoldenKeyPopup(
                         contentDescription = "Close Button",
                         modifier = Modifier
                             .size(30.dp)
-                            .clickable { onDismiss() }
+                            .clickable { onDismiss()
+                                        soundManager.playSound()
+                                    }
                     )
                 }
             }
@@ -127,10 +132,10 @@ fun GoldenKeyPopup(
 }
 
 
-@Composable
-@Preview(showBackground = true, showSystemUi = true)
-fun GoldenKeyprev(){
-    IslandGameTheme() {
-        GoldenKeyPopup(onDismiss = {})
-    }
-}
+//@Composable
+//@Preview(showBackground = true, showSystemUi = true)
+//fun GoldenKeyprev(){
+//    IslandGameTheme() {
+//        GoldenKeyPopup(onDismiss = {})
+//    }
+//}

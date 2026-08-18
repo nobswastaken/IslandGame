@@ -43,9 +43,9 @@ fun GameScreen(
     Scaffold(
         topBar = {
             TopNavbarGameplay(
-                score = 100,
+                score = engine.score,
                 targetCount = 5,
-                movesLeft = 10,
+                movesLeft = engine.movesLeft,
                 starProgress = 0.7f,
             )
         },

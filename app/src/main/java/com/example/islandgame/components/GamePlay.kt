@@ -4,6 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.example.islandgame.data.Gems
+import com.example.islandgame.data.Match
 import kotlin.collections.List
 import kotlin.math.abs
 
@@ -15,6 +16,9 @@ class GamePlay(
     var boardState by mutableStateOf(generateBoard())
 
     var selectedGem by mutableStateOf<Pair<Int, Int>?>(null)
+    var movesLeft by mutableStateOf(10)
+
+    var score by mutableStateOf(0)
 
     private fun generateBoard(): List<List<Gems>> {
         val board = MutableList(rows) {
@@ -50,68 +54,117 @@ class GamePlay(
 
         return board
     }
-    fun findMatches(): Set<Pair<Int, Int>> {
-        val matches = mutableSetOf<Pair<Int, Int>>()
+    fun findMatches(): Set<Match> {
+        val matches = mutableSetOf<Match>()
 
         // Horizontal matches
         for (row in 0 until rows) {
-            for (col in 0 until columns - 2) {
+            var col = 0
 
+            while (col < columns) {
                 val gem = boardState[row][col]
 
-                if (
-                    gem != Gems.Empty &&
-                    gem != Gems.Crystal_Ball &&
-                    gem == boardState[row][col + 1] &&
-                    gem == boardState[row][col + 2]
-                ) {
-                    matches.add(Pair(row, col))
-                    matches.add(Pair(row, col + 1))
-                    matches.add(Pair(row, col + 2))
+                if (gem == Gems.Empty || gem == Gems.Crystal_Ball) {
+                    col++
+                    continue
                 }
+
+                var endCol = col + 1
+
+                while (
+                    endCol < columns &&
+                    boardState[row][endCol] == gem
+                ) {
+                    endCol++
+                }
+
+                val length = endCol - col
+
+                if (length >= 3) {
+                    val positions = (col until endCol)
+                        .map { currentCol -> Pair(row, currentCol) }
+                        .toSet()
+
+                    matches.add(
+                        Match(
+                            gems = positions,
+                            size = positions.size
+                        )
+                    )
+                }
+
+                col = endCol
             }
         }
 
         // Vertical matches
-        for (row in 0 until rows - 2) {
-            for (col in 0 until columns) {
+        for (col in 0 until columns) {
+            var row = 0
 
+            while (row < rows) {
                 val gem = boardState[row][col]
 
-                if (
-                    gem != Gems.Empty &&
-                    gem != Gems.Crystal_Ball &&
-                    gem == boardState[row + 1][col] &&
-                    gem == boardState[row + 2][col]
-                ) {
-                    matches.add(Pair(row, col))
-                    matches.add(Pair(row + 1, col))
-                    matches.add(Pair(row + 2, col))
+                if (gem == Gems.Empty || gem == Gems.Crystal_Ball) {
+                    row++
+                    continue
                 }
+
+                var endRow = row + 1
+
+                while (
+                    endRow < rows &&
+                    boardState[endRow][col] == gem
+                ) {
+                    endRow++
+                }
+
+                val length = endRow - row
+
+                if (length >= 3) {
+                    val positions = (row until endRow)
+                        .map { currentRow -> Pair(currentRow, col) }
+                        .toSet()
+
+                    matches.add(
+                        Match(
+                            gems = positions,
+                            size = positions.size
+                        )
+                    )
+                }
+                row = endRow
             }
         }
         return matches
     }
 
-    private fun removeMatches(matches: Set<Pair<Int, Int>>) {
+    private fun removeMatches(matches: Set<Match>) {
+
         val newBoard = boardState
             .map { it.toMutableList() }
             .toMutableList()
 
-        for ((row, col) in matches) {
-            newBoard[row][col] = Gems.Empty
+        for (match in matches) {
+            for ((row, col) in match.gems) {
+                newBoard[row][col] = Gems.Empty
+            }
         }
 
         boardState = newBoard
     }
 
     fun selectGem(row: Int, col: Int) {
+        if (movesLeft <= 0) {
+            return
+        }
+
         val firstSelect = selectedGem
 
         if (firstSelect == null) {
             selectedGem = Pair(row, col)
         } else {
             if (isAdjacent(firstSelect, Pair(row, col))) {
+                movesLeft--
                 swapGems(firstSelect, Pair(row, col))
             }
             selectedGem = null
@@ -145,16 +198,12 @@ class GamePlay(
 
         val matches = findMatches()
 
-        println("MATCHES AFTER SWAP: $matches")
-
         if (matches.isEmpty()) {
             println("NO MATCH - REVERTING")
             boardState = originalBoard
         } else {
-            println("MATCH FOUND - KEEPING SWAP")
-            removeMatches(matches)
-            collapseBoard()
-            fillEmptySpaces()
+            println("MATCH FOUND")
+            resolveMatches()
         }
     }
 
@@ -203,5 +252,31 @@ class GamePlay(
         boardState = newBoard
     }
 
+    private fun resolveMatches() {
+        var cascade = 1
 
+        while (true) {
+
+            val matches = findMatches()
+
+            if (matches.isEmpty()) {
+                println("NO MORE MATCHES")
+                break
+            }
+
+            val totalGems = matches.sumOf { it.size }
+
+            println("CASCADE $cascade: $totalGems gems matched")
+
+            score += totalGems * 10
+
+            removeMatches(matches)
+
+            collapseBoard()
+
+            fillEmptySpaces()
+
+            cascade++
+        }
+    }
 }

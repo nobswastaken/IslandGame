@@ -23,6 +23,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -116,7 +117,7 @@ fun TopNavbarGameplay(
                         contentAlignment = Alignment.Center
                     ) {
                         Image(
-                            painter = painterResource(R.drawable.blue),
+                            painter = painterResource(R.drawable.pink_stone),
                             contentDescription = null,
                             modifier = Modifier.size(30.dp)
                         )
@@ -132,6 +133,7 @@ fun TopNavbarGameplay(
                             Text(
                                 text = targetCount.toString(),
                                 color = brownThemeColor,
+                                textAlign = TextAlign.Center,
                                 fontSize = 10.sp,
                                 fontWeight = FontWeight.Black
                             )

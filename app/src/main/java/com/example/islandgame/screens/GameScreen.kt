@@ -30,21 +30,26 @@ import com.example.islandgame.data.Gems
 import com.example.islandgame.ui.theme.IslandGameTheme
 
 import androidx.compose.material3.Scaffold // Ensure you have this import
+import androidx.compose.material3.Text
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
+import com.example.islandgame.components.LevelCompletePopup
 import com.example.islandgame.components.TopNavbarGameplay
+import com.example.islandgame.data.levels
 
 @Composable
 fun GameScreen(
     onHomeClick: () -> Unit,
     onThisLevelClick: () -> Unit,
 ) {
-    val engine = remember { GamePlay() }
+    val engine = remember { GamePlay(levels[0]) }
 
 
     Scaffold(
         topBar = {
             TopNavbarGameplay(
                 score = engine.score,
-                targetCount = 5,
+                targetCount = engine.targetCount,
                 movesLeft = engine.movesLeft,
                 starProgress = 0.7f,
             )
@@ -100,13 +105,23 @@ fun GameScreen(
                                     Image(
                                         painter = painterResource(id = gem.drawableId),
                                         contentDescription = null,
-                                        modifier = Modifier.fillMaxSize().padding(4.dp)
+                                        modifier = Modifier
+                                            .fillMaxSize()
+                                            .padding(4.dp)
                                     )
                                 }
                             }
                         }
                     }
                 }
+            }
+            if (engine.isLevelCompleted) {
+                LevelCompletePopup(
+                    onHomeClick = { },
+                    onNextLevelClick = {},
+                    score = engine.score,
+                    stars = engine.getStars(),
+                )
             }
         }
     }

@@ -1,25 +1,32 @@
 package com.example.islandgame.components
 
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.example.islandgame.data.Gems
+import com.example.islandgame.data.LevelConfig
 import com.example.islandgame.data.Match
 import kotlin.collections.List
 import kotlin.math.abs
 
 class GamePlay(
+    val levelConfig: LevelConfig,
     val rows: Int = 8,
     val columns: Int = 8
 ) {
 
     var boardState by mutableStateOf(generateBoard())
-
     var selectedGem by mutableStateOf<Pair<Int, Int>?>(null)
-    var movesLeft by mutableStateOf(10)
-
+    var movesLeft by mutableStateOf(levelConfig.moves)
     var score by mutableStateOf(0)
-
+    val targetGem: Gems
+        get() = levelConfig.targetGem
+    var targetCount by mutableIntStateOf(0)
+    val targetRequired: Int
+        get() = levelConfig.targetRequired
+    var isLevelCompleted by mutableStateOf(false)
+        private set
     private fun generateBoard(): List<List<Gems>> {
         val board = MutableList(rows) {
             MutableList<Gems>(columns) { Gems.Empty }
@@ -154,7 +161,7 @@ class GamePlay(
     }
 
     fun selectGem(row: Int, col: Int) {
-        if (movesLeft <= 0) {
+        if (movesLeft <= 0 || isLevelCompleted) {
             return
         }
 
@@ -252,6 +259,33 @@ class GamePlay(
         boardState = newBoard
     }
 
+    private fun calculateScore(matchSize: Int): Int {
+        return when (matchSize) {
+            3 -> 30
+            4 -> 50
+            5 -> 75
+            6 -> 100
+            else -> 125
+        }
+    }
+
+    fun getStars(): Int {
+        return when{
+            movesLeft >= 7 -> 3
+            movesLeft >= 4 -> 2
+            else -> 1
+
+        }
+    }
+
+    fun resetLevel() {
+        boardState = generateBoard()
+        selectedGem = null
+        movesLeft = levelConfig.moves
+        score = 0
+        targetCount = 0
+        isLevelCompleted = false
+    }
     private fun resolveMatches() {
         var cascade = 1
 
@@ -268,7 +302,17 @@ class GamePlay(
 
             println("CASCADE $cascade: $totalGems gems matched")
 
-            score += totalGems * 10
+            for (match in matches) {
+                score += calculateScore(match.size)
+                targetCount += match.gems.count { position ->
+                    boardState[position.first][position.second] == targetGem
+                }
+            }
+
+            if(targetCount >= targetRequired){
+                isLevelCompleted = true
+                println("LEVEL COMPLETED")
+            }
 
             removeMatches(matches)
 

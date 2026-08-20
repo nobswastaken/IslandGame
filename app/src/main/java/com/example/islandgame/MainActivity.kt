@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 import com.example.islandgame.data.AppNavGraph
+import com.example.islandgame.repository.LevelProgressRepo
 import com.example.islandgame.repository.ProfileRepo
 import com.example.islandgame.repository.SettingsRepo
 import com.example.islandgame.screens.GameScreen
@@ -66,7 +67,8 @@ class MainActivity : ComponentActivity() {
                     navController = navController,
                     profileViewModel = profileViewmodel,
                     settingsViewModel = settingsViewModel,
-                    soundManager = soundManager
+                    soundManager = soundManager,
+                    levelProgressRepo = LevelProgressRepo(applicationContext)
                 )
             }
         }

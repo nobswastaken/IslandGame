@@ -31,6 +31,7 @@ import com.example.islandgame.components.GoldenKeyPopup
 import com.example.islandgame.components.LevelButton
 import com.example.islandgame.components.TopNavBar
 import com.example.islandgame.components.Zone
+import com.example.islandgame.data.levels
 import com.example.islandgame.sounds.SoundManager
 import com.example.islandgame.ui.theme.IslandGameTheme
 import com.example.islandgame.viewmodel.ProfileViewmodel
@@ -40,9 +41,10 @@ import com.example.islandgame.viewmodel.SettingsViewmodel
 fun PlayScreen(
     onHomeClick: () -> Unit,
     onLevelClick: () -> Unit,
+    onThisLevelClick: (Int) -> Unit,
     soundManager: SoundManager,
     profileViewModel: ProfileViewmodel,
-    settingsVM: SettingsViewmodel,
+    settingsVM: SettingsViewmodel
 ) {
 
     var showSettingsPopup by remember { mutableStateOf(false) }
@@ -168,7 +170,13 @@ fun PlayScreen(
         }
 
         if (showPrelevelPopup) {
+            val levelConfig = levels.first{ it.levelNumber == 1 }
             PreLevelPopup(
+                levelConfig = levelConfig,
+                onPlayClick = {
+                    showPrelevelPopup = false
+                    onThisLevelClick(1)
+                },
                 onDismiss = { showPrelevelPopup = false },
                 stars = 0,
                 soundManager = soundManager

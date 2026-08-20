@@ -31,11 +31,17 @@ import com.example.islandgame.ui.theme.IslandGameTheme
 
 import androidx.compose.material3.Scaffold // Ensure you have this import
 import androidx.compose.material3.Text
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.example.islandgame.components.LevelCompletePopup
 import com.example.islandgame.components.TopNavbarGameplay
 import com.example.islandgame.data.levels
+import com.example.islandgame.repository.LevelProgressRepo
 import kotlin.text.toFloat
 
 @Composable
@@ -43,10 +49,23 @@ fun GameScreen(
     levelNumber: Int,
     onHomeClick: () -> Unit,
     onLevelClick: () -> Unit,
-    onNextLevelClick: () -> Unit
+    onNextLevelClick: () -> Unit,
+    levelProgressRepo: LevelProgressRepo,
 ) {
     val levelConfig = levels.first { it.levelNumber == levelNumber }
     val engine = remember(levelNumber) { GamePlay(levelConfig) }
+    var progressSaved by remember { mutableStateOf(false) }
+
+    LaunchedEffect(engine.isLevelCompleted) {
+        if (!progressSaved && engine.isLevelCompleted) {
+            val stars = engine.getStars()
+            levelProgressRepo.saveStars(
+                levelNumber = levelNumber,
+                stars = stars
+            )
+            progressSaved = true
+        }
+    }
     val progress = (
             engine.targetCount.toFloat()/engine.targetRequired.toFloat()
             ).coerceIn(0f,1f)

@@ -25,12 +25,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.islandgame.R
 import com.example.islandgame.components.Boost
+import com.example.islandgame.data.LevelConfig
 import com.example.islandgame.sounds.SoundManager
 import com.example.islandgame.ui.theme.IslandGameTheme
 
 @Composable
 fun PreLevelPopup(
-    levelNumber: Int = 1,
+    levelConfig: LevelConfig,
+    onPlayClick: () -> Unit,
     onDismiss: () -> Unit,
     soundManager: SoundManager,
     modifier: Modifier = Modifier,
@@ -63,7 +65,7 @@ fun PreLevelPopup(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = "Level $levelNumber",
+                        text = "Level ${levelConfig.levelNumber}",
                         color = Color.White,
                         fontSize = 28.sp,
                         fontWeight = FontWeight.Black,
@@ -79,11 +81,6 @@ fun PreLevelPopup(
                                     }
                     )
                 }
-
-
-
-
-
 
                 Column(
                     verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -159,7 +156,7 @@ fun PreLevelPopup(
                     modifier = Modifier
                         .align(Alignment.BottomCenter)
                         .offset(y = (-40).dp)
-                        .clickable { /* Trigger level game scene loop start */ }
+                        .clickable { onPlayClick() }
                 )
             }
         }

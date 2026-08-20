@@ -31,6 +31,7 @@ import com.example.islandgame.components.LockedLevelCard
 import com.example.islandgame.components.TopNavBar
 import com.example.islandgame.components.UnlockedLevelCard
 import com.example.islandgame.data.levels
+import com.example.islandgame.repository.LevelProgressRepo
 import com.example.islandgame.sounds.SoundManager
 import com.example.islandgame.viewmodel.ProfileViewmodel
 import com.example.islandgame.viewmodel.SettingsViewmodel
@@ -40,6 +41,7 @@ fun LevelScreen(
     onHomeClick: () -> Unit,
     onLevelClick: () -> Unit,
     onThisLevelClick: (Int) -> Unit,
+    levelProgressRepo: LevelProgressRepo,
     profileViewModel: ProfileViewmodel = viewModel(),
     settingsVM: SettingsViewmodel = viewModel(),
     soundManager: SoundManager
@@ -50,7 +52,13 @@ fun LevelScreen(
     val username by profileViewModel.username.collectAsState()
     val countryId by profileViewModel.country.collectAsState()
 
+    var levelStars by remember { mutableStateOf<Map<Int, Int>>(emptyMap()) }
 
+    LaunchedEffect(Unit) {
+        levelStars = levelProgressRepo
+            .getAllLevelProgress()
+            .associate { it.levelNumber to it.stars }
+    }
     Scaffold(
         topBar = {
             TopNavBar(
@@ -102,7 +110,7 @@ fun LevelScreen(
                         for (level in levelRow) {
                                 UnlockedLevelCard(
                                     number = level.levelNumber.toString(),
-                                    stars = 0,
+                                    stars = levelStars[level.levelNumber] ?: 0,
                                     onThisLevelClick = {onThisLevelClick(level.levelNumber)
                                     }
                                 )

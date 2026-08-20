@@ -6,6 +6,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.example.islandgame.repository.LevelProgressRepo
 import com.example.islandgame.screens.GameScreen
 import com.example.islandgame.screens.HomeScreen
 import com.example.islandgame.screens.LevelScreen
@@ -20,6 +21,7 @@ fun AppNavGraph(
     navController: NavHostController,
     profileViewModel: ProfileViewmodel,
     settingsViewModel: SettingsViewmodel,
+    levelProgressRepo: LevelProgressRepo,
     soundManager: SoundManager
     ) {
     NavHost(
@@ -43,6 +45,9 @@ fun AppNavGraph(
                 onLevelClick = {
                     navController.navigate("levels")
                 },
+                onThisLevelClick = { levelNumber ->
+                    navController.navigate("games/$levelNumber")
+                },
                 profileViewModel = profileViewModel,
                 settingsVM = settingsViewModel,
                 soundManager = soundManager
@@ -62,7 +67,8 @@ fun AppNavGraph(
                 },
                 profileViewModel = profileViewModel,
                 settingsVM = settingsViewModel,
-                soundManager = soundManager
+                soundManager = soundManager,
+                levelProgressRepo = levelProgressRepo
             )
         }
 
@@ -86,7 +92,8 @@ fun AppNavGraph(
                 },
                 onNextLevelClick = {
                     navController.navigate("games/${levelNumber + 1}")
-                }
+                },
+                levelProgressRepo = levelProgressRepo
             )
         }
     }

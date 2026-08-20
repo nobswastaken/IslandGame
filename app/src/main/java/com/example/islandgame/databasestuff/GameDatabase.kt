@@ -6,19 +6,23 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.islandgame.daos.SettingsDao
 import com.example.islandgame.daos.UserProfileDao
-
+import com.example.islandgame.daos.LevelProgressDao
 
 @Database(
     entities = [
         UserProfileEntity::class,
-        SettingsEntity::class
+        SettingsEntity::class,
+        LevelProgressEntity::class
     ],
-    version = 2,
+    version = 3,
     exportSchema = false
 )
 abstract class GameDatabase : RoomDatabase() {
     abstract fun userProfileDao(): UserProfileDao
     abstract fun settingsDao(): SettingsDao
+
+    abstract fun levelProgressDao(): LevelProgressDao
+
 
     companion object {
         @Volatile

@@ -21,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -192,10 +193,15 @@ fun YouWinPopup(
 }
 
 
-//@Preview(showBackground = true, showSystemUi = true)
-//@Composable
-//fun YouWinPopupPreview(){
-//    IslandGameTheme() {
-//        YouWinPopup (onDismiss = {}, modifier = Modifier, stars = 3)
-//    }
-//}
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+fun YouWinPopupPreview(){
+    IslandGameTheme() {
+        YouWinPopup (
+            onDismiss = {},
+            modifier = Modifier,
+            stars = 3,
+            soundManager = SoundManager(LocalContext.current)
+        )
+    }
+}

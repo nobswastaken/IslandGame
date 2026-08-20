@@ -36,22 +36,38 @@ import androidx.compose.ui.unit.sp
 import com.example.islandgame.components.LevelCompletePopup
 import com.example.islandgame.components.TopNavbarGameplay
 import com.example.islandgame.data.levels
+import kotlin.text.toFloat
 
 @Composable
 fun GameScreen(
+    levelNumber: Int,
     onHomeClick: () -> Unit,
-    onThisLevelClick: () -> Unit,
+    onLevelClick: () -> Unit,
+    onNextLevelClick: () -> Unit
 ) {
-    val engine = remember { GamePlay(levels[0]) }
+    val levelConfig = levels.first { it.levelNumber == levelNumber }
+    val engine = remember(levelNumber) { GamePlay(levelConfig) }
+    val progress = (
+            engine.targetCount.toFloat()/engine.targetRequired.toFloat()
+            ).coerceIn(0f,1f)
 
+    val stars = when {
+        progress >= 1f -> 3
+        progress >= 0.50f -> 2
+        progress >= 0.30f -> 1
+        else -> 0
+    }
 
     Scaffold(
         topBar = {
             TopNavbarGameplay(
                 score = engine.score,
+                targetGem = engine.targetGem,
+                targetRequired = engine.targetRequired,
                 targetCount = engine.targetCount,
                 movesLeft = engine.movesLeft,
-                starProgress = 0.7f,
+                starProgress = progress,
+                stars = stars,
             )
         },
 
@@ -117,10 +133,12 @@ fun GameScreen(
             }
             if (engine.isLevelCompleted) {
                 LevelCompletePopup(
-                    onHomeClick = { },
-                    onNextLevelClick = {},
+                    onHomeClick = { onHomeClick() },
+                    onLevelClick = { onLevelClick() },
+                    onNextLevelClick = { onNextLevelClick() },
                     score = engine.score,
                     stars = engine.getStars(),
+                    targetRequired = engine.targetRequired
                 )
             }
         }

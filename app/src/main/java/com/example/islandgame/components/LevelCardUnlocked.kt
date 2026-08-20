@@ -57,11 +57,12 @@ fun UnlockedLevelCard(
             contentAlignment = Alignment.Center,
             modifier = Modifier
                 .size(60.dp)
+                .clickable { onThisLevelClick() }
         ) {
             Image(
                 painter = painterResource(id = R.drawable.unlockedlevel),
                 contentDescription = "Level Button",
-                modifier = Modifier.size(60.dp).clickable { onThisLevelClick() }
+                modifier = Modifier.size(60.dp)
             )
 
             Text(

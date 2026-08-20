@@ -17,6 +17,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.rememberNavController
+import com.example.islandgame.data.AppNavGraph
 import com.example.islandgame.repository.ProfileRepo
 import com.example.islandgame.repository.SettingsRepo
 import com.example.islandgame.screens.GameScreen
@@ -58,36 +60,14 @@ class MainActivity : ComponentActivity() {
                     soundManager.soundEnabled = settings.sound
                 }
 
-                var currentScreen by remember { mutableStateOf("home") }
+                val navController = rememberNavController()
 
-                // 2. Control which screen is visible based on that variable
-                when (currentScreen) {
-                    "home" -> HomeScreen(
-                        onPlayClick = { currentScreen = "play" } // Changes screen
-                    )
-                    "play" -> { PlayScreen(
-                        onHomeClick = { currentScreen = "home"},
-                        onLevelClick = { currentScreen = "levels"},
-                        profileViewModel = profileViewmodel,
-                        settingsVM = settingsViewModel,
-                        soundManager = soundManager
-                    )}
-
-                    "games" -> GameScreen(
-                        onHomeClick = { currentScreen = "home"},
-                        onThisLevelClick = { currentScreen = "games"},
-
-                    )
-                    "levels" -> LevelScreen(
-                        onHomeClick = { currentScreen = "home"},
-                        onLevelClick = { currentScreen = "play"},
-                        onThisLevelClick = { currentScreen = "games"},
-                        profileViewModel = profileViewmodel,
-                        settingsVM = settingsViewModel,
-                        soundManager = soundManager
-                    )
-                }
-
+                AppNavGraph(
+                    navController = navController,
+                    profileViewModel = profileViewmodel,
+                    settingsViewModel = settingsViewModel,
+                    soundManager = soundManager
+                )
             }
         }
     }

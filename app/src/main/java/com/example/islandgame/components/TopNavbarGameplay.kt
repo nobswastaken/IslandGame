@@ -28,13 +28,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.islandgame.R
+import com.example.islandgame.data.Gems
 import com.example.islandgame.ui.theme.IslandGameTheme
 
 @Composable
 fun TopNavbarGameplay(
     score: Int,
+    targetGem: Gems,
     targetCount: Int,
+    targetRequired: Int,
     movesLeft: Int,
+    stars: Int,
     starProgress: Float,
     modifier: Modifier = Modifier
 ) {
@@ -43,6 +47,7 @@ fun TopNavbarGameplay(
         colors = listOf(Color(0xFFFFF1C1), Color(0xFFFCD37F))
     )
     val orangeBorderColor = Color(0xFFDF7B00)
+
 
     Box(
         modifier = modifier
@@ -117,7 +122,7 @@ fun TopNavbarGameplay(
                         contentAlignment = Alignment.Center
                     ) {
                         Image(
-                            painter = painterResource(R.drawable.pink_stone),
+                            painter = painterResource(targetGem.drawableId),
                             contentDescription = null,
                             modifier = Modifier.size(30.dp)
                         )
@@ -125,13 +130,13 @@ fun TopNavbarGameplay(
                             modifier = Modifier
                                 .align(Alignment.BottomEnd)
                                 .offset(x = (-4).dp, y = (-4).dp)
-                                .size(18.dp)
+                                .size(30.dp)
                                 .background(color = Color.White, shape = CircleShape)
-                                .border(width = 2.5.dp, color = orangeBorderColor, shape = CircleShape),
+                                .border(width = 1.dp, color = orangeBorderColor, shape = CircleShape),
                             contentAlignment = Alignment.Center
                         ) {
                             Text(
-                                text = targetCount.toString(),
+                                text = "${targetCount}/${targetRequired}",
                                 color = brownThemeColor,
                                 textAlign = TextAlign.Center,
                                 fontSize = 10.sp,
@@ -195,9 +200,28 @@ fun TopNavbarGameplay(
                         )
                 )
                 Box(modifier = Modifier.fillMaxWidth()) {
-                    Image(painter = painterResource(id = R.drawable.property_1_free), contentDescription = null, modifier = Modifier.align(Alignment.CenterStart).padding(start = 70.dp).size(34.dp))
-                    Image(painter = painterResource(id = R.drawable.property_1_free), contentDescription = null, modifier = Modifier.align(Alignment.CenterEnd).padding(end = 90.dp).size(34.dp))
-                    Image(painter = painterResource(id = R.drawable.property_1_free), contentDescription = null, modifier = Modifier.align(Alignment.CenterEnd).offset(x = 6.dp).size(34.dp))
+                    for (i in 1..3) {
+                        val starResource =
+                            if (i <= stars) {
+                                R.drawable.property_1_full
+                            } else {
+                                R.drawable.property_1_free
+                            }
+
+                        Image(
+                            painter = painterResource(id = starResource),
+                            contentDescription = null,
+                            modifier = Modifier
+                                .align(
+                                    when (i) {
+                                        1 -> Alignment.CenterStart
+                                        2 -> Alignment.Center
+                                        else -> Alignment.CenterEnd
+                                    }
+                                )
+                                .size(34.dp)
+                        )
+                    }
                 }
             }
         }
@@ -206,15 +230,17 @@ fun TopNavbarGameplay(
 
 
 
-@Preview
-@Composable
-fun TopNavbarGameplayPreview(){
-    IslandGameTheme() {
-        TopNavbarGameplay(
-            score = 100,
-            targetCount = 5,
-            movesLeft = 10,
-            starProgress = 0.5f,
-        )
-    }
-}
+//@Preview
+//@Composable
+//fun TopNavbarGameplayPreview(){
+//    IslandGameTheme() {
+//        TopNavbarGameplay(
+//            score = 100,
+//            targetCount = 5,
+//            movesLeft = 10,
+//            starProgress = 0.5f,
+//            stars = 2,
+//            targetRequired = 10,
+//        )
+//    }
+//}

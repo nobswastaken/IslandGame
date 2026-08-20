@@ -30,6 +30,7 @@ import com.example.islandgame.components.LevelButton
 import com.example.islandgame.components.LockedLevelCard
 import com.example.islandgame.components.TopNavBar
 import com.example.islandgame.components.UnlockedLevelCard
+import com.example.islandgame.data.levels
 import com.example.islandgame.sounds.SoundManager
 import com.example.islandgame.viewmodel.ProfileViewmodel
 import com.example.islandgame.viewmodel.SettingsViewmodel
@@ -38,7 +39,7 @@ import com.example.islandgame.viewmodel.SettingsViewmodel
 fun LevelScreen(
     onHomeClick: () -> Unit,
     onLevelClick: () -> Unit,
-    onThisLevelClick: () -> Unit,
+    onThisLevelClick: (Int) -> Unit,
     profileViewModel: ProfileViewmodel = viewModel(),
     settingsVM: SettingsViewmodel = viewModel(),
     soundManager: SoundManager
@@ -88,6 +89,7 @@ fun LevelScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(innerPadding)
+                    .verticalScroll(rememberScrollState())
                     .padding(horizontal = 16.dp),
                 verticalArrangement = Arrangement.spacedBy(20.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
@@ -95,47 +97,24 @@ fun LevelScreen(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                // Row 1
-                Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                    UnlockedLevelCard(number = "1", stars = 3, onThisLevelClick = onThisLevelClick)
-                    UnlockedLevelCard(number = "2", stars = 3, onThisLevelClick = onThisLevelClick)
-                    UnlockedLevelCard(number = "3", stars = 3, onThisLevelClick = onThisLevelClick)
-                    UnlockedLevelCard(number = "4", stars = 2, onThisLevelClick = onThisLevelClick)
-                }
-                // Row 2
-                Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                    UnlockedLevelCard(number = "5", stars = 2, onThisLevelClick = onThisLevelClick)
-                    UnlockedLevelCard(number = "6", stars = 2, onThisLevelClick = onThisLevelClick)
-                    UnlockedLevelCard(number = "7", stars = 1, onThisLevelClick = onThisLevelClick)
-                    UnlockedLevelCard(number = "8", stars = 2, onThisLevelClick = onThisLevelClick)
-                }
-                // Row 3
-                Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                    UnlockedLevelCard(number = "9", stars = 1, onThisLevelClick = onThisLevelClick)
-                    UnlockedLevelCard(number = "10", stars = 0, onThisLevelClick = onThisLevelClick)
-                    LockedLevelCard()
-                    LockedLevelCard()
-                }
-                // Row 4
-                Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                    LockedLevelCard()
-                    LockedLevelCard()
-                    LockedLevelCard()
-                    LockedLevelCard()
-                }
-                // Row 5
-                Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                    LockedLevelCard()
-                    LockedLevelCard()
-                    LockedLevelCard()
-                    LockedLevelCard()
-                }
+                for (levelRow in levels.chunked(4)) {
+                    Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                        for (level in levelRow) {
+                                UnlockedLevelCard(
+                                    number = level.levelNumber.toString(),
+                                    stars = 0,
+                                    onThisLevelClick = {onThisLevelClick(level.levelNumber)
+                                    }
+                                )
+                            }
+                        }
+                    }
 
 
                 Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                     LevelButton(
                         text = "Back",
-                        onClick = {},
+                        onClick = { onHomeClick()},
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.width(100.dp)

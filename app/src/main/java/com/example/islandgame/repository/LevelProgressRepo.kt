@@ -13,6 +13,18 @@ class LevelProgressRepo(context: Context) {
         return dao.getAllLevelProgress()
     }
 
+    suspend fun getNextLevel(): Int {
+        val completedLevels = dao.getAllLevelProgress()
+            .filter { it.stars > 0 }
+            .map { it.levelNumber }
+        return if (completedLevels.isEmpty()) {
+            1
+        } else {
+            val highestCompletedLevel = completedLevels.maxOrNull() ?: 0
+            highestCompletedLevel + 1
+        }
+    }
+
     suspend fun saveStars(levelNumber: Int, stars: Int) {
         val existingProgress = dao.getLevelProgress(levelNumber)
 

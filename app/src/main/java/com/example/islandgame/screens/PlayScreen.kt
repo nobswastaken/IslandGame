@@ -1,6 +1,5 @@
 package com.example.islandgame.screens
 
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -11,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -21,19 +21,22 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.runtime.collectAsState
 import com.example.islandgame.R
 import com.example.islandgame.components.BottomNavbar
+import com.example.islandgame.components.EditProfilePopup
 import com.example.islandgame.components.GoldenKeyPopup
 import com.example.islandgame.components.LevelButton
+import com.example.islandgame.components.PreLevelPopup
+import com.example.islandgame.components.SettingsPopup
+import com.example.islandgame.components.TasksPopup
 import com.example.islandgame.components.TopNavBar
 import com.example.islandgame.components.Zone
 import com.example.islandgame.data.levels
+import com.example.islandgame.repository.LevelProgressRepo
 import com.example.islandgame.sounds.SoundManager
-import com.example.islandgame.ui.theme.IslandGameTheme
 import com.example.islandgame.viewmodel.ProfileViewmodel
 import com.example.islandgame.viewmodel.SettingsViewmodel
 
@@ -44,7 +47,8 @@ fun PlayScreen(
     onThisLevelClick: (Int) -> Unit,
     soundManager: SoundManager,
     profileViewModel: ProfileViewmodel,
-    settingsVM: SettingsViewmodel
+    settingsVM: SettingsViewmodel,
+    levelProgressRepo: LevelProgressRepo
 ) {
 
     var showSettingsPopup by remember { mutableStateOf(false) }
@@ -52,20 +56,17 @@ fun PlayScreen(
     var showKeysPopup by remember { mutableStateOf(false) }
     var showTaskPopup by remember { mutableStateOf(false) }
     var showPrelevelPopup by remember { mutableStateOf(false) }
+    var nextLevel by remember { mutableStateOf(1) }
 
     val username by profileViewModel.username.collectAsState()
     val countryId by profileViewModel.country.collectAsState()
 
+    LaunchedEffect(Unit) {
+        nextLevel = levelProgressRepo.getNextLevel()
+    }
 
-    Box(modifier = Modifier.fillMaxSize()) {
 
 
-        Image(
-            painter = painterResource(id = R.drawable.playscreen_bg),
-            contentDescription = null,
-            modifier = Modifier.fillMaxSize(),
-            contentScale = ContentScale.Crop
-        )
 
         Scaffold(
             containerColor = Color.Transparent,
@@ -91,6 +92,16 @@ fun PlayScreen(
             },
         ) { innerPadding ->
 
+            Box(modifier = Modifier.fillMaxSize()) {
+
+
+                Image(
+                    painter = painterResource(id = R.drawable.playscreen_bg),
+                    contentDescription = null,
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Crop
+                )
+
             Box(
                 modifier = Modifier
                     .fillMaxSize()
@@ -109,7 +120,7 @@ fun PlayScreen(
                         verticalAlignment = Alignment.Bottom,
                     ) {
                         LevelButton(
-                            text = "Level 1",
+                            text = "Level $nextLevel",
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Bold,
                             onClick = { showPrelevelPopup = true},
@@ -164,18 +175,18 @@ fun PlayScreen(
 
         if (showTaskPopup) {
             TasksPopup(
-                onDismiss = { showTaskPopup = false},
+                onDismiss = { showTaskPopup = false },
                 soundManager = soundManager
             )
         }
 
         if (showPrelevelPopup) {
-            val levelConfig = levels.first{ it.levelNumber == 1 }
+            val levelConfig = levels.first{ it.levelNumber == nextLevel }
             PreLevelPopup(
                 levelConfig = levelConfig,
                 onPlayClick = {
                     showPrelevelPopup = false
-                    onThisLevelClick(1)
+                    onThisLevelClick(nextLevel)
                 },
                 onDismiss = { showPrelevelPopup = false },
                 stars = 0,

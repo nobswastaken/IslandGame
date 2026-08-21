@@ -1,4 +1,4 @@
-package com.example.islandgame.screens
+package com.example.islandgame.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -17,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -24,7 +25,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.islandgame.R
-import com.example.islandgame.components.Boost
+import com.example.islandgame.data.Gems
 import com.example.islandgame.data.LevelConfig
 import com.example.islandgame.sounds.SoundManager
 import com.example.islandgame.ui.theme.IslandGameTheme
@@ -83,7 +84,7 @@ fun PreLevelPopup(
                 }
 
                 Column(
-                    verticalArrangement = Arrangement.spacedBy(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(2.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier
                         .align(Alignment.Center)
@@ -103,6 +104,39 @@ fun PreLevelPopup(
                             )
                         }
                     }
+
+                    Text(
+                        text = "Goal:",
+                        color = Color(0xFF954B25),
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ){
+                        Image(
+                            painter = painterResource(id = levelConfig.targetGem.drawableId),
+                            contentDescription = null,
+                            modifier = Modifier.size(40.dp)
+                        )
+                        Text(
+                            text = "${levelConfig.targetRequired}",
+                            color = Color(0xFF954B25),
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+
+                    Text(
+                        text = "Moves: ${levelConfig.moves}",
+                        color = Color(0xFF954B25),
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold,
+                        textAlign = TextAlign.Center
+                    )
+
 
 
                     Text(
@@ -162,16 +196,3 @@ fun PreLevelPopup(
         }
     }
 }
-
-//@Preview(showBackground = true)
-//@Composable
-//fun BoosterPopupPreview(){
-//    IslandGameTheme {
-//        PreLevelPopup(
-//            levelNumber = 1,
-//            onDismiss = {},
-//            modifier = Modifier,
-//            stars = 0
-//        )
-//    }
-//}

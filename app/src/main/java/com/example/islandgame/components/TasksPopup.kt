@@ -1,4 +1,4 @@
-package com.example.islandgame.screens
+package com.example.islandgame.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -24,15 +24,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.islandgame.R
-import com.example.islandgame.components.DoItButton
-import com.example.islandgame.components.Tasks
-import com.example.islandgame.components.WorldProgress
 import com.example.islandgame.sounds.SoundManager
-import com.example.islandgame.ui.theme.IslandGameTheme
 
 @Composable
 fun TasksPopup(

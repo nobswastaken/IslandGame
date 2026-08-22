@@ -1,5 +1,9 @@
 package com.example.islandgame.screens
 
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.keyframes
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -10,6 +14,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -21,28 +26,24 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.islandgame.R
 import com.example.islandgame.components.GameBottomNavbar
 import com.example.islandgame.components.GamePlay
 import com.example.islandgame.data.Gems
-import com.example.islandgame.ui.theme.IslandGameTheme
-
-import androidx.compose.material3.Scaffold // Ensure you have this import
-import androidx.compose.material3.Text
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.sp
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.scale
+import androidx.compose.ui.unit.times
 import com.example.islandgame.components.LevelCompletePopup
 import com.example.islandgame.components.TopNavbarGameplay
 import com.example.islandgame.data.levels
 import com.example.islandgame.repository.LevelProgressRepo
-import kotlin.text.toFloat
+import kotlinx.coroutines.launch
 
 @Composable
 fun GameScreen(
@@ -55,6 +56,7 @@ fun GameScreen(
     val levelConfig = levels.first { it.levelNumber == levelNumber }
     val engine = remember(levelNumber) { GamePlay(levelConfig) }
     var progressSaved by remember { mutableStateOf(false) }
+    val scope = rememberCoroutineScope()
 
     LaunchedEffect(engine.isLevelCompleted) {
         if (!progressSaved && engine.isLevelCompleted) {
@@ -111,42 +113,149 @@ fun GameScreen(
                 modifier = Modifier.fillMaxSize()
             )
 
+            val cellSize = 40.dp
+            val cellSpacing = 4.dp
+            val cellStep = cellSize + cellSpacing
 
-            Column(
+            Box(
                 modifier = Modifier
-                    .padding(16.dp)
-                    .background(Color(0xFF1A252F), shape = RoundedCornerShape(16.dp))
-                    .padding(8.dp),
-                verticalArrangement = Arrangement.spacedBy(4.dp)
+                    .size(
+                        width = (cellSize * engine.columns) +
+                                (cellSpacing * (engine.columns - 1)) +
+                                16.dp,
+                        height = (cellSize * engine.rows) +
+                                (cellSpacing * (engine.rows - 1)) +
+                                16.dp
+                    )
+                    .background(
+                        Color(0xFF1A252F),
+                        shape = RoundedCornerShape(16.dp)
+                    )
+                    .padding(8.dp)
             ) {
-                for (row in 0 until engine.rows) {
-                    Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                        for (col in 0 until engine.columns) {
-                            val gem = engine.boardState[row][col]
-                            val isSelected = engine.selectedGem == Pair(row, col)
 
-                            Box(
-                                modifier = Modifier
-                                    .size(40.dp)
-                                    .background(Color(0xFF1A252F), shape = RoundedCornerShape(8.dp))
-                                    .border(
-                                        width = if (isSelected) 2.dp else 0.dp,
-                                        color = if (isSelected) Color(0xFFFFFFFF) else Color.Transparent
-                                    )
-                                    .clickable { engine.selectGem(row, col) },
-                                contentAlignment = Alignment.Center
-                            ) {
-                                if (gem != Gems.Empty) {
-                                    Image(
-                                        painter = painterResource(id = gem.drawableId),
-                                        contentDescription = null,
-                                        modifier = Modifier
-                                            .fillMaxSize()
-                                            .padding(4.dp)
-                                    )
+
+                for (row in 0 until engine.rows) {
+                    for (col in 0 until engine.columns) {
+
+                        Box(
+                            modifier = Modifier
+                                .size(cellSize)
+                                .offset(
+                                    x = col * cellStep,
+                                    y = row * cellStep
+                                )
+                                .background(
+                                    Color(0xFF1A252F),
+                                    shape = RoundedCornerShape(8.dp)
+                                )
+                                .clickable(
+                                    enabled = !engine.isAnimating
+                                ) {
+                                    scope.launch {
+                                        engine.selectGem(row, col)
+                                    }
                                 }
-                            }
+                        )
+                    }
+                }
+
+                for (row in 0 until engine.rows) {
+                    for (col in 0 until engine.columns) {
+
+                        val position = Pair(row, col)
+                        val swap = engine.swappingGems
+
+
+                        val isFirst = swap?.first == position
+                        val isSecond = swap?.second == position
+
+                        val gem = when {
+                            isFirst -> engine.boardState[swap!!.first.first][swap.first.second]
+                            isSecond -> engine.boardState[swap!!.second.first][swap.second.second]
+                            else -> engine.boardState[row][col]
                         }
+
+                        if (gem == Gems.Empty) {
+                            continue
+                        }
+
+                        val targetRow = when {
+                            isFirst -> swap!!.second.first
+                            isSecond -> swap!!.first.first
+                            else -> row
+                        }
+
+                        val targetCol = when {
+                            isFirst -> swap!!.second.second
+                            isSecond -> swap!!.first.second
+                            else -> col
+                        }
+
+                        val animatedX by animateDpAsState(
+                            targetValue = targetCol * cellStep,
+                            animationSpec = tween(
+                                durationMillis = 250
+                            ),
+                            label = "gemX"
+                        )
+
+                        val animatedY by animateDpAsState(
+                            targetValue = targetRow * cellStep,
+                            animationSpec = tween(
+                                durationMillis = 250
+                            ),
+                            label = "gemY"
+                        )
+
+                        val isSelected =
+                            engine.selectedGem == position
+
+                        val isMatched =
+                            position in engine.matchedGems
+
+                        val matchScale by animateFloatAsState(
+                            targetValue = if(isMatched) 0.2f else 1f,
+                            animationSpec = keyframes {
+                                durationMillis = 200
+                                1f at 0
+                                1.25f at 100
+                                0.2f at 200
+                            },
+                            label = "matchScale"
+                        )
+
+                        val matchAlpha by animateFloatAsState(
+                            targetValue = if(isMatched) 0f else 1f,
+                            animationSpec = tween(
+                                durationMillis = 200
+                            ),
+                            label = "matchAlpha"
+                        )
+
+                        Image(
+                            painter = painterResource(
+                                id = gem.drawableId
+                            ),
+                            contentDescription = null,
+                            modifier = Modifier
+                                .size(cellSize)
+                                .offset(
+                                    x = animatedX,
+                                    y = animatedY
+                                )
+                                .padding(4.dp)
+                                .alpha(matchAlpha)
+                                .scale(matchScale)
+                                .border(
+                                    width = if (isSelected) 2.dp else 0.dp,
+                                    color = if (isSelected)
+                                        Color.White
+                                    else
+                                        Color.Transparent,
+                                    shape = RoundedCornerShape(8.dp)
+                                )
+                        )
                     }
                 }
             }

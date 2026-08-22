@@ -7,7 +7,9 @@ import androidx.compose.runtime.setValue
 import com.example.islandgame.data.Gems
 import com.example.islandgame.data.LevelConfig
 import com.example.islandgame.data.Match
+import kotlinx.coroutines.delay
 import kotlin.collections.List
+import kotlin.collections.emptySet
 import kotlin.math.abs
 
 class GamePlay(
@@ -18,6 +20,8 @@ class GamePlay(
 
     var boardState by mutableStateOf(generateBoard())
     var selectedGem by mutableStateOf<Pair<Int, Int>?>(null)
+    var swappingGems by mutableStateOf<Pair<Pair<Int, Int>, Pair<Int, Int>>?>(null)
+        private set
     var movesLeft by mutableStateOf(levelConfig.moves)
     var score by mutableStateOf(0)
     val targetGem: Gems
@@ -27,6 +31,16 @@ class GamePlay(
         get() = levelConfig.targetRequired
     var isLevelCompleted by mutableStateOf(false)
         private set
+
+    var isAnimating by mutableStateOf(false)
+        private set
+
+    var matchedGems by mutableStateOf<Set<Pair<Int, Int>>>(emptySet())
+
+    fun clearSwappingGems() {
+        swappingGems = null
+    }
+
     private fun generateBoard(): List<List<Gems>> {
         val board = MutableList(rows) {
             MutableList<Gems>(columns) { Gems.Empty }
@@ -89,7 +103,9 @@ class GamePlay(
 
                 if (length >= 3) {
                     val positions = (col until endCol)
-                        .map { currentCol -> Pair(row, currentCol) }
+                        .map { currentCol ->
+                            Pair(row, currentCol)
+                        }
                         .toSet()
 
                     matches.add(
@@ -129,7 +145,9 @@ class GamePlay(
 
                 if (length >= 3) {
                     val positions = (row until endRow)
-                        .map { currentRow -> Pair(currentRow, col) }
+                        .map { currentRow ->
+                            Pair(currentRow, col)
+                        }
                         .toSet()
 
                     matches.add(
@@ -139,9 +157,11 @@ class GamePlay(
                         )
                     )
                 }
+
                 row = endRow
             }
         }
+
         return matches
     }
 
@@ -160,7 +180,7 @@ class GamePlay(
         boardState = newBoard
     }
 
-    fun selectGem(row: Int, col: Int) {
+    suspend fun selectGem(row: Int, col: Int) {
         if (movesLeft <= 0 || isLevelCompleted) {
             return
         }
@@ -172,8 +192,14 @@ class GamePlay(
         } else {
             if (isAdjacent(firstSelect, Pair(row, col))) {
                 movesLeft--
-                swapGems(firstSelect, Pair(row, col))
+
+                val secondSelect = Pair(row, col)
+
+                swappingGems = Pair(firstSelect, secondSelect)
+
+                swapGems(firstSelect, secondSelect)
             }
+
             selectedGem = null
         }
     }
@@ -183,10 +209,14 @@ class GamePlay(
                 (p1.second == p2.second && abs(p1.first - p2.first) == 1)
     }
 
-    private fun swapGems(
+    private suspend fun swapGems(
         p1: Pair<Int, Int>,
         p2: Pair<Int, Int>
     ) {
+        if (isAnimating) return
+
+        isAnimating = true
+
         val originalBoard = boardState
 
         val newBoard = boardState
@@ -201,17 +231,38 @@ class GamePlay(
         newBoard[p2.first][p2.second] =
             temp
 
+
+        swappingGems = Pair(p1, p2)
+
+
+        delay(250)
+
+
         boardState = newBoard
+
 
         val matches = findMatches()
 
         if (matches.isEmpty()) {
-            println("NO MATCH - REVERTING")
+
+            println("NO MATCHES FOUND")
+
+            swappingGems = Pair(p2, p1)
+
+            delay(250)
+
+
             boardState = originalBoard
+
         } else {
-            println("MATCH FOUND")
+
+            println("MATCHES FOUND")
+
             resolveMatches()
         }
+
+        swappingGems = null
+        isAnimating = false
     }
 
     private fun collapseBoard() {
@@ -281,12 +332,14 @@ class GamePlay(
     fun resetLevel() {
         boardState = generateBoard()
         selectedGem = null
+        swappingGems = null
+        matchedGems = emptySet()
         movesLeft = levelConfig.moves
         score = 0
         targetCount = 0
         isLevelCompleted = false
     }
-    private fun resolveMatches() {
+    private suspend fun resolveMatches() {
         var cascade = 1
 
         while (true) {
@@ -309,18 +362,22 @@ class GamePlay(
                 }
             }
 
-            if(targetCount >= targetRequired){
-                isLevelCompleted = true
-                println("LEVEL COMPLETED")
-            }
+            matchedGems = matches
+                .flatMap { it.gems }
+                .toSet()
 
+            delay(300)
             removeMatches(matches)
+            matchedGems = emptySet()
 
             collapseBoard()
-
             fillEmptySpaces()
 
             cascade++
+        }
+        if(targetCount >= targetRequired){
+            isLevelCompleted = true
+            println("LEVEL COMPLETED")
         }
     }
 }

@@ -40,9 +40,11 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.unit.times
 import com.example.islandgame.components.LevelCompletePopup
+import com.example.islandgame.components.PreLevelPopup
 import com.example.islandgame.components.TopNavbarGameplay
 import com.example.islandgame.data.levels
 import com.example.islandgame.repository.LevelProgressRepo
+import com.example.islandgame.sounds.SoundManager
 import kotlinx.coroutines.launch
 
 @Composable
@@ -52,10 +54,12 @@ fun GameScreen(
     onLevelClick: () -> Unit,
     onNextLevelClick: () -> Unit,
     levelProgressRepo: LevelProgressRepo,
+    soundManager: SoundManager
 ) {
     val levelConfig = levels.first { it.levelNumber == levelNumber }
     val engine = remember(levelNumber) { GamePlay(levelConfig) }
     var progressSaved by remember { mutableStateOf(false) }
+    var showPrelevelPopup by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
 
     LaunchedEffect(engine.isLevelCompleted) {
@@ -263,11 +267,31 @@ fun GameScreen(
                 LevelCompletePopup(
                     onHomeClick = { onHomeClick() },
                     onLevelClick = { onLevelClick() },
-                    onNextLevelClick = { onNextLevelClick() },
+                    onNextLevelClick = { showPrelevelPopup = true },
                     score = engine.score,
                     stars = engine.getStars(),
                     targetRequired = engine.targetRequired
                 )
+            }
+
+            if (showPrelevelPopup){
+                val nextLevelNumber = levelNumber + 1
+                val nextLevelConfig = levels.firstOrNull {
+                    it.levelNumber == nextLevelNumber
+                }
+
+                if(nextLevelConfig != null){
+                    PreLevelPopup(
+                        levelConfig = nextLevelConfig,
+                        stars = 0,
+                        onDismiss = {showPrelevelPopup = false},
+                        onPlayClick = {
+                            showPrelevelPopup = false
+                            onNextLevelClick()
+                        },
+                        soundManager = soundManager
+                    )
+                }
             }
         }
     }

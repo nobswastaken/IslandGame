@@ -95,7 +95,8 @@ fun AppNavGraph(
                 onNextLevelClick = {
                     navController.navigate("games/${levelNumber + 1}")
                 },
-                levelProgressRepo = levelProgressRepo
+                levelProgressRepo = levelProgressRepo,
+                soundManager = soundManager
             )
         }
     }

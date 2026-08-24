@@ -29,6 +29,7 @@ import com.example.islandgame.data.Gems
 import com.example.islandgame.data.LevelConfig
 import com.example.islandgame.sounds.SoundManager
 import com.example.islandgame.ui.theme.IslandGameTheme
+import kotlinx.serialization.Required
 
 @Composable
 fun PreLevelPopup(

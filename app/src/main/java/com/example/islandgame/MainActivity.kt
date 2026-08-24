@@ -26,6 +26,8 @@ class MainActivity : ComponentActivity() {
         val profileRepository = ProfileRepo(applicationContext)
         val profileViewmodel = ProfileViewmodel(profileRepository)
 
+        val levelProgressRepo = LevelProgressRepo(applicationContext)
+
         val settingsRepository = SettingsRepo(applicationContext)
         val settingsViewModel = SettingsViewmodel(settingsRepository)
 

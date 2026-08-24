@@ -11,6 +11,7 @@ import kotlinx.coroutines.delay
 import kotlin.collections.List
 import kotlin.collections.emptySet
 import kotlin.math.abs
+import kotlin.random.Random
 
 class GamePlay(
     val levelConfig: LevelConfig,
@@ -46,15 +47,20 @@ class GamePlay(
             MutableList<Gems>(columns) { Gems.Empty }
         }
 
+        val normalGems = listOf(
+            Gems.Pink_Gem,
+            Gems.Blue_Gem,
+            Gems.Green_Gem,
+            Gems.Yellow_Gem
+        )
+
+        val isCrystalBallLevel =
+            levelConfig.targetGem == Gems.Crystal_Ball
+
         for (row in 0 until rows) {
             for (col in 0 until columns) {
 
-                val availableGems = listOf(
-                    Gems.Pink_Gem,
-                    Gems.Blue_Gem,
-                    Gems.Green_Gem,
-                    Gems.Yellow_Gem
-                ).filter { gem ->
+                val availableGems = normalGems.filter { gem ->
 
                     val createsHorizontalMatch =
                         col >= 2 &&
@@ -69,12 +75,18 @@ class GamePlay(
                     !createsHorizontalMatch && !createsVerticalMatch
                 }
 
-                board[row][col] = availableGems.random()
+                board[row][col] =
+                    if (isCrystalBallLevel && Random.nextFloat() < 0.10f) {
+                        Gems.Crystal_Ball
+                    } else {
+                        availableGems.random()
+                    }
             }
         }
 
         return board
     }
+
     fun findMatches(): Set<Match> {
         val matches = mutableSetOf<Match>()
 
@@ -170,11 +182,38 @@ class GamePlay(
         val newBoard = boardState
             .map { it.toMutableList() }
             .toMutableList()
+        val positionsToRemove = mutableSetOf<Pair<Int, Int>>()
 
         for (match in matches) {
-            for ((row, col) in match.gems) {
-                newBoard[row][col] = Gems.Empty
+            positionsToRemove.addAll(match.gems)
+        }
+
+
+        if (targetGem == Gems.Crystal_Ball) {
+
+            for (match in matches) {
+
+                for ((row, col) in match.gems) {
+
+                    val adjacentPositions =
+                        getAdjacentPositions(row, col)
+
+                    for (position in adjacentPositions) {
+
+                        if (
+                            boardState[position.first][position.second] ==
+                            Gems.Crystal_Ball
+                        ) {
+                            positionsToRemove.add(position)
+                        }
+                    }
+                }
             }
+        }
+
+
+        for ((row, col) in positionsToRemove) {
+            newBoard[row][col] = Gems.Empty
         }
 
         boardState = newBoard
@@ -209,6 +248,19 @@ class GamePlay(
                 (p1.second == p2.second && abs(p1.first - p2.first) == 1)
     }
 
+    private fun getAdjacentPositions(
+        row: Int,
+        col: Int
+    ): List<Pair<Int, Int>>{
+        return listOf(
+            Pair(row - 1, col),
+            Pair(row + 1, col),
+            Pair(row, col - 1),
+            Pair(row, col + 1)
+        ).filter { (r,c) ->
+            r in 0 until rows && c in 0 until columns
+        }
+    }
     private suspend fun swapGems(
         p1: Pair<Int, Int>,
         p2: Pair<Int, Int>
@@ -293,16 +345,27 @@ class GamePlay(
             .map { it.toMutableList() }
             .toMutableList()
 
+        val normalGems = listOf(
+            Gems.Pink_Gem,
+            Gems.Blue_Gem,
+            Gems.Green_Gem,
+            Gems.Yellow_Gem
+        )
+
+        val isCrystalBallLevel =
+            levelConfig.targetGem == Gems.Crystal_Ball
+
         for (row in 0 until rows) {
             for (col in 0 until columns) {
 
                 if (newBoard[row][col] == Gems.Empty) {
-                    newBoard[row][col] = listOf(
-                        Gems.Pink_Gem,
-                        Gems.Blue_Gem,
-                        Gems.Green_Gem,
-                        Gems.Yellow_Gem
-                    ).random()
+
+                    newBoard[row][col] =
+                        if (isCrystalBallLevel && Random.nextFloat() < 0.10f) {
+                            Gems.Crystal_Ball
+                        } else {
+                            normalGems.random()
+                        }
                 }
             }
         }
@@ -356,9 +419,36 @@ class GamePlay(
             println("CASCADE $cascade: $totalGems gems matched")
 
             for (match in matches) {
+
                 score += calculateScore(match.size)
-                targetCount += match.gems.count { position ->
-                    boardState[position.first][position.second] == targetGem
+
+                if (targetGem != Gems.Crystal_Ball) {
+
+                    targetCount += match.gems.count { position ->
+                        boardState[position.first][position.second] == targetGem
+                    }
+
+                } else {
+
+                    val crystalBallsCollected = mutableSetOf<Pair<Int, Int>>()
+
+                    for ((row, col) in match.gems) {
+
+                        val adjacentPositions =
+                            getAdjacentPositions(row, col)
+
+                        for (position in adjacentPositions) {
+
+                            val adjacentGem =
+                                boardState[position.first][position.second]
+
+                            if (adjacentGem == Gems.Crystal_Ball) {
+                                crystalBallsCollected.add(position)
+                            }
+                        }
+                    }
+
+                    targetCount += crystalBallsCollected.size
                 }
             }
 

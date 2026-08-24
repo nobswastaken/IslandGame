@@ -21,10 +21,12 @@ import com.example.islandgame.components.ArrowButtonLeft
 import com.example.islandgame.components.BottomNavbar
 import com.example.islandgame.components.EditProfilePopup
 import com.example.islandgame.components.LevelButton
+import com.example.islandgame.components.LockedLevelCard
 import com.example.islandgame.components.SettingsPopup
 import com.example.islandgame.components.TopNavBar
 import com.example.islandgame.components.UnlockedLevelCard
 import com.example.islandgame.data.levels
+import com.example.islandgame.databasestuff.LevelProgressEntity
 import com.example.islandgame.repository.LevelProgressRepo
 import com.example.islandgame.sounds.SoundManager
 import com.example.islandgame.viewmodel.ProfileViewmodel
@@ -47,11 +49,14 @@ fun LevelScreen(
     val countryId by profileViewModel.country.collectAsState()
 
     var levelStars by remember { mutableStateOf<Map<Int, Int>>(emptyMap()) }
+    var levelProgress by remember { mutableStateOf<List<LevelProgressEntity>>(emptyList()) }
 
     LaunchedEffect(Unit) {
         levelStars = levelProgressRepo
             .getAllLevelProgress()
             .associate { it.levelNumber to it.stars }
+        levelProgress = levelProgressRepo
+            .getAllLevelProgress()
     }
     Scaffold(
         topBar = {
@@ -102,15 +107,28 @@ fun LevelScreen(
                 for (levelRow in levels.chunked(4)) {
                     Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                         for (level in levelRow) {
+                            val savedProgress =
+                                levelProgress.firstOrNull { it.levelNumber == level.levelNumber }
+                            val stars = savedProgress?.stars ?: 0
+                            val isUnlocked =
+                                level.levelNumber == 1 ||
+                                        levelProgress.any {
+                                            it.levelNumber == level.levelNumber - 1 &&
+                                                    it.stars > 0
+                                        }
+                            if (isUnlocked) {
                                 UnlockedLevelCard(
                                     number = level.levelNumber.toString(),
-                                    stars = levelStars[level.levelNumber] ?: 0,
-                                    onThisLevelClick = {onThisLevelClick(level.levelNumber)
-                                    }
+                                    stars = stars,
+                                    onThisLevelClick = { onThisLevelClick(level.levelNumber) }
                                 )
+                            } else {
+                                LockedLevelCard()
                             }
                         }
                     }
+                }
+
 
 
                 Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {

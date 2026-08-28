@@ -34,6 +34,7 @@ import com.example.islandgame.viewmodel.SettingsViewmodel
 
 @Composable
 fun LevelScreen(
+    onClick: () -> Unit,
     onHomeClick: () -> Unit,
     onLevelClick: () -> Unit,
     onThisLevelClick: (Int) -> Unit,
@@ -50,6 +51,8 @@ fun LevelScreen(
 
     var levelStars by remember { mutableStateOf<Map<Int, Int>>(emptyMap()) }
     var levelProgress by remember { mutableStateOf<List<LevelProgressEntity>>(emptyList()) }
+
+    var currentPage by remember { mutableStateOf(1) }
 
     LaunchedEffect(Unit) {
         levelStars = levelProgressRepo
@@ -104,7 +107,12 @@ fun LevelScreen(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                for (levelRow in levels.chunked(4)) {
+                val levelsperPage = 12
+
+                val currentPageLevels = levels
+                    .drop((currentPage - 1) * levelsperPage)
+                    .take(levelsperPage)
+                for (levelRow in currentPageLevels.chunked(4)) {
                     Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                         for (level in levelRow) {
                             val savedProgress =
@@ -132,15 +140,25 @@ fun LevelScreen(
 
 
                 Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                    LevelButton(
-                        text = "Back",
-                        onClick = { onHomeClick()},
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.width(100.dp)
+                        LevelButton(
+                            text = "Back",
+                            onClick = { onHomeClick()},
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.width(100.dp)
+                        )
+                        ArrowButtonLeft(onClick = {
+                            if(currentPage > 1){
+                                currentPage--
+                            }
+                        }
                     )
-                    ArrowButtonLeft(onClick = {})
-                    ArrowButtonRight(onClick = {})
+                        ArrowButtonRight(onClick = {
+                            if(currentPage < 2){
+                                currentPage++
+                            }
+                        }
+                    )
                 }
 
 

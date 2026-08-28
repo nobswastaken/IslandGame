@@ -70,7 +70,8 @@ fun AppNavGraph(
                 profileViewModel = profileViewModel,
                 settingsVM = settingsViewModel,
                 soundManager = soundManager,
-                levelProgressRepo = levelProgressRepo
+                levelProgressRepo = levelProgressRepo,
+                onClick ={}
             )
         }
 

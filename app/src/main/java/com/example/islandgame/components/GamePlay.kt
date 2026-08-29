@@ -42,6 +42,20 @@ class GamePlay(
         swappingGems = null
     }
 
+    var selectedBooster by mutableStateOf<Booster?>(null)
+        private set
+
+    var usedBomb by mutableStateOf(false)
+        private set
+
+    var bombPosition by mutableStateOf(
+        Pair(
+            Random.nextInt(rows),
+            Random.nextInt(columns)
+        )
+    )
+        private set
+
     private fun generateBoard(): List<List<Gems>> {
         val board = MutableList(rows) {
             MutableList<Gems>(columns) { Gems.Empty }
@@ -219,9 +233,96 @@ class GamePlay(
         boardState = newBoard
     }
 
+    suspend fun useBomb(row: Int, col: Int) {
+        if (isAnimating || usedBomb) return
+
+        isAnimating = true
+
+        val positionsToRemove = mutableSetOf<Pair<Int, Int>>()
+
+        // this is the 3x3 area around the bomb
+        for (r in row - 1..row + 1) {
+            for (c in col - 1..col + 1) {
+
+                if (r in 0 until rows && c in 0 until columns) {
+                    positionsToRemove.add(Pair(r, c))
+                }
+            }
+        }
+
+
+        targetCount += positionsToRemove.count { position ->
+            boardState[position.first][position.second] == targetGem
+        }
+
+
+        matchedGems = positionsToRemove
+
+        delay(300)
+
+
+        val newBoard = boardState
+            .map { it.toMutableList() }
+            .toMutableList()
+
+        for ((r, c) in positionsToRemove) {
+            newBoard[r][c] = Gems.Empty
+        }
+
+        boardState = newBoard
+        matchedGems = emptySet()
+
+
+        usedBomb = true
+        selectedBooster = null
+
+        movesLeft--
+
+
+        collapseBoard()
+        fillEmptySpaces()
+
+        if (targetCount >= targetRequired) {
+            isLevelCompleted = true
+        }
+
+        isAnimating = false
+    }
+
+    suspend fun useBombAtPosition(){
+        val position = bombPosition
+
+        useBomb(
+            row = position.first,
+            col = position.second
+        )
+    }
     suspend fun selectGem(row: Int, col: Int) {
         if (movesLeft <= 0 || isLevelCompleted) {
             return
+        }
+
+        when(selectedBooster){
+
+            Booster.BOMB -> {
+//                useBomb(row,col)
+                return
+            }
+
+            Booster.POTION -> {
+                //I'LL FIX THIS
+                return
+            }
+
+            Booster.DIAMOND -> {
+                //I'LL FIX THIS
+                return
+            }
+
+            null -> {
+
+            }
+
         }
 
         val firstSelect = selectedGem
@@ -401,6 +502,13 @@ class GamePlay(
         score = 0
         targetCount = 0
         isLevelCompleted = false
+        usedBomb = false
+        selectedBooster = null
+
+        bombPosition = Pair(
+            Random.nextInt(rows),
+            Random.nextInt(columns)
+        )
     }
     private suspend fun resolveMatches() {
         var cascade = 1
@@ -470,4 +578,12 @@ class GamePlay(
             println("LEVEL COMPLETED")
         }
     }
+
+    fun selectBooster(booster: Booster){
+        if(isAnimating || isLevelCompleted) return
+
+        selectedBooster = booster
+        selectedGem = null
+    }
+
 }

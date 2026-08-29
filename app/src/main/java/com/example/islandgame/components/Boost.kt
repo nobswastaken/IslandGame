@@ -25,6 +25,11 @@ import androidx.compose.ui.unit.sp
 import com.example.islandgame.R
 import com.example.islandgame.ui.theme.IslandGameTheme
 
+enum class Booster {
+    BOMB,
+    POTION,
+    DIAMOND
+}
 @Composable
 fun Boost(
     drawableId: Int,
@@ -66,7 +71,7 @@ fun Boost(
             Image(
                 painter = painterResource(id = drawableId),
                 contentDescription = contentDescription,
-                modifier = Modifier.size(44.dp) // Limits image size cleanly within borders
+                modifier = Modifier.size(44.dp)
             )
         }
 

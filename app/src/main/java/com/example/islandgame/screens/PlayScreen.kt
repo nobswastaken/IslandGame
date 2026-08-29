@@ -24,7 +24,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.setValue
 import com.example.islandgame.R
+import com.example.islandgame.components.Booster
 import com.example.islandgame.components.BottomNavbar
 import com.example.islandgame.components.EditProfilePopup
 import com.example.islandgame.components.GoldenKeyPopup
@@ -57,6 +59,7 @@ fun PlayScreen(
     var showTaskPopup by remember { mutableStateOf(false) }
     var showPrelevelPopup by remember { mutableStateOf(false) }
     var nextLevel by remember { mutableStateOf(1) }
+    var selectedBooster by remember { mutableStateOf<Booster?>(null) }
 
     val username by profileViewModel.username.collectAsState()
     val countryId by profileViewModel.country.collectAsState()
@@ -187,6 +190,10 @@ fun PlayScreen(
                 onPlayClick = {
                     showPrelevelPopup = false
                     onThisLevelClick(nextLevel)
+                },
+                selectedBooster = selectedBooster,
+                onBoosterSelected = { booster ->
+                    selectedBooster = booster
                 },
                 onDismiss = { showPrelevelPopup = false },
                 stars = 0,

@@ -36,6 +36,8 @@ fun PreLevelPopup(
     levelConfig: LevelConfig,
     onPlayClick: () -> Unit,
     onDismiss: () -> Unit,
+    onBoosterSelected: (Booster?) -> Unit,
+    selectedBooster: Booster?,
     soundManager: SoundManager,
     modifier: Modifier = Modifier,
     stars: Int
@@ -158,28 +160,37 @@ fun PreLevelPopup(
                         Boost(
                             drawableId = R.drawable.bomb,
                             contentDescription = "Bomb booster",
-                            isSelected = true,
+                            isSelected = selectedBooster == Booster.BOMB,
                             count = 3,
                             size = 56.dp,
-                            onClick = { /* Handle selection toggle logic */ }
+                            onClick = {
+                                if(selectedBooster == Booster.BOMB){ onBoosterSelected(null) }
+                                else {onBoosterSelected(Booster.BOMB)}
+                            }
                         )
 
                         Boost(
                             drawableId = R.drawable.potion,
                             contentDescription = "Potion booster",
-                            isSelected = false,
+                            isSelected = selectedBooster == Booster.POTION,
                             count = 3,
                             size = 56.dp,
-                            onClick = { /* Handle selection toggle logic */ }
+                            onClick = {
+                                if(selectedBooster == Booster.POTION){ onBoosterSelected(null) }
+                                else {onBoosterSelected(Booster.POTION)}
+                            }
                         )
 
                         Boost(
                             drawableId = R.drawable.diamond,
                             contentDescription = "Diamond booster",
-                            isSelected = false,
+                            isSelected = selectedBooster == Booster.DIAMOND,
                             count = 3,
                             size = 56.dp,
-                            onClick = { /* Handle selection toggle logic */ }
+                            onClick = {
+                                if(selectedBooster == Booster.DIAMOND){ onBoosterSelected(null) }
+                                else {onBoosterSelected(Booster.DIAMOND)}
+                            }
                         )
                     }
                 }

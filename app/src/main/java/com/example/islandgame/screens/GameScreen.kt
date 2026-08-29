@@ -39,7 +39,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.unit.times
+import com.example.islandgame.components.Boost
+import com.example.islandgame.components.Booster
 import com.example.islandgame.components.LevelCompletePopup
+import com.example.islandgame.components.MainBooster
 import com.example.islandgame.components.PreLevelPopup
 import com.example.islandgame.components.TopNavbarGameplay
 import com.example.islandgame.data.levels
@@ -52,7 +55,7 @@ fun GameScreen(
     levelNumber: Int,
     onHomeClick: () -> Unit,
     onLevelClick: () -> Unit,
-    onNextLevelClick: () -> Unit,
+    onNextLevelClick: (Booster?) -> Unit,
     levelProgressRepo: LevelProgressRepo,
     soundManager: SoundManager
 ) {
@@ -61,6 +64,7 @@ fun GameScreen(
     var progressSaved by remember { mutableStateOf(false) }
     var showPrelevelPopup by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
+    var selectedBooster by remember { mutableStateOf<Booster?>(null) }
 
     LaunchedEffect(engine.isLevelCompleted) {
         if (!progressSaved && engine.isLevelCompleted) {
@@ -168,6 +172,8 @@ fun GameScreen(
                     for (col in 0 until engine.columns) {
 
                         val position = Pair(row, col)
+                        val isBombPosition =
+                            engine.bombPosition == position && !engine.usedBomb
                         val swap = engine.swappingGems
 
 
@@ -180,7 +186,7 @@ fun GameScreen(
                             else -> engine.boardState[row][col]
                         }
 
-                        if (gem == Gems.Empty) {
+                        if (gem == Gems.Empty || isBombPosition ) {
                             continue
                         }
 
@@ -262,7 +268,31 @@ fun GameScreen(
                         )
                     }
                 }
+                engine.bombPosition?.let { (bombRow, bombCol) ->
+
+                    if (!engine.usedBomb) {
+
+                        Image(
+                            painter = painterResource(id = R.drawable.bomb),
+                            contentDescription = "Bomb booster",
+                            modifier = Modifier
+                                .size(cellSize)
+                                .offset(
+                                    x = bombCol * cellStep,
+                                    y = bombRow * cellStep
+                                )
+                                .clickable(
+                                    enabled = !engine.isAnimating && !engine.usedBomb
+                                ) {
+                                    scope.launch {
+                                        engine.useBombAtPosition()
+                                    }
+                                }
+                        )
+                    }
+                }
             }
+
             if (engine.isLevelCompleted) {
                 LevelCompletePopup(
                     onHomeClick = { onHomeClick() },
@@ -285,9 +315,13 @@ fun GameScreen(
                         levelConfig = nextLevelConfig,
                         stars = 0,
                         onDismiss = {showPrelevelPopup = false},
+                        selectedBooster = selectedBooster,
+                        onBoosterSelected = { booster ->
+                            selectedBooster = booster
+                        },
                         onPlayClick = {
                             showPrelevelPopup = false
-                            onNextLevelClick()
+                            onNextLevelClick(selectedBooster)
                         },
                         soundManager = soundManager
                     )

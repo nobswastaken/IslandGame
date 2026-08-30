@@ -15,8 +15,9 @@ import kotlin.random.Random
 
 class GamePlay(
     val levelConfig: LevelConfig,
+    val startingBooster: Booster? = null,
     val rows: Int = 8,
-    val columns: Int = 8
+    val columns: Int = 8,
 ) {
 
     var boardState by mutableStateOf(generateBoard())
@@ -42,17 +43,24 @@ class GamePlay(
         swappingGems = null
     }
 
-    var selectedBooster by mutableStateOf<Booster?>(null)
-        private set
-
     var usedBomb by mutableStateOf(false)
         private set
 
-    var bombPosition by mutableStateOf(
-        Pair(
-            Random.nextInt(rows),
-            Random.nextInt(columns)
-        )
+    var isBombExplode by mutableStateOf(false)
+        private set
+
+    var selectedBooster by mutableStateOf<Booster?>(null)
+        private set
+
+    var bombPosition by mutableStateOf<Pair<Int,Int>?>(
+        if(startingBooster == Booster.BOMB){
+            Pair(
+                Random.nextInt(rows),
+                Random.nextInt(columns)
+            )
+        }else{
+            null
+        }
     )
         private set
 
@@ -234,7 +242,7 @@ class GamePlay(
     }
 
     suspend fun useBomb(row: Int, col: Int) {
-        if (isAnimating || usedBomb) return
+        if (isAnimating) return
 
         isAnimating = true
 
@@ -250,16 +258,10 @@ class GamePlay(
             }
         }
 
-
-        targetCount += positionsToRemove.count { position ->
-            boardState[position.first][position.second] == targetGem
-        }
-
-
         matchedGems = positionsToRemove
 
-        delay(300)
-
+        isBombExplode = true
+        delay(350)
 
         val newBoard = boardState
             .map { it.toMutableList() }
@@ -269,15 +271,20 @@ class GamePlay(
             newBoard[r][c] = Gems.Empty
         }
 
+        targetCount += positionsToRemove.count { position ->
+            boardState[position.first][position.second] == targetGem
+        }
+
         boardState = newBoard
+
         matchedGems = emptySet()
+        isBombExplode = false
 
-
+        movesLeft--
         usedBomb = true
         selectedBooster = null
 
-        movesLeft--
-
+        delay(200)
 
         collapseBoard()
         fillEmptySpaces()
@@ -290,7 +297,7 @@ class GamePlay(
     }
 
     suspend fun useBombAtPosition(){
-        val position = bombPosition
+        val position = bombPosition ?: return
 
         useBomb(
             row = position.first,
@@ -504,11 +511,13 @@ class GamePlay(
         isLevelCompleted = false
         usedBomb = false
         selectedBooster = null
-
-        bombPosition = Pair(
+        isBombExplode = false
+        bombPosition = if(startingBooster == Booster.BOMB){
+            Pair(
             Random.nextInt(rows),
             Random.nextInt(columns)
         )
+        } else{null}
     }
     private suspend fun resolveMatches() {
         var cascade = 1

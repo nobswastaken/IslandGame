@@ -1,9 +1,12 @@
 package com.example.islandgame.screens
 
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.animate
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.keyframes
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -33,11 +36,15 @@ import com.example.islandgame.components.GamePlay
 import com.example.islandgame.data.Gems
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.times
 import com.example.islandgame.components.Boost
 import com.example.islandgame.components.Booster
@@ -57,14 +64,16 @@ fun GameScreen(
     onLevelClick: () -> Unit,
     onNextLevelClick: (Booster?) -> Unit,
     levelProgressRepo: LevelProgressRepo,
-    soundManager: SoundManager
+    soundManager: SoundManager,
+    startingBooster: Booster?,
 ) {
     val levelConfig = levels.first { it.levelNumber == levelNumber }
-    val engine = remember(levelNumber) { GamePlay(levelConfig) }
+    val engine = remember(levelNumber, startingBooster) { GamePlay(levelConfig = levelConfig, startingBooster = startingBooster) }
     var progressSaved by remember { mutableStateOf(false) }
     var showPrelevelPopup by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
     var selectedBooster by remember { mutableStateOf<Booster?>(null) }
+    var bombShockwave by remember { mutableFloatStateOf(0f) }
 
     LaunchedEffect(engine.isLevelCompleted) {
         if (!progressSaved && engine.isLevelCompleted) {
@@ -229,8 +238,8 @@ fun GameScreen(
                             animationSpec = keyframes {
                                 durationMillis = 200
                                 1f at 0
-                                1.25f at 100
-                                0.2f at 200
+                                1.4f at 100
+                                0.2f at 250
                             },
                             label = "matchScale"
                         )
@@ -238,7 +247,7 @@ fun GameScreen(
                         val matchAlpha by animateFloatAsState(
                             targetValue = if(isMatched) 0f else 1f,
                             animationSpec = tween(
-                                durationMillis = 200
+                                durationMillis = 250
                             ),
                             label = "matchAlpha"
                         )
@@ -288,10 +297,76 @@ fun GameScreen(
                                         engine.useBombAtPosition()
                                     }
                                 }
-                        )
+                            )
+                        }
+                    }
+                    LaunchedEffect(engine.isBombExplode) {
+                        if (engine.isBombExplode) {
+                            bombShockwave = 0f
+
+                            animate(
+                                initialValue = 0f,
+                                targetValue = 1f,
+                                animationSpec = tween(
+                                    durationMillis = 350,
+                                    easing = FastOutSlowInEasing
+                                )
+                            ) { value, _ ->
+                                bombShockwave = value
+                            }
+                            bombShockwave = 0f
+                        }
+                    }
+
+                if(engine.isBombExplode){
+
+                    engine.bombPosition?.let { (bombRow, bombCol) ->
+
+                        Canvas(
+                            modifier = Modifier
+                                .fillMaxSize()
+                        ) {
+
+                            val centerX =
+                                8.dp.toPx() +
+                                        bombCol * cellStep.toPx() +
+                                        cellSize.toPx() / 2
+
+                            val centerY =
+                                8.dp.toPx() +
+                                        bombRow * cellStep.toPx() +
+                                        cellSize.toPx() / 2
+
+                            val maxRadius =
+                                cellStep.toPx() * 2.2f
+
+                            val radius =
+                                bombShockwave * maxRadius
+
+                            val alpha =
+                                (1f - bombShockwave).coerceIn(0f,1f)
+
+                            // Outer shockwave
+                            drawCircle(
+                                color = Color.White.copy(alpha = alpha),
+                                radius = radius,
+                                center = Offset(centerX, centerY),
+                                style = Stroke(
+                                    width = 5.dp.toPx()
+                                )
+                            )
+
+                            // Inner glow
+                            drawCircle(
+                                color = Color.White.copy(
+                                    alpha = alpha * 0.25f
+                                ),
+                                radius = radius * 0.65f,
+                                center = Offset(centerX, centerY)
+                            )
+                        }
                     }
                 }
-            }
 
             if (engine.isLevelCompleted) {
                 LevelCompletePopup(
@@ -328,6 +403,7 @@ fun GameScreen(
                 }
             }
         }
+    }
     }
 }
 

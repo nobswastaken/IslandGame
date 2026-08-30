@@ -6,6 +6,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.example.islandgame.components.Booster
 import com.example.islandgame.repository.LevelProgressRepo
 import com.example.islandgame.screens.GameScreen
 import com.example.islandgame.screens.HomeScreen
@@ -46,7 +47,7 @@ fun AppNavGraph(
                     navController.navigate("levels")
                 },
                 onThisLevelClick = { levelNumber ->
-                    navController.navigate("games/$levelNumber")
+                    navController.navigate("games/$levelNumber/NONE")
                 },
                 profileViewModel = profileViewModel,
                 settingsVM = settingsViewModel,
@@ -65,7 +66,7 @@ fun AppNavGraph(
                     navController.navigate("levels")
                 },
                 onThisLevelClick = { levelNumber ->
-                    navController.navigate("games/$levelNumber")
+                    navController.navigate("games/$levelNumber/NONE")
                 },
                 profileViewModel = profileViewModel,
                 settingsVM = settingsViewModel,
@@ -76,25 +77,38 @@ fun AppNavGraph(
         }
 
         composable(
-            route = "games/{levelNumber}",
+            route = "games/{levelNumber}/{booster}",
             arguments = listOf(
                 navArgument("levelNumber"){
                     type = NavType.IntType
+                },
+                navArgument("booster"){
+                    type = NavType.StringType
                 }
             )
         ) { backStackEntry ->
 
             val levelNumber = backStackEntry.arguments?.getInt("levelNumber") ?: 1
+            val boosterName = backStackEntry.arguments?.getString("booster")
+
+            val startingBooster =
+                if(boosterName == "NONE"){
+                    null
+                }else{
+                    Booster.valueOf(boosterName?: "NONE")
+                }
             GameScreen(
                 levelNumber = levelNumber,
+                startingBooster = startingBooster,
                 onHomeClick = {
                     navController.navigate("play")
                 },
                 onLevelClick = {
                     navController.navigate("levels")
                 },
-                onNextLevelClick = {
-                    navController.navigate("games/${levelNumber + 1}")
+                onNextLevelClick = { booster ->
+                    val nextLevel = levelNumber + 1
+                    navController.navigate("games/$nextLevel/${booster?.name?: "NONE"}")
                 },
                 levelProgressRepo = levelProgressRepo,
                 soundManager = soundManager

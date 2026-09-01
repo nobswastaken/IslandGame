@@ -46,6 +46,9 @@ class GamePlay(
     var usedBomb by mutableStateOf(false)
         private set
 
+    var usedDiamond by mutableStateOf(false)
+        private set
+
     var isBombExplode by mutableStateOf(false)
         private set
 
@@ -54,6 +57,18 @@ class GamePlay(
 
     var bombPosition by mutableStateOf<Pair<Int,Int>?>(
         if(startingBooster == Booster.BOMB){
+            Pair(
+                Random.nextInt(rows),
+                Random.nextInt(columns)
+            )
+        }else{
+            null
+        }
+    )
+        private set
+
+    var diamondPosition by mutableStateOf<Pair<Int,Int>?>(
+        if(startingBooster == Booster.DIAMOND){
             Pair(
                 Random.nextInt(rows),
                 Random.nextInt(columns)
@@ -296,6 +311,90 @@ class GamePlay(
         isAnimating = false
     }
 
+    suspend fun useDiamond(targetRow: Int, targetCol: Int){
+        if (isAnimating || usedDiamond) return
+
+        val diamond = diamondPosition ?: return
+
+        val targetGem = boardState [targetRow] [targetCol]
+
+        if (targetGem == Gems.Empty || targetGem == Gems.Crystal_Ball){
+            return
+        }
+
+        isAnimating = true
+
+        val newBoard = boardState
+            .map { it.toMutableList() }
+            .toMutableList()
+
+        newBoard[diamond.first][diamond.second] = targetGem
+        newBoard[targetRow][targetCol] = Gems.Empty
+
+        boardState = newBoard
+
+        delay(250)
+
+        val positionsToRemove = mutableSetOf<Pair<Int, Int>>()
+
+        //this is the removing gem with swapped color
+        for (row in 0 until rows){
+            for(col in 0 until columns){
+                if(boardState[row][col] == targetGem){
+                    positionsToRemove.add(Pair(row,col))
+                }
+            }
+        }
+
+
+        matchedGems = positionsToRemove
+
+        delay(300)
+
+        val boardAfterRemoving = boardState
+            .map { it.toMutableList() }
+            .toMutableList()
+
+        for ((row, col) in positionsToRemove) {
+            boardAfterRemoving[row][col] = Gems.Empty
+        }
+
+        targetCount += positionsToRemove.count { position ->
+            boardState[position.first][position.second] == targetGem
+        }
+
+        boardState = boardAfterRemoving
+
+        matchedGems = emptySet()
+
+        usedDiamond = true
+        diamondPosition= null
+        selectedBooster = null
+
+        movesLeft--
+
+        delay(200)
+
+        collapseBoard()
+        fillEmptySpaces()
+
+        if (targetCount >= targetRequired) {
+            isLevelCompleted = true
+        }
+
+        isAnimating = false
+
+    }
+
+    suspend fun useDiamondAtPosition(targetRow: Int, targetCol: Int){
+        val diamond = diamondPosition ?: return
+
+        if(!isAdjacent(diamond, Pair(targetRow, targetCol))){
+            return
+        }
+
+        useDiamond(targetRow, targetCol)
+    }
     suspend fun useBombAtPosition(){
         val position = bombPosition ?: return
 
@@ -317,12 +416,11 @@ class GamePlay(
             }
 
             Booster.POTION -> {
-                //I'LL FIX THIS
-                return
+
             }
 
             Booster.DIAMOND -> {
-                //I'LL FIX THIS
+                useDiamondAtPosition(row,col)
                 return
             }
 
@@ -510,13 +608,22 @@ class GamePlay(
         targetCount = 0
         isLevelCompleted = false
         usedBomb = false
+        usedDiamond = false
         selectedBooster = null
         isBombExplode = false
+
         bombPosition = if(startingBooster == Booster.BOMB){
             Pair(
             Random.nextInt(rows),
             Random.nextInt(columns)
         )
+        } else{null}
+
+        diamondPosition = if(startingBooster == Booster.DIAMOND){
+            Pair(
+                Random.nextInt(rows),
+                Random.nextInt(columns)
+            )
         } else{null}
     }
     private suspend fun resolveMatches() {

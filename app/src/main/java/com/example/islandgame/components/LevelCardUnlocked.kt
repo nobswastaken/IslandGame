@@ -57,7 +57,8 @@ fun UnlockedLevelCard(
             contentAlignment = Alignment.Center,
             modifier = Modifier
                 .size(60.dp)
-                .clickable { onThisLevelClick() }
+                .clickable { onThisLevelClick()
+                }
         ) {
             Image(
                 painter = painterResource(id = R.drawable.unlockedlevel),
@@ -75,15 +76,15 @@ fun UnlockedLevelCard(
     }
 }
 
-@Preview
-@Composable
-fun UnlockedLevelCardPreview(){
-    IslandGameTheme() {
-        UnlockedLevelCard(
-            modifier = Modifier,
-            number = "1",
-            stars = 3,
-            onThisLevelClick = {},
-        )
-    }
-}
+//@Preview
+//@Composable
+//fun UnlockedLevelCardPreview(){
+//    IslandGameTheme() {
+//        UnlockedLevelCard(
+//            modifier = Modifier,
+//            number = "1",
+//            stars = 3,
+//            onThisLevelClick = {},
+//        )
+//    }
+//}

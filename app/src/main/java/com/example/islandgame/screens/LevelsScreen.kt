@@ -6,6 +6,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.*
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -18,10 +19,12 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.islandgame.R
 import com.example.islandgame.components.ArrowButtonRight
 import com.example.islandgame.components.ArrowButtonLeft
+import com.example.islandgame.components.Booster
 import com.example.islandgame.components.BottomNavbar
 import com.example.islandgame.components.EditProfilePopup
 import com.example.islandgame.components.LevelButton
 import com.example.islandgame.components.LockedLevelCard
+import com.example.islandgame.components.PreLevelPopup
 import com.example.islandgame.components.SettingsPopup
 import com.example.islandgame.components.TopNavBar
 import com.example.islandgame.components.UnlockedLevelCard
@@ -34,10 +37,9 @@ import com.example.islandgame.viewmodel.SettingsViewmodel
 
 @Composable
 fun LevelScreen(
-    onClick: () -> Unit,
     onHomeClick: () -> Unit,
     onLevelClick: () -> Unit,
-    onThisLevelClick: (Int) -> Unit,
+    onThisLevelClick: (Int, Booster?) -> Unit,
     levelProgressRepo: LevelProgressRepo,
     profileViewModel: ProfileViewmodel = viewModel(),
     settingsVM: SettingsViewmodel = viewModel(),
@@ -45,6 +47,9 @@ fun LevelScreen(
 ) {
     var showSettingsPopup by remember { mutableStateOf(false) }
     var showEditProfilePopup by remember { mutableStateOf(false) }
+    var showPrelevelPopup by remember { mutableStateOf(false) }
+    var selectedBooster by remember { mutableStateOf<Booster?>(null) }
+    var selectedLevel by remember { mutableStateOf(1) }
 
     val username by profileViewModel.username.collectAsState()
     val countryId by profileViewModel.country.collectAsState()
@@ -128,7 +133,9 @@ fun LevelScreen(
                                 UnlockedLevelCard(
                                     number = level.levelNumber.toString(),
                                     stars = stars,
-                                    onThisLevelClick = { onThisLevelClick(level.levelNumber) }
+                                    onThisLevelClick = { selectedLevel = level.levelNumber
+                                                       selectedBooster = null
+                                                       showPrelevelPopup = true}
                                 )
                             } else {
                                 LockedLevelCard()
@@ -165,6 +172,24 @@ fun LevelScreen(
                 Spacer(modifier = Modifier.height(16.dp))
             }
         }
+    }
+
+    if (showPrelevelPopup) {
+        val levelConfig = levels.first{ it.levelNumber == selectedLevel }
+        PreLevelPopup(
+            levelConfig = levelConfig,
+            onPlayClick = {
+                showPrelevelPopup = false
+                onThisLevelClick(selectedLevel,selectedBooster)
+            },
+            selectedBooster = selectedBooster,
+            onBoosterSelected = { booster ->
+                selectedBooster = booster
+            },
+            onDismiss = { showPrelevelPopup = false },
+            stars = 0,
+            soundManager = soundManager
+        )
     }
 
     if (showSettingsPopup) {

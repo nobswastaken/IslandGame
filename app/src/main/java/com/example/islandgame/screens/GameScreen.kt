@@ -72,9 +72,15 @@ fun GameScreen(
     var progressSaved by remember { mutableStateOf(false) }
     var showPrelevelPopup by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
-    var selectedBooster by remember { mutableStateOf<Booster?>(null) }
+    var selectedBooster by remember { mutableStateOf(startingBooster) }
     var bombShockwave by remember { mutableFloatStateOf(0f) }
 
+
+    LaunchedEffect(startingBooster) {
+        startingBooster?. let{
+            engine.selectBooster(it)
+        }
+    }
     LaunchedEffect(engine.isLevelCompleted) {
         if (!progressSaved && engine.isLevelCompleted) {
             val stars = engine.getStars()
@@ -183,6 +189,9 @@ fun GameScreen(
                         val position = Pair(row, col)
                         val isBombPosition =
                             engine.bombPosition == position && !engine.usedBomb
+                        val isDiamondPosition =
+                            engine.diamondPosition == position && !engine.usedDiamond
+
                         val swap = engine.swappingGems
 
 
@@ -195,7 +204,7 @@ fun GameScreen(
                             else -> engine.boardState[row][col]
                         }
 
-                        if (gem == Gems.Empty || isBombPosition ) {
+                        if (gem == Gems.Empty || isBombPosition || isDiamondPosition) {
                             continue
                         }
 
@@ -315,6 +324,21 @@ fun GameScreen(
                                 bombShockwave = value
                             }
                             bombShockwave = 0f
+                        }
+                    }
+
+                engine.diamondPosition?.let{ (diamondRow, diamondCol) ->
+                    if (!engine.usedDiamond) {
+                        Image(
+                            painter = painterResource(id = R.drawable.diamond),
+                            contentDescription = "Diamond booster",
+                            modifier = Modifier
+                                .size(cellSize)
+                                .offset(
+                                    x = diamondCol * cellStep,
+                                    y = diamondRow * cellStep
+                                )
+                            )
                         }
                     }
 

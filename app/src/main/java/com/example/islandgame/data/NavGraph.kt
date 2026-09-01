@@ -16,6 +16,7 @@ import com.example.islandgame.sounds.MusicManager
 import com.example.islandgame.sounds.SoundManager
 import com.example.islandgame.viewmodel.ProfileViewmodel
 import com.example.islandgame.viewmodel.SettingsViewmodel
+import kotlin.let
 
 @Composable
 fun AppNavGraph(
@@ -46,8 +47,8 @@ fun AppNavGraph(
                 onLevelClick = {
                     navController.navigate("levels")
                 },
-                onThisLevelClick = { levelNumber ->
-                    navController.navigate("games/$levelNumber/NONE")
+                onThisLevelClick = { levelNumber, booster ->
+                    navController.navigate("games/$levelNumber/${booster?.name?: "NONE"}")
                 },
                 profileViewModel = profileViewModel,
                 settingsVM = settingsViewModel,
@@ -65,14 +66,14 @@ fun AppNavGraph(
                 onLevelClick = {
                     navController.navigate("levels")
                 },
-                onThisLevelClick = { levelNumber ->
-                    navController.navigate("games/$levelNumber/NONE")
+                onThisLevelClick = { levelNumber, booster ->
+                    navController.navigate("games/$levelNumber/${booster?.name?: "NONE"}"
+                    )
                 },
                 profileViewModel = profileViewModel,
                 settingsVM = settingsViewModel,
                 soundManager = soundManager,
-                levelProgressRepo = levelProgressRepo,
-                onClick ={}
+                levelProgressRepo = levelProgressRepo
             )
         }
 
@@ -95,7 +96,8 @@ fun AppNavGraph(
                 if(boosterName == "NONE"){
                     null
                 }else{
-                    Booster.valueOf(boosterName?: "NONE")
+                    boosterName?.let{
+                        Booster.valueOf(it) }
                 }
             GameScreen(
                 levelNumber = levelNumber,

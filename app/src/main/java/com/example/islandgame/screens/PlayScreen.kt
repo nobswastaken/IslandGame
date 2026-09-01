@@ -46,7 +46,7 @@ import com.example.islandgame.viewmodel.SettingsViewmodel
 fun PlayScreen(
     onHomeClick: () -> Unit,
     onLevelClick: () -> Unit,
-    onThisLevelClick: (Int) -> Unit,
+    onThisLevelClick: (Int, Booster?) -> Unit,
     soundManager: SoundManager,
     profileViewModel: ProfileViewmodel,
     settingsVM: SettingsViewmodel,
@@ -60,6 +60,7 @@ fun PlayScreen(
     var showPrelevelPopup by remember { mutableStateOf(false) }
     var nextLevel by remember { mutableStateOf(1) }
     var selectedBooster by remember { mutableStateOf<Booster?>(null) }
+    var selectedLevel by remember { mutableStateOf(1) }
 
     val username by profileViewModel.username.collectAsState()
     val countryId by profileViewModel.country.collectAsState()
@@ -183,23 +184,23 @@ fun PlayScreen(
             )
         }
 
-        if (showPrelevelPopup) {
-            val levelConfig = levels.first{ it.levelNumber == nextLevel }
-            PreLevelPopup(
-                levelConfig = levelConfig,
-                onPlayClick = {
-                    showPrelevelPopup = false
-                    onThisLevelClick(nextLevel)
-                },
-                selectedBooster = selectedBooster,
-                onBoosterSelected = { booster ->
-                    selectedBooster = booster
-                },
-                onDismiss = { showPrelevelPopup = false },
-                stars = 0,
-                soundManager = soundManager
-            )
-        }
+            if (showPrelevelPopup) {
+                val levelConfig = levels.first{ it.levelNumber == nextLevel }
+                PreLevelPopup(
+                    levelConfig = levelConfig,
+                    onPlayClick = {
+                        showPrelevelPopup = false
+                        onThisLevelClick(selectedLevel,selectedBooster)
+                    },
+                    selectedBooster = selectedBooster,
+                    onBoosterSelected = { booster ->
+                        selectedBooster = booster
+                    },
+                    onDismiss = { showPrelevelPopup = false },
+                    stars = 0,
+                    soundManager = soundManager
+                )
+            }
 
     }
 }

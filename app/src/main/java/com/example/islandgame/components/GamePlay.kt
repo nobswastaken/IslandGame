@@ -49,6 +49,9 @@ class GamePlay(
     var usedDiamond by mutableStateOf(false)
         private set
 
+    var usedPotion by mutableStateOf(false)
+        private set
+
     var isBombExplode by mutableStateOf(false)
         private set
 
@@ -69,6 +72,18 @@ class GamePlay(
 
     var diamondPosition by mutableStateOf<Pair<Int,Int>?>(
         if(startingBooster == Booster.DIAMOND){
+            Pair(
+                Random.nextInt(rows),
+                Random.nextInt(columns)
+            )
+        }else{
+            null
+        }
+    )
+        private set
+
+    var potionPosition by mutableStateOf<Pair<Int,Int>?>(
+        if(startingBooster == Booster.POTION){
             Pair(
                 Random.nextInt(rows),
                 Random.nextInt(columns)
@@ -386,6 +401,76 @@ class GamePlay(
 
     }
 
+    suspend fun usePotion(row: Int, col: Int){
+        if (isAnimating || usedPotion) return
+
+        val potion = potionPosition ?: return
+
+        isAnimating = true
+
+        val positionsToRemove = mutableSetOf<Pair<Int, Int>>()
+
+        for (c in 0 until columns){
+            positionsToRemove.add(Pair(potion.first,c))
+        }
+
+        for (r in 0 until rows){
+            positionsToRemove.add(Pair(r, potion.second))
+        }
+
+        matchedGems = positionsToRemove
+
+        delay(300)
+
+        val newBoard = boardState
+            .map { it.toMutableList() }
+            .toMutableList()
+
+        for ((r, c) in positionsToRemove) {
+            newBoard[r][c] = Gems.Empty
+        }
+
+        targetCount += positionsToRemove.count { position ->
+            boardState[position.first][position.second] == targetGem
+        }
+
+        boardState = newBoard
+
+        matchedGems = emptySet()
+
+        usedPotion = true
+        potionPosition= null
+        selectedBooster = null
+
+        movesLeft--
+
+        delay(200)
+
+        collapseBoard()
+        fillEmptySpaces()
+
+        if (targetCount >= targetRequired) {
+            isLevelCompleted = true
+        }
+
+        isAnimating = false
+
+    }
+
+
+    suspend fun usePotionAtPosition(targetRow: Int, targetCol: Int){
+        val potion = potionPosition ?: return
+
+        if(!isAdjacent(potion, Pair(targetRow, targetCol))){
+            return
+        }
+
+        usePotion(
+            row = potion.first,
+            col = potion.second
+        )
+    }
+
     suspend fun useDiamondAtPosition(targetRow: Int, targetCol: Int){
         val diamond = diamondPosition ?: return
 
@@ -416,7 +501,8 @@ class GamePlay(
             }
 
             Booster.POTION -> {
-
+                usePotionAtPosition(row,col)
+                return
             }
 
             Booster.DIAMOND -> {
@@ -609,6 +695,7 @@ class GamePlay(
         isLevelCompleted = false
         usedBomb = false
         usedDiamond = false
+        usedPotion = false
         selectedBooster = null
         isBombExplode = false
 
@@ -620,6 +707,13 @@ class GamePlay(
         } else{null}
 
         diamondPosition = if(startingBooster == Booster.DIAMOND){
+            Pair(
+                Random.nextInt(rows),
+                Random.nextInt(columns)
+            )
+        } else{null}
+
+        potionPosition = if(startingBooster == Booster.POTION){
             Pair(
                 Random.nextInt(rows),
                 Random.nextInt(columns)

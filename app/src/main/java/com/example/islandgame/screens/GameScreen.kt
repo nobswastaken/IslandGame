@@ -191,6 +191,8 @@ fun GameScreen(
                             engine.bombPosition == position && !engine.usedBomb
                         val isDiamondPosition =
                             engine.diamondPosition == position && !engine.usedDiamond
+                        val isPotionPosition =
+                            engine.potionPosition == position && !engine.usedPotion
 
                         val swap = engine.swappingGems
 
@@ -204,7 +206,7 @@ fun GameScreen(
                             else -> engine.boardState[row][col]
                         }
 
-                        if (gem == Gems.Empty || isBombPosition || isDiamondPosition) {
+                        if (gem == Gems.Empty || isBombPosition || isDiamondPosition || isPotionPosition) {
                             continue
                         }
 
@@ -341,6 +343,21 @@ fun GameScreen(
                             )
                         }
                     }
+
+                engine.potionPosition?.let{ (potionRow, potionCol) ->
+                    if (!engine.usedPotion) {
+                        Image(
+                            painter = painterResource(id = R.drawable.potion),
+                            contentDescription = "Potion booster",
+                            modifier = Modifier
+                                .size(cellSize)
+                                .offset(
+                                    x = potionCol * cellStep,
+                                    y = potionRow * cellStep
+                                )
+                        )
+                    }
+                }
 
                 if(engine.isBombExplode){
 

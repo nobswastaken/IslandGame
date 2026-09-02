@@ -21,13 +21,14 @@ import com.example.islandgame.components.ArrowButtonRight
 import com.example.islandgame.components.ArrowButtonLeft
 import com.example.islandgame.components.Booster
 import com.example.islandgame.components.BottomNavbar
-import com.example.islandgame.components.EditProfilePopup
+import com.example.islandgame.popups.EditProfilePopup
 import com.example.islandgame.components.LevelButton
 import com.example.islandgame.components.LockedLevelCard
-import com.example.islandgame.components.PreLevelPopup
-import com.example.islandgame.components.SettingsPopup
+import com.example.islandgame.popups.PreLevelPopup
+import com.example.islandgame.popups.SettingsPopup
 import com.example.islandgame.components.TopNavBar
 import com.example.islandgame.components.UnlockedLevelCard
+import com.example.islandgame.data.BoostStore
 import com.example.islandgame.data.levels
 import com.example.islandgame.databasestuff.LevelProgressEntity
 import com.example.islandgame.repository.LevelProgressRepo
@@ -43,7 +44,8 @@ fun LevelScreen(
     levelProgressRepo: LevelProgressRepo,
     profileViewModel: ProfileViewmodel = viewModel(),
     settingsVM: SettingsViewmodel = viewModel(),
-    soundManager: SoundManager
+    soundManager: SoundManager,
+    boosterstore: BoostStore
 ) {
     var showSettingsPopup by remember { mutableStateOf(false) }
     var showEditProfilePopup by remember { mutableStateOf(false) }
@@ -188,7 +190,8 @@ fun LevelScreen(
             },
             onDismiss = { showPrelevelPopup = false },
             stars = 0,
-            soundManager = soundManager
+            soundManager = soundManager,
+            boosterstore = boosterstore
         )
     }
 

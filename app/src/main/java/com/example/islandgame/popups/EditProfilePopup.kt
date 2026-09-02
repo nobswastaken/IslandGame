@@ -1,4 +1,4 @@
-package com.example.islandgame.components
+package com.example.islandgame.popups
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -40,6 +40,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.islandgame.R
+import com.example.islandgame.components.FlagIcon
+import com.example.islandgame.components.LevelButton
+import com.example.islandgame.components.TextInput
 import com.example.islandgame.data.flags
 import com.example.islandgame.sounds.SoundManager
 
@@ -76,7 +79,7 @@ fun EditProfilePopup(
             ) {
 
                 Row(
-                    modifier = Modifier.align(Alignment.TopCenter).offset(y = 20.dp),
+                    modifier = Modifier.align(Alignment.TopCenter).offset(y = 28.dp),
                     horizontalArrangement = Arrangement.spacedBy(24.dp, Alignment.CenterHorizontally),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -121,7 +124,7 @@ fun EditProfilePopup(
                         )
                         TextInput(
                             text = name,
-                            onTextChange = {name = it}
+                            onTextChange = { name = it }
                         )
                     }
 
@@ -172,9 +175,10 @@ fun EditProfilePopup(
                         text = "Accept",
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold,
-                        onClick = { onAccept(name, selectedFlagId)
-                                  onDismiss()
-                                  soundManager.playSound()
+                        onClick = {
+                            onAccept(name, selectedFlagId)
+                            onDismiss()
+                            soundManager.playSound()
                         },
                         modifier = Modifier
                             .wrapContentWidth()

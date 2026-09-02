@@ -1,4 +1,4 @@
-package com.example.islandgame.components
+package com.example.islandgame.popups
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
@@ -24,12 +23,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.islandgame.R
+import com.example.islandgame.components.LevelButton
 import com.example.islandgame.sounds.SoundManager
-import com.example.islandgame.ui.theme.IslandGameTheme
 
 @Composable
 fun GoldenKeyPopup(
@@ -53,7 +51,7 @@ fun GoldenKeyPopup(
                 modifier = Modifier.matchParentSize()
             ) {
                 Row(
-                    modifier = Modifier.align(Alignment.TopCenter).offset(y = 20.dp),
+                    modifier = Modifier.align(Alignment.TopCenter).offset(y = 28.dp),
                     horizontalArrangement = Arrangement.spacedBy(24.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {

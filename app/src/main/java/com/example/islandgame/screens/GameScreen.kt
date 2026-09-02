@@ -11,10 +11,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
@@ -44,14 +41,12 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.times
-import com.example.islandgame.components.Boost
 import com.example.islandgame.components.Booster
-import com.example.islandgame.components.LevelCompletePopup
-import com.example.islandgame.components.MainBooster
-import com.example.islandgame.components.PreLevelPopup
+import com.example.islandgame.popups.LevelCompletePopup
+import com.example.islandgame.popups.PreLevelPopup
 import com.example.islandgame.components.TopNavbarGameplay
+import com.example.islandgame.data.BoostStore
 import com.example.islandgame.data.levels
 import com.example.islandgame.repository.LevelProgressRepo
 import com.example.islandgame.sounds.SoundManager
@@ -66,6 +61,7 @@ fun GameScreen(
     levelProgressRepo: LevelProgressRepo,
     soundManager: SoundManager,
     startingBooster: Booster?,
+    boosterstore: BoostStore
 ) {
     val levelConfig = levels.first { it.levelNumber == levelNumber }
     val engine = remember(levelNumber, startingBooster) { GamePlay(levelConfig = levelConfig, startingBooster = startingBooster) }
@@ -79,6 +75,22 @@ fun GameScreen(
     LaunchedEffect(startingBooster) {
         startingBooster?. let{
             engine.selectBooster(it)
+        }
+    }
+
+    LaunchedEffect(engine.usedBomb) {
+        if(engine.usedBomb){
+            boosterstore.consume(Booster.BOMB)
+        }
+    }
+    LaunchedEffect(engine.usedPotion) {
+        if(engine.usedPotion){
+            boosterstore.consume(Booster.POTION)
+        }
+    }
+    LaunchedEffect(engine.usedDiamond) {
+        if(engine.usedDiamond){
+            boosterstore.consume(Booster.DIAMOND)
         }
     }
     LaunchedEffect(engine.isLevelCompleted) {
@@ -420,31 +432,33 @@ fun GameScreen(
                 )
             }
 
-            if (showPrelevelPopup){
-                val nextLevelNumber = levelNumber + 1
-                val nextLevelConfig = levels.firstOrNull {
-                    it.levelNumber == nextLevelNumber
-                }
 
-                if(nextLevelConfig != null){
-                    PreLevelPopup(
-                        levelConfig = nextLevelConfig,
-                        stars = 0,
-                        onDismiss = {showPrelevelPopup = false},
-                        selectedBooster = selectedBooster,
-                        onBoosterSelected = { booster ->
-                            selectedBooster = booster
-                        },
-                        onPlayClick = {
-                            showPrelevelPopup = false
-                            onNextLevelClick(selectedBooster)
-                        },
-                        soundManager = soundManager
-                    )
-                }
-            }
         }
     }
+        if (showPrelevelPopup){
+            val nextLevelNumber = levelNumber + 1
+            val nextLevelConfig = levels.firstOrNull {
+                it.levelNumber == nextLevelNumber
+            }
+
+            if(nextLevelConfig != null){
+                PreLevelPopup(
+                    levelConfig = nextLevelConfig,
+                    stars = 0,
+                    onDismiss = {showPrelevelPopup = false},
+                    selectedBooster = selectedBooster,
+                    onBoosterSelected = { booster ->
+                        selectedBooster = booster
+                    },
+                    onPlayClick = {
+                        showPrelevelPopup = false
+                        onNextLevelClick(selectedBooster)
+                    },
+                    soundManager = soundManager,
+                    boosterstore = boosterstore
+                )
+            }
+        }
     }
 }
 

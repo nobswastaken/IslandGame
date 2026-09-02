@@ -24,18 +24,18 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.setValue
 import com.example.islandgame.R
 import com.example.islandgame.components.Booster
 import com.example.islandgame.components.BottomNavbar
-import com.example.islandgame.components.EditProfilePopup
-import com.example.islandgame.components.GoldenKeyPopup
+import com.example.islandgame.popups.EditProfilePopup
+import com.example.islandgame.popups.GoldenKeyPopup
 import com.example.islandgame.components.LevelButton
-import com.example.islandgame.components.PreLevelPopup
-import com.example.islandgame.components.SettingsPopup
-import com.example.islandgame.components.TasksPopup
+import com.example.islandgame.popups.PreLevelPopup
+import com.example.islandgame.popups.SettingsPopup
+import com.example.islandgame.popups.TasksPopup
 import com.example.islandgame.components.TopNavBar
 import com.example.islandgame.components.Zone
+import com.example.islandgame.data.BoostStore
 import com.example.islandgame.data.levels
 import com.example.islandgame.repository.LevelProgressRepo
 import com.example.islandgame.sounds.SoundManager
@@ -50,7 +50,8 @@ fun PlayScreen(
     soundManager: SoundManager,
     profileViewModel: ProfileViewmodel,
     settingsVM: SettingsViewmodel,
-    levelProgressRepo: LevelProgressRepo
+    levelProgressRepo: LevelProgressRepo,
+    boosterstore: BoostStore
 ) {
 
     var showSettingsPopup by remember { mutableStateOf(false) }
@@ -198,7 +199,8 @@ fun PlayScreen(
                     },
                     onDismiss = { showPrelevelPopup = false },
                     stars = 0,
-                    soundManager = soundManager
+                    soundManager = soundManager,
+                    boosterstore = boosterstore
                 )
             }
 

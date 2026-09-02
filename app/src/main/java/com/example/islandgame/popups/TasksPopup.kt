@@ -1,4 +1,4 @@
-package com.example.islandgame.components
+package com.example.islandgame.popups
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -27,6 +27,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.islandgame.R
+import com.example.islandgame.components.DoItButton
+import com.example.islandgame.components.Tasks
+import com.example.islandgame.components.WorldProgress
 import com.example.islandgame.sounds.SoundManager
 
 @Composable
@@ -55,7 +58,7 @@ fun TasksPopup(
                 modifier = Modifier.matchParentSize()
             ) {
                 Row(
-                    modifier = Modifier.align(Alignment.TopCenter).offset(y = 20.dp),
+                    modifier = Modifier.align(Alignment.TopCenter).offset(y = 28.dp),
                     horizontalArrangement = Arrangement.spacedBy(24.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {

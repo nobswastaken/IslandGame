@@ -24,7 +24,8 @@ fun AppNavGraph(
     profileViewModel: ProfileViewmodel,
     settingsViewModel: SettingsViewmodel,
     levelProgressRepo: LevelProgressRepo,
-    soundManager: SoundManager
+    soundManager: SoundManager,
+    boosterstore: BoostStore
     ) {
     NavHost(
         navController = navController,
@@ -53,7 +54,8 @@ fun AppNavGraph(
                 profileViewModel = profileViewModel,
                 settingsVM = settingsViewModel,
                 soundManager = soundManager,
-                levelProgressRepo = levelProgressRepo
+                levelProgressRepo = levelProgressRepo,
+                boosterstore = boosterstore
 
             )
         }
@@ -73,7 +75,8 @@ fun AppNavGraph(
                 profileViewModel = profileViewModel,
                 settingsVM = settingsViewModel,
                 soundManager = soundManager,
-                levelProgressRepo = levelProgressRepo
+                levelProgressRepo = levelProgressRepo,
+                boosterstore = boosterstore
             )
         }
 
@@ -113,7 +116,8 @@ fun AppNavGraph(
                     navController.navigate("games/$nextLevel/${booster?.name?: "NONE"}")
                 },
                 levelProgressRepo = levelProgressRepo,
-                soundManager = soundManager
+                soundManager = soundManager,
+                boosterstore = boosterstore
             )
         }
     }

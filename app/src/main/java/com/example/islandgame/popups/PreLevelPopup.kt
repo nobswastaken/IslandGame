@@ -1,4 +1,4 @@
-package com.example.islandgame.components
+package com.example.islandgame.popups
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -7,7 +7,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -17,19 +19,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.islandgame.R
-import com.example.islandgame.data.Gems
+import com.example.islandgame.components.Boost
+import com.example.islandgame.components.Booster
+import com.example.islandgame.data.BoostStore
 import com.example.islandgame.data.LevelConfig
 import com.example.islandgame.sounds.SoundManager
-import com.example.islandgame.ui.theme.IslandGameTheme
-import kotlinx.serialization.Required
 
 @Composable
 fun PreLevelPopup(
@@ -38,6 +38,7 @@ fun PreLevelPopup(
     onDismiss: () -> Unit,
     onBoosterSelected: (Booster?) -> Unit,
     selectedBooster: Booster?,
+    boosterstore: BoostStore,
     soundManager: SoundManager,
     modifier: Modifier = Modifier,
     stars: Int
@@ -64,7 +65,7 @@ fun PreLevelPopup(
                 modifier = Modifier.matchParentSize()
             ) {
                 Row(
-                    modifier = Modifier.align(Alignment.TopCenter).offset(y = 20.dp),
+                    modifier = Modifier.align(Alignment.TopCenter).offset(y = 28.dp),
                     horizontalArrangement = Arrangement.spacedBy(24.dp, Alignment.CenterHorizontally),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -91,7 +92,7 @@ fun PreLevelPopup(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier
                         .align(Alignment.Center)
-                        .padding(top = 44.dp, bottom = 44.dp)
+                        .padding(top = 32.dp, bottom = 20.dp)
                 ) {
                     // STARS ROW
                     Row(
@@ -161,11 +162,16 @@ fun PreLevelPopup(
                             drawableId = R.drawable.bomb,
                             contentDescription = "Bomb booster",
                             isSelected = selectedBooster == Booster.BOMB,
-                            count = 3,
+                            count = boosterstore.getCount(Booster.BOMB),
                             size = 56.dp,
                             onClick = {
-                                if(selectedBooster == Booster.BOMB){ onBoosterSelected(null) }
-                                else {onBoosterSelected(Booster.BOMB)}
+                                if (boosterstore.getCount(Booster.BOMB) > 0) {
+                                    if (selectedBooster == Booster.BOMB) {
+                                        onBoosterSelected(null)
+                                    } else {
+                                        onBoosterSelected(Booster.BOMB)
+                                    }
+                                }
                             }
                         )
 
@@ -173,11 +179,16 @@ fun PreLevelPopup(
                             drawableId = R.drawable.potion,
                             contentDescription = "Potion booster",
                             isSelected = selectedBooster == Booster.POTION,
-                            count = 3,
+                            count = boosterstore.getCount(Booster.POTION),
                             size = 56.dp,
                             onClick = {
-                                if(selectedBooster == Booster.POTION){ onBoosterSelected(null) }
-                                else {onBoosterSelected(Booster.POTION)}
+                                if (boosterstore.getCount(Booster.POTION) > 0) {
+                                    if (selectedBooster == Booster.POTION) {
+                                        onBoosterSelected(null)
+                                    } else {
+                                        onBoosterSelected(Booster.POTION)
+                                    }
+                                }
                             }
                         )
 
@@ -185,22 +196,29 @@ fun PreLevelPopup(
                             drawableId = R.drawable.diamond,
                             contentDescription = "Diamond booster",
                             isSelected = selectedBooster == Booster.DIAMOND,
-                            count = 3,
+                            count = boosterstore.getCount(Booster.DIAMOND),
                             size = 56.dp,
                             onClick = {
-                                if(selectedBooster == Booster.DIAMOND){ onBoosterSelected(null) }
-                                else {onBoosterSelected(Booster.DIAMOND)}
+                                if (boosterstore.getCount(Booster.DIAMOND) > 0) {
+                                    if (selectedBooster == Booster.DIAMOND) {
+                                        onBoosterSelected(null)
+                                    } else {
+                                        onBoosterSelected(Booster.DIAMOND)
+                                    }
+                                }
                             }
                         )
                     }
                 }
 
+                Spacer(modifier = Modifier.height(0.dp))
 
                 Image(
                     painter = painterResource(id = R.drawable.playbtn),
                     contentDescription = "Play Button",
                     modifier = Modifier
                         .align(Alignment.BottomCenter)
+                        .size(60.dp)
                         .offset(y = (-40).dp)
                         .clickable { onPlayClick() }
                 )
@@ -208,3 +226,4 @@ fun PreLevelPopup(
         }
     }
 }
+

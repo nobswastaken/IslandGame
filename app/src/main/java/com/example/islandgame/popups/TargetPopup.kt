@@ -1,4 +1,4 @@
-package com.example.islandgame.components
+package com.example.islandgame.popups
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -52,7 +52,7 @@ fun TargetPopup(
             ) {
 
                 Row(
-                    modifier = Modifier.align(Alignment.TopCenter).offset(y = 20.dp),
+                    modifier = Modifier.align(Alignment.TopCenter).offset(y = 28.dp),
                     horizontalArrangement = Arrangement.spacedBy(24.dp, Alignment.CenterHorizontally),
                     verticalAlignment = Alignment.CenterVertically
                 ) {

@@ -7,8 +7,10 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.navigation.compose.rememberNavController
 import com.example.islandgame.data.AppNavGraph
+import com.example.islandgame.data.BoostStore
 import com.example.islandgame.repository.LevelProgressRepo
 import com.example.islandgame.repository.ProfileRepo
 import com.example.islandgame.repository.SettingsRepo
@@ -27,7 +29,6 @@ class MainActivity : ComponentActivity() {
         val profileViewmodel = ProfileViewmodel(profileRepository)
 
         val levelProgressRepo = LevelProgressRepo(applicationContext)
-
         val settingsRepository = SettingsRepo(applicationContext)
         val settingsViewModel = SettingsViewmodel(settingsRepository)
 
@@ -38,6 +39,8 @@ class MainActivity : ComponentActivity() {
         setContent {
             IslandGameTheme {
                 val settings by settingsViewModel.settingsFlow.collectAsState()
+                val boosterstore = remember { BoostStore() }
+
 
                 LaunchedEffect(settings.music) {
                     if (settings.music) musicManager.play()
@@ -55,7 +58,8 @@ class MainActivity : ComponentActivity() {
                     profileViewModel = profileViewmodel,
                     settingsViewModel = settingsViewModel,
                     soundManager = soundManager,
-                    levelProgressRepo = LevelProgressRepo(applicationContext)
+                    levelProgressRepo = LevelProgressRepo(applicationContext),
+                    boosterstore = boosterstore
                 )
             }
         }

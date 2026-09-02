@@ -1,4 +1,4 @@
-package com.example.islandgame.components
+package com.example.islandgame.popups
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -29,6 +30,7 @@ import androidx.compose.ui.unit.sp
 import com.example.islandgame.R
 import com.example.islandgame.viewmodel.SettingsViewmodel
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.input.pointer.motionEventSpy
 import com.example.islandgame.sounds.SoundManager
 
 @Composable
@@ -61,7 +63,7 @@ fun SettingsPopup(
                 ) {
 
                     Row(
-                        modifier = Modifier.align(Alignment.TopCenter).offset(y = 20.dp),
+                        modifier = Modifier.align(Alignment.TopCenter).offset(y = 28.dp),
                         horizontalArrangement = Arrangement.spacedBy(
                             24.dp,
                             Alignment.CenterHorizontally
@@ -93,7 +95,7 @@ fun SettingsPopup(
 
                     ) {
                     Row(
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier.fillMaxWidth().padding(top = 32.dp),
                         horizontalArrangement = Arrangement.spacedBy(
                             32.dp,
                             Alignment.CenterHorizontally
@@ -110,10 +112,12 @@ fun SettingsPopup(
                                 painter = painterResource(id = if(settings.sound) R.drawable.sound_icon
                                 else R.drawable.no_sound_icon),
                                 contentDescription = "Sound Button",
+                                modifier = Modifier.size(70.dp)
                             )
                             Image(
                                 painter = painterResource(id = R.drawable.sound),
                                 contentDescription = "Sound text",
+                                modifier = Modifier.size(70.dp)
                             )
                         }
                         Column(
@@ -121,35 +125,43 @@ fun SettingsPopup(
                             modifier = Modifier.clickable {
                                 settingsVM.toggleMusic(!settings.music)
                             }
+
                         ) {
                             Image(
                                 painter = painterResource(id = if(settings.music) R.drawable.music_icon
                                 else R.drawable.no_music_icon),
                                 contentDescription = "Music Button",
+                                modifier = Modifier.size(70.dp)
                             )
                             Image(
                                 painter = painterResource(id = R.drawable.music),
                                 contentDescription = "Music text",
+                                modifier = Modifier.size(70.dp)
                             )
                         }
                     }
-                    Spacer(modifier = Modifier.height(30.dp))
+                    Spacer(modifier = Modifier.height(21.dp))
                     Image(
                         painter = painterResource(id = R.drawable.line),
                         contentDescription = "Divider",
+                        modifier = Modifier.width(200.dp)
                     )
-                    Spacer(modifier = Modifier.height(12.dp))
+                    Spacer(modifier = Modifier.height(21.dp))
+
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
+
                         Image(
                             painter = painterResource(id = R.drawable.edit_profile_icon),
                             contentDescription = "Edit Profile Button",
                             modifier = Modifier.clickable(
                                 onClick = { onEditProfileClick() }
-                            )
+                            ).size(70.dp)
+
                         )
                         Image(
                             painter = painterResource(id = R.drawable.edit_profile),
-                            contentDescription = "Music text",
+                            contentDescription = "Edit Profile text",
+                            modifier = Modifier.width(120.dp)
                         )
                     }
                 }

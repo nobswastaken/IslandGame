@@ -1,6 +1,12 @@
 package com.example.islandgame.data
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -27,6 +33,37 @@ fun AppNavGraph(
     soundManager: SoundManager,
     boosterstore: BoostStore
     ) {
+
+    val context = LocalContext.current
+    val lifecycleOwner = LocalLifecycleOwner.current
+
+    val musicManager = remember { MusicManager(context) }
+
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver {_, event ->
+            when (event){
+                Lifecycle.Event.ON_START -> {
+                    musicManager.play()
+                }
+                Lifecycle.Event.ON_STOP -> {
+                    musicManager.pause()
+                }
+                else -> {}
+            }
+        }
+
+        lifecycleOwner.lifecycle.addObserver(observer)
+
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
+            musicManager.stop()
+        }
+    }
+
+
+
+
+
     NavHost(
         navController = navController,
         startDestination = "home"

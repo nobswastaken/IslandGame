@@ -50,6 +50,8 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.navigation.compose)
+    implementation("io.github.vinceglb:confettikit:0.5.1")
+    implementation("com.github.gayanvoice:android-animations-kotlin:1.0.1")
     ksp(libs.androidx.room.compiler)
     testImplementation(libs.junit)
     androidTestImplementation(platform(libs.androidx.compose.bom))

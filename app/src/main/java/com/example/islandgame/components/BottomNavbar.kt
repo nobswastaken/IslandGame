@@ -43,9 +43,9 @@ fun BottomNavbar(
         )
 
         Row(
-            modifier = Modifier.fillMaxWidth().padding(0.dp),
+            modifier = Modifier.fillMaxWidth().padding(bottom = 40.dp),
             horizontalArrangement = Arrangement.SpaceEvenly,
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.Top
         ) {
             Image(
                 painter = painterResource(id = R.drawable.settings),

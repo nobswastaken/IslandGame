@@ -1,6 +1,8 @@
 package com.example.islandgame.screens
 
 import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.VectorConverter
 import androidx.compose.animation.core.animate
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
@@ -40,6 +42,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.unit.times
 import com.example.islandgame.components.Booster
@@ -51,6 +54,17 @@ import com.example.islandgame.data.levels
 import com.example.islandgame.repository.LevelProgressRepo
 import com.example.islandgame.sounds.SoundManager
 import kotlinx.coroutines.launch
+import io.github.vinceglb.confettikit.compose.ConfettiKit
+import io.github.vinceglb.confettikit.core.Angle
+import io.github.vinceglb.confettikit.core.Party
+import io.github.vinceglb.confettikit.core.Position
+import io.github.vinceglb.confettikit.core.Spread
+import io.github.vinceglb.confettikit.core.emitter.Emitter
+import io.github.vinceglb.confettikit.core.models.Size
+import java.util.concurrent.TimeUnit
+import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.seconds
+import androidx.compose.ui.unit.Dp
 
 @Composable
 fun GameScreen(
@@ -70,6 +84,7 @@ fun GameScreen(
     val scope = rememberCoroutineScope()
     var selectedBooster by remember { mutableStateOf(startingBooster) }
     var bombShockwave by remember { mutableFloatStateOf(0f) }
+    var showConfetti by remember { mutableStateOf(false) }
 
 
     LaunchedEffect(startingBooster) {
@@ -94,6 +109,10 @@ fun GameScreen(
         }
     }
     LaunchedEffect(engine.isLevelCompleted) {
+        if(engine.isLevelCompleted){
+            showConfetti = true
+        }
+
         if (!progressSaved && engine.isLevelCompleted) {
             val stars = engine.getStars()
             levelProgressRepo.saveStars(
@@ -103,6 +122,7 @@ fun GameScreen(
             progressSaved = true
         }
     }
+
     val progress = (
             engine.targetCount.toFloat()/engine.targetRequired.toFloat()
             ).coerceIn(0f,1f)
@@ -242,12 +262,49 @@ fun GameScreen(
                             label = "gemX"
                         )
 
-                        val animatedY by animateDpAsState(
-                            targetValue = targetRow * cellStep,
-                            animationSpec = tween(
+                        val fallDistance = engine.fallingGems[position] ?: 0
+
+                        val fallOffset = remember(
+                            engine.cascadeAnimationKey,
+                            position
+                        ) {
+                            Animatable(
+                                initialValue = -(cellStep * fallDistance),
+                                typeConverter = Dp.VectorConverter
+                            )
+                        }
+
+                        LaunchedEffect(
+                            engine.cascadeAnimationKey,
+                            position
+                        ) {
+                            if (fallDistance > 0) {
+                                fallOffset.animateTo(
+                                    targetValue = 0.dp,
+                                    animationSpec = tween(
+                                        durationMillis = 450,
+                                        easing = FastOutSlowInEasing
+                                    )
+                                )
+                            }
+                        }
+
+                        val animatedY = targetRow * cellStep + fallOffset.value
+
+                        val isShaking = position in engine.shakingGems
+
+                        val shakeOffset by animateDpAsState(
+                            targetValue = if (isShaking) 4.dp else 0.dp,
+                            animationSpec = keyframes {
                                 durationMillis = 250
-                            ),
-                            label = "gemY"
+                                0.dp at 0
+                                (-4).dp at 50
+                                4.dp at 100
+                                (-3).dp at 150
+                                2.dp at 200
+                                0.dp at 250
+                            },
+                            label = "gemShake"
                         )
 
                         val isSelected =
@@ -283,7 +340,7 @@ fun GameScreen(
                             modifier = Modifier
                                 .size(cellSize)
                                 .offset(
-                                    x = animatedX,
+                                    x = animatedX + shakeOffset,
                                     y = animatedY
                                 )
                                 .padding(4.dp)
@@ -421,6 +478,9 @@ fun GameScreen(
                     }
                 }
 
+
+
+
             if (engine.isLevelCompleted) {
                 LevelCompletePopup(
                     onHomeClick = { onHomeClick() },
@@ -431,10 +491,48 @@ fun GameScreen(
                     targetRequired = engine.targetRequired
                 )
             }
-
-
         }
     }
+        if (showConfetti) {
+            ConfettiKit(
+                modifier = Modifier.fillMaxSize(),
+                parties = listOf(
+                    Party(
+                        timeToLive = 5000,
+                        maxSpeed = 30f,
+                        damping = 0.9f,
+                        speed = 10f,
+                        angle = Angle.RIGHT - 45,
+                        spread = Spread.WIDE,
+                        colors = listOf(
+                            0XE13700,
+                            0xFFFC31,
+                            0xFFFC31,
+                            0x337CA0),
+                        emitter = Emitter(duration = 5.seconds).perSecond(30),
+                        position = Position.Relative(0.0, 0.5),
+                        size = listOf(Size.SMALL, Size.MEDIUM, Size.LARGE),
+                    ),
+
+                    Party(
+                        timeToLive = 5000,
+                        maxSpeed = 30f,
+                        damping = 0.9f,
+                        speed = 10f,
+                        angle = Angle.LEFT + 45,
+                        spread = Spread.WIDE,
+                        colors = listOf(0XE13700,
+                            0x3EC300,
+                            0xFFFC31,
+                            0x337CA0),
+                        emitter = Emitter(duration = 5.seconds).perSecond(30),
+                        position = Position.Relative(1.0, 0.5),
+                        size = listOf(Size.SMALL, Size.MEDIUM, Size.LARGE),
+                    )
+                )
+            )
+        }
+
         if (showPrelevelPopup){
             val nextLevelNumber = levelNumber + 1
             val nextLevelConfig = levels.firstOrNull {
@@ -461,11 +559,3 @@ fun GameScreen(
         }
     }
 }
-
-//@Preview(showBackground = true)
-//@Composable
-//fun GameScreenPreview(){
-//    IslandGameTheme {
-//        GameScreen()
-//    }
-//}

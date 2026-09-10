@@ -20,6 +20,9 @@ class GamePlay(
     val columns: Int = 8,
 ) {
 
+    var shakingGems by mutableStateOf<Set<Pair<Int, Int>>>(emptySet())
+        private set
+
     var boardState by mutableStateOf(generateBoard())
     var selectedGem by mutableStateOf<Pair<Int, Int>?>(null)
     var swappingGems by mutableStateOf<Pair<Pair<Int, Int>, Pair<Int, Int>>?>(null)
@@ -38,6 +41,12 @@ class GamePlay(
         private set
 
     var matchedGems by mutableStateOf<Set<Pair<Int, Int>>>(emptySet())
+
+    var fallingGems by mutableStateOf<Map<Pair<Int, Int>, Int>>(emptyMap())
+        private set
+
+    var cascadeAnimationKey by mutableIntStateOf(0)
+        private set
 
     fun clearSwappingGems() {
         swappingGems = null
@@ -609,27 +618,41 @@ class GamePlay(
         isAnimating = false
     }
 
-    private fun collapseBoard() {
+    private fun collapseBoard(): Map<Pair<Int, Int>, Int> {
         val newBoard = MutableList(rows) {
             MutableList(columns) { Gems.Empty }
         }
 
-        for (col in 0 until columns) {
+        val fallDistances = mutableMapOf<Pair<Int, Int>, Int>()
 
+        for (col in 0 until columns) {
             var newRow = rows - 1
 
             for (row in rows - 1 downTo 0) {
-
                 val gem = boardState[row][col]
 
                 if (gem != Gems.Empty) {
+
                     newBoard[newRow][col] = gem
+
+                    val distance = newRow  -  row
+
+                    if (distance > 0) {
+                        fallDistances[Pair(newRow, col)] = distance
+                    }
+
                     newRow--
                 }
+            }
+            while (newRow >= 0) {
+                fallDistances[Pair(newRow, col)] = rows - newRow
+                newRow--
             }
         }
 
         boardState = newBoard
+
+        return fallDistances
     }
 
     private fun fillEmptySpaces() {
@@ -778,8 +801,21 @@ class GamePlay(
             removeMatches(matches)
             matchedGems = emptySet()
 
-            collapseBoard()
+            fallingGems = collapseBoard()
+
             fillEmptySpaces()
+
+            cascadeAnimationKey++
+
+            delay(450)
+
+            shakingGems = fallingGems.keys
+
+            delay(250)
+
+            shakingGems = emptySet()
+
+            fallingGems = emptyMap()
 
             cascade++
         }

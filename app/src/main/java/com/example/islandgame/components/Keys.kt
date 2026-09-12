@@ -33,6 +33,7 @@ import com.example.islandgame.ui.theme.IslandGameTheme
 fun Keys(
     modifier: Modifier = Modifier,
     onKeysClick: () -> Unit,
+    keyCount: Int,
 ){
 
     Box(
@@ -56,7 +57,7 @@ fun Keys(
         ){
 
             Text(
-                text = "100",
+                text = keyCount.toString(),
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.White,
@@ -71,10 +72,10 @@ fun Keys(
     }
 }
 
-@Preview
-@Composable
-fun KeysPreview(){
-    IslandGameTheme() {
-        Keys(onKeysClick = {})
-    }
-}
+//@Preview
+//@Composable
+//fun KeysPreview(){
+//    IslandGameTheme() {
+//        Keys(onKeysClick = {})
+//    }
+//}

@@ -24,6 +24,7 @@ fun TopNavBar(
     showKeysButton: Boolean = true,
     showCoinsButton: Boolean = true,
     onKeysClick: () -> Unit = {},
+    keyCount: Int,
     currentCountryId: String = "Brazil",
     currentName: String = "Player 1",
     onEditProfileClick: () -> Unit = {}
@@ -57,16 +58,17 @@ fun TopNavBar(
             Keys(
                 modifier = Modifier.alpha(if (showKeysButton) 1f else 0f),
                 onKeysClick = onKeysClick,
+                keyCount = keyCount
             )
         }
 
     }
 }
 
-@Preview
-@Composable
-fun TopNavBarPreview(){
-    IslandGameTheme() {
-        TopNavBar()
-    }
-}
+//@Preview
+//@Composable
+//fun TopNavBarPreview(){
+//    IslandGameTheme() {
+//        TopNavBar()
+//    }
+//}

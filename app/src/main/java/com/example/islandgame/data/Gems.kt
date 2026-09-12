@@ -9,5 +9,6 @@ enum class Gems(val drawableId: Int) {
     Green_Gem(R.drawable.green_stone),
     Yellow_Gem(R.drawable.yellow_stone),
     Crystal_Ball(R.drawable.ballon),
+    Key(R.drawable.key),
     Empty(0)
 }

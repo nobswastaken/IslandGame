@@ -24,6 +24,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.runtime.collectAsState
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.islandgame.R
 import com.example.islandgame.components.Booster
 import com.example.islandgame.components.BottomNavbar
@@ -37,8 +38,11 @@ import com.example.islandgame.components.TopNavBar
 import com.example.islandgame.components.Zone
 import com.example.islandgame.data.BoostStore
 import com.example.islandgame.data.levels
+import com.example.islandgame.repository.KeyRepo
 import com.example.islandgame.repository.LevelProgressRepo
+import com.example.islandgame.repository.TaskRepo
 import com.example.islandgame.sounds.SoundManager
+import com.example.islandgame.viewmodel.KeyViewmodel
 import com.example.islandgame.viewmodel.ProfileViewmodel
 import com.example.islandgame.viewmodel.SettingsViewmodel
 
@@ -49,6 +53,9 @@ fun PlayScreen(
     onThisLevelClick: (Int, Booster?) -> Unit,
     soundManager: SoundManager,
     profileViewModel: ProfileViewmodel,
+    keyRepo: KeyRepo,
+    taskRepo: TaskRepo,
+    keyViewModel: KeyViewmodel,
     settingsVM: SettingsViewmodel,
     levelProgressRepo: LevelProgressRepo,
     boosterstore: BoostStore
@@ -65,13 +72,12 @@ fun PlayScreen(
 
     val username by profileViewModel.username.collectAsState()
     val countryId by profileViewModel.country.collectAsState()
+    val currentKeyCount by keyViewModel.keyCounter.collectAsState()
+
 
     LaunchedEffect(Unit) {
         nextLevel = levelProgressRepo.getNextLevel()
     }
-
-
-
 
         Scaffold(
             containerColor = Color.Transparent,
@@ -82,9 +88,7 @@ fun PlayScreen(
                     currentCountryId = countryId,
                     currentName = username,
                     onEditProfileClick = { showEditProfilePopup = true },
-
-
-
+                    keyCount = currentKeyCount
                 )
             },
             bottomBar = {
@@ -181,7 +185,10 @@ fun PlayScreen(
         if (showTaskPopup) {
             TasksPopup(
                 onDismiss = { showTaskPopup = false },
-                soundManager = soundManager
+                soundManager = soundManager,
+                keyRepo = keyRepo,
+                taskRepo = taskRepo,
+                keyCount = currentKeyCount
             )
         }
 

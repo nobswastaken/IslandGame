@@ -5,4 +5,5 @@ data class LevelConfig(
     val targetRequired: Int,
     val targetGem: Gems,
     val moves: Int,
+    val keyCount: Int = 0
 )

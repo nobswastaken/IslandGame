@@ -4,17 +4,21 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.example.islandgame.daos.KeyDao
 import com.example.islandgame.daos.SettingsDao
 import com.example.islandgame.daos.UserProfileDao
 import com.example.islandgame.daos.LevelProgressDao
+import com.example.islandgame.daos.TaskDao
 
 @Database(
     entities = [
         UserProfileEntity::class,
         SettingsEntity::class,
-        LevelProgressEntity::class
+        LevelProgressEntity::class,
+        KeysEntity::class,
+        TaskEntity::class
     ],
-    version = 3,
+    version = 5,
     exportSchema = false
 )
 abstract class GameDatabase : RoomDatabase() {
@@ -23,6 +27,8 @@ abstract class GameDatabase : RoomDatabase() {
 
     abstract fun levelProgressDao(): LevelProgressDao
 
+    abstract fun keyDao(): KeyDao
+    abstract fun taskDao(): TaskDao
 
     companion object {
         @Volatile

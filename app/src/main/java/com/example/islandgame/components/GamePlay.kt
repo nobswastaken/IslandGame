@@ -32,6 +32,9 @@ class GamePlay(
     val targetGem: Gems
         get() = levelConfig.targetGem
     var targetCount by mutableIntStateOf(0)
+
+    var collectedKeys by mutableIntStateOf(0)
+        private set
     val targetRequired: Int
         get() = levelConfig.targetRequired
     var isLevelCompleted by mutableStateOf(false)
@@ -145,6 +148,23 @@ class GamePlay(
             }
         }
 
+        val emptyPositions = mutableListOf<Pair<Int, Int>>()
+
+        for (row in 0 until rows) {
+            for (col in 0 until columns) {
+                if (board[row][col] != Gems.Crystal_Ball) {
+                    emptyPositions.add(Pair(row, col))
+                }
+            }
+        }
+
+        emptyPositions.shuffle()
+
+        for (i in 0 until minOf(levelConfig.keyCount, emptyPositions.size)) {
+            val (row, col) = emptyPositions[i]
+            board[row][col] = Gems.Key
+        }
+
         return board
     }
 
@@ -158,7 +178,7 @@ class GamePlay(
             while (col < columns) {
                 val gem = boardState[row][col]
 
-                if (gem == Gems.Empty || gem == Gems.Crystal_Ball) {
+                if (gem == Gems.Empty || gem == Gems.Crystal_Ball || gem == Gems.Key) {
                     col++
                     continue
                 }
@@ -249,6 +269,11 @@ class GamePlay(
             positionsToRemove.addAll(match.gems)
         }
 
+        val keysToCollect = collectAdjacentKeys(matches)
+
+        positionsToRemove.addAll(keysToCollect)
+
+        collectedKeys += keysToCollect.size
 
         if (targetGem == Gems.Crystal_Ball) {
 
@@ -562,6 +587,27 @@ class GamePlay(
             r in 0 until rows && c in 0 until columns
         }
     }
+
+    private fun collectAdjacentKeys(
+        matches: Set<Match>
+    ): Set<Pair<Int, Int>> {
+
+        val keysToCollect = mutableSetOf<Pair<Int, Int>>()
+
+        for (match in matches) {
+            for ((row, col) in match.gems) {
+
+                for (position in getAdjacentPositions(row, col)) {
+
+                    if (boardState[position.first][position.second] == Gems.Key) {
+                        keysToCollect.add(position)
+                    }
+                }
+            }
+        }
+
+        return keysToCollect
+    }
     private suspend fun swapGems(
         p1: Pair<Int, Int>,
         p2: Pair<Int, Int>
@@ -715,6 +761,7 @@ class GamePlay(
         movesLeft = levelConfig.moves
         score = 0
         targetCount = 0
+        collectedKeys = 0
         isLevelCompleted = false
         usedBomb = false
         usedDiamond = false

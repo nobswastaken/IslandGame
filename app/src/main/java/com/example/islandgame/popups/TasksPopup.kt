@@ -18,6 +18,12 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -30,14 +36,28 @@ import com.example.islandgame.R
 import com.example.islandgame.components.DoItButton
 import com.example.islandgame.components.Tasks
 import com.example.islandgame.components.WorldProgress
+import com.example.islandgame.databasestuff.KeysEntity
+import com.example.islandgame.repository.KeyRepo
+import com.example.islandgame.repository.TaskRepo
 import com.example.islandgame.sounds.SoundManager
+import kotlinx.coroutines.launch
 
 @Composable
 fun TasksPopup(
     onDismiss: () -> Unit,
     soundManager: SoundManager,
+    keyRepo: KeyRepo,
+    taskRepo: TaskRepo,
+    keyCount: Int,
     modifier: Modifier = Modifier,
 ) {
+
+    val scope = rememberCoroutineScope()
+    val keys by keyRepo.keysFlow.collectAsState(initial = KeysEntity())
+    var lampCompleted by remember { mutableStateOf(false) }
+
+    var wellCompleted by remember { mutableStateOf(false) }
+
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -114,7 +134,17 @@ fun TasksPopup(
                                 modifier = Modifier.height(30.dp)
                             )
                             Spacer(modifier = Modifier.width(8.dp))
-                            DoItButton(onClick = {})
+                            DoItButton(
+                                onClick = {
+                                    if (keyCount > 0) {
+                                        scope.launch {
+                                            keyRepo.spendKey()
+                                            taskRepo.completeTask(1)
+                                            soundManager.playSound()
+                                        }
+                                    }
+                                }
+                            )
                         }
                     }
 
@@ -133,7 +163,17 @@ fun TasksPopup(
                                 modifier = Modifier.height(30.dp)
                             )
                             Spacer(modifier = Modifier.width(8.dp))
-                            DoItButton(onClick = {})
+                            DoItButton(
+                                onClick = {
+                                    if (keyCount > 0) {
+                                        scope.launch {
+                                            keyRepo.spendKey()
+                                            taskRepo.completeTask(2)
+                                            soundManager.playSound()
+                                        }
+                                    }
+                                }
+                            )
                         }
                     }
                 }

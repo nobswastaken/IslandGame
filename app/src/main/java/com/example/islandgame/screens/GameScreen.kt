@@ -36,6 +36,7 @@ import com.example.islandgame.data.Gems
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
@@ -65,6 +66,7 @@ import java.util.concurrent.TimeUnit
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
 import androidx.compose.ui.unit.Dp
+import com.example.islandgame.repository.KeyRepo
 
 @Composable
 fun GameScreen(
@@ -75,7 +77,8 @@ fun GameScreen(
     levelProgressRepo: LevelProgressRepo,
     soundManager: SoundManager,
     startingBooster: Booster?,
-    boosterstore: BoostStore
+    boosterstore: BoostStore,
+    keyRepo: KeyRepo
 ) {
     val levelConfig = levels.first { it.levelNumber == levelNumber }
     val engine = remember(levelNumber, startingBooster) { GamePlay(levelConfig = levelConfig, startingBooster = startingBooster) }
@@ -85,11 +88,19 @@ fun GameScreen(
     var selectedBooster by remember { mutableStateOf(startingBooster) }
     var bombShockwave by remember { mutableFloatStateOf(0f) }
     var showConfetti by remember { mutableStateOf(false) }
+    var processedKeys by remember { mutableIntStateOf(0) }
 
 
     LaunchedEffect(startingBooster) {
         startingBooster?. let{
             engine.selectBooster(it)
+        }
+    }
+
+    LaunchedEffect(engine.collectedKeys) {
+        while (processedKeys < engine.collectedKeys) {
+            keyRepo.addKey()
+            processedKeys++
         }
     }
 

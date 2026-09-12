@@ -33,6 +33,7 @@ import com.example.islandgame.data.levels
 import com.example.islandgame.databasestuff.LevelProgressEntity
 import com.example.islandgame.repository.LevelProgressRepo
 import com.example.islandgame.sounds.SoundManager
+import com.example.islandgame.viewmodel.KeyViewmodel
 import com.example.islandgame.viewmodel.ProfileViewmodel
 import com.example.islandgame.viewmodel.SettingsViewmodel
 
@@ -43,6 +44,7 @@ fun LevelScreen(
     onThisLevelClick: (Int, Booster?) -> Unit,
     levelProgressRepo: LevelProgressRepo,
     profileViewModel: ProfileViewmodel = viewModel(),
+    keyViewModel: KeyViewmodel = viewModel(),
     settingsVM: SettingsViewmodel = viewModel(),
     soundManager: SoundManager,
     boosterstore: BoostStore
@@ -55,6 +57,7 @@ fun LevelScreen(
 
     val username by profileViewModel.username.collectAsState()
     val countryId by profileViewModel.country.collectAsState()
+    val currentKeyCount by keyViewModel.keyCounter.collectAsState()
 
     var levelStars by remember { mutableStateOf<Map<Int, Int>>(emptyMap()) }
     var levelProgress by remember { mutableStateOf<List<LevelProgressEntity>>(emptyList()) }
@@ -75,6 +78,7 @@ fun LevelScreen(
                 showFlagsButton = false,
                 showCoinsButton = true,
                 showKeysButton = false,
+                keyCount = currentKeyCount
             )
         },
         bottomBar = {

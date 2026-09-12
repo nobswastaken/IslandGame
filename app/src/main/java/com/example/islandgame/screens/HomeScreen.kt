@@ -68,15 +68,15 @@ fun HomeScreen(
     }
 }
 
-@Preview
-@Composable
-fun HomeScreenPreview(){
-    IslandGameTheme() {
-        HomeScreen(
-            onPlayClick = {},
-        )
-    }
-}
+//@Preview
+//@Composable
+//fun HomeScreenPreview(){
+//    IslandGameTheme() {
+//        HomeScreen(
+//            onPlayClick = {},
+//        )
+//    }
+//}
 
 
 

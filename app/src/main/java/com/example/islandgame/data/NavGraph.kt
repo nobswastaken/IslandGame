@@ -13,13 +13,16 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.islandgame.components.Booster
+import com.example.islandgame.repository.KeyRepo
 import com.example.islandgame.repository.LevelProgressRepo
+import com.example.islandgame.repository.TaskRepo
 import com.example.islandgame.screens.GameScreen
 import com.example.islandgame.screens.HomeScreen
 import com.example.islandgame.screens.LevelScreen
 import com.example.islandgame.screens.PlayScreen
 import com.example.islandgame.sounds.MusicManager
 import com.example.islandgame.sounds.SoundManager
+import com.example.islandgame.viewmodel.KeyViewmodel
 import com.example.islandgame.viewmodel.ProfileViewmodel
 import com.example.islandgame.viewmodel.SettingsViewmodel
 import kotlin.let
@@ -29,9 +32,13 @@ fun AppNavGraph(
     navController: NavHostController,
     profileViewModel: ProfileViewmodel,
     settingsViewModel: SettingsViewmodel,
+    keyViewModel: KeyViewmodel,
     levelProgressRepo: LevelProgressRepo,
     soundManager: SoundManager,
-    boosterstore: BoostStore
+    boosterstore: BoostStore,
+    keyRepo: KeyRepo,
+    taskRepo: TaskRepo,
+    keyCount: Int
     ) {
 
     val context = LocalContext.current
@@ -73,7 +80,7 @@ fun AppNavGraph(
             HomeScreen(
                 onPlayClick = {
                     navController.navigate("play")
-                }
+                },
             )
         }
 
@@ -92,7 +99,10 @@ fun AppNavGraph(
                 settingsVM = settingsViewModel,
                 soundManager = soundManager,
                 levelProgressRepo = levelProgressRepo,
-                boosterstore = boosterstore
+                boosterstore = boosterstore,
+                keyViewModel = keyViewModel,
+                taskRepo = taskRepo,
+                keyRepo = keyRepo,
 
             )
         }
@@ -154,7 +164,8 @@ fun AppNavGraph(
                 },
                 levelProgressRepo = levelProgressRepo,
                 soundManager = soundManager,
-                boosterstore = boosterstore
+                boosterstore = boosterstore,
+                keyRepo = keyRepo
             )
         }
     }

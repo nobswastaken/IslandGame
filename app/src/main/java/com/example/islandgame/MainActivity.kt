@@ -11,12 +11,16 @@ import androidx.compose.runtime.remember
 import androidx.navigation.compose.rememberNavController
 import com.example.islandgame.data.AppNavGraph
 import com.example.islandgame.data.BoostStore
+import com.example.islandgame.databasestuff.KeysEntity
+import com.example.islandgame.repository.KeyRepo
 import com.example.islandgame.repository.LevelProgressRepo
 import com.example.islandgame.repository.ProfileRepo
 import com.example.islandgame.repository.SettingsRepo
+import com.example.islandgame.repository.TaskRepo
 import com.example.islandgame.sounds.MusicManager
 import com.example.islandgame.sounds.SoundManager
 import com.example.islandgame.ui.theme.IslandGameTheme
+import com.example.islandgame.viewmodel.KeyViewmodel
 import com.example.islandgame.viewmodel.ProfileViewmodel
 import com.example.islandgame.viewmodel.SettingsViewmodel
 
@@ -29,6 +33,12 @@ class MainActivity : ComponentActivity() {
         val profileViewmodel = ProfileViewmodel(profileRepository)
 
         val levelProgressRepo = LevelProgressRepo(applicationContext)
+
+        val keyRepo = KeyRepo(applicationContext)
+        val keyViewModel = KeyViewmodel(keyRepo)
+
+        val taskRepo = TaskRepo(applicationContext)
+
         val settingsRepository = SettingsRepo(applicationContext)
         val settingsViewModel = SettingsViewmodel(settingsRepository)
 
@@ -41,6 +51,12 @@ class MainActivity : ComponentActivity() {
                 val settings by settingsViewModel.settingsFlow.collectAsState()
                 val boosterstore = remember { BoostStore() }
 
+                val keys by keyRepo.keysFlow.collectAsState(initial = KeysEntity())
+
+                LaunchedEffect(Unit) {
+                    keyRepo.initializeKeys()
+                    taskRepo.initializeTasks()
+                }
 
                 LaunchedEffect(settings.music) {
                     if (settings.music) musicManager.play()
@@ -57,9 +73,13 @@ class MainActivity : ComponentActivity() {
                     navController = navController,
                     profileViewModel = profileViewmodel,
                     settingsViewModel = settingsViewModel,
+                    keyViewModel = keyViewModel,
                     soundManager = soundManager,
                     levelProgressRepo = LevelProgressRepo(applicationContext),
-                    boosterstore = boosterstore
+                    boosterstore = boosterstore,
+                    keyRepo = keyRepo,
+                    keyCount = keys.count,
+                    taskRepo = taskRepo
                 )
             }
         }

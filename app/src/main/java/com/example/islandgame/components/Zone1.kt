@@ -43,10 +43,13 @@ fun Zone(
     modifier: Modifier = Modifier,
     currentZone: Int,
     totalZone: Int,
+    completedTasks: Int,
+    totalTasks: Int,
     onZoneClick: () -> Unit,
 
 ) {
-    val progressPercentage = if (totalZone > 0) currentZone.toFloat() / totalZone.toFloat() else 0f
+    val progressPercentage =
+        if (totalTasks > 0) completedTasks.toFloat() / totalTasks.toFloat() else 0f
 
     val btngradient = Brush.horizontalGradient(
         colors = listOf(Color(0xFF65BA09), Color(0xFF8CE30B))
@@ -100,7 +103,7 @@ fun Zone(
                         )
                     }
                         Text(
-                            text = "$currentZone/$totalZone",
+                            text = "$completedTasks/$totalTasks",
                             style = TextStyle(
                                 brush = textcolor,
                                 fontSize = 16.sp,
@@ -123,15 +126,15 @@ fun Zone(
     }
 
 
-@Preview
-@Composable
-fun ZonePreview(){
-    IslandGameTheme() {
-        Zone(
-            modifier = Modifier,
-            currentZone = 2,
-            totalZone = 10,
-            onZoneClick = {}
-        )
-    }
-}
+//@Preview
+//@Composable
+//fun ZonePreview(){
+//    IslandGameTheme() {
+//        Zone(
+//            modifier = Modifier,
+//            currentZone = 2,
+//            totalZone = 10,
+//            onZoneClick = {}
+//        )
+//    }
+//}

@@ -72,7 +72,10 @@ fun PlayScreen(
 
     val username by profileViewModel.username.collectAsState()
     val countryId by profileViewModel.country.collectAsState()
+
     val currentKeyCount by keyViewModel.keyCounter.collectAsState()
+    val tasks by taskRepo.tasksFlow.collectAsState(initial = emptyList())
+    val completedTaskCount = tasks.count { it.completed }
 
 
     LaunchedEffect(Unit) {
@@ -140,6 +143,8 @@ fun PlayScreen(
                             modifier = Modifier.weight(1f),
                             currentZone = 2,
                             totalZone = 10,
+                            completedTasks = completedTaskCount,
+                            totalTasks = 2,
                             onZoneClick = { showTaskPopup = true }
                         )
                     }
@@ -213,11 +218,3 @@ fun PlayScreen(
 
     }
 }
-
-
-
-
-
-
-
-

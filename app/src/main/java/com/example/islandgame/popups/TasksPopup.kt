@@ -59,6 +59,7 @@ fun TasksPopup(
     val tasks by taskRepo.tasksFlow.collectAsState(initial = emptyList())
     val lampCompleted = tasks.firstOrNull { it.id == 1 }?.completed == true
     val wellCompleted = tasks.firstOrNull { it.id == 2 }?.completed == true
+    val completedTaskCount = tasks.count { it.completed }
 
     Box(
         modifier = modifier
@@ -115,8 +116,8 @@ fun TasksPopup(
 
 
                     WorldProgress(
-                        currentProgress = 2,
-                        totalProgress = 10,
+                        currentProgress = completedTaskCount,
+                        totalProgress = 2,
                         modifier = Modifier
                     )
 

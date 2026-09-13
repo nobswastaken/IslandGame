@@ -27,6 +27,7 @@ import com.example.islandgame.ui.theme.IslandGameTheme
 fun DoItButton(
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
+    enabled: Boolean = true
 ){
     val btngradient = Brush.horizontalGradient(
         colors = listOf(Color(0xFF65BA09), Color(0xFF8CE30B))
@@ -38,6 +39,7 @@ fun DoItButton(
 
     Button(
         onClick = onClick,
+        enabled = enabled,
         modifier = modifier.defaultMinSize(minWidth = 80.dp, minHeight = 50.dp).background(btngradient, shape = RoundedCornerShape(4.dp)),
         colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
         shape = RoundedCornerShape(12.dp),

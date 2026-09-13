@@ -41,36 +41,6 @@ fun AppNavGraph(
     keyCount: Int
     ) {
 
-    val context = LocalContext.current
-    val lifecycleOwner = LocalLifecycleOwner.current
-
-    val musicManager = remember { MusicManager(context) }
-
-    DisposableEffect(lifecycleOwner) {
-        val observer = LifecycleEventObserver {_, event ->
-            when (event){
-                Lifecycle.Event.ON_START -> {
-                    musicManager.play()
-                }
-                Lifecycle.Event.ON_STOP -> {
-                    musicManager.pause()
-                }
-                else -> {}
-            }
-        }
-
-        lifecycleOwner.lifecycle.addObserver(observer)
-
-        onDispose {
-            lifecycleOwner.lifecycle.removeObserver(observer)
-            musicManager.stop()
-        }
-    }
-
-
-
-
-
     NavHost(
         navController = navController,
         startDestination = "home"
@@ -123,7 +93,8 @@ fun AppNavGraph(
                 settingsVM = settingsViewModel,
                 soundManager = soundManager,
                 levelProgressRepo = levelProgressRepo,
-                boosterstore = boosterstore
+                boosterstore = boosterstore,
+                keyViewModel = keyViewModel,
             )
         }
 

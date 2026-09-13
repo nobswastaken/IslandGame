@@ -44,7 +44,7 @@ fun LevelScreen(
     onThisLevelClick: (Int, Booster?) -> Unit,
     levelProgressRepo: LevelProgressRepo,
     profileViewModel: ProfileViewmodel = viewModel(),
-    keyViewModel: KeyViewmodel = viewModel(),
+    keyViewModel: KeyViewmodel,
     settingsVM: SettingsViewmodel = viewModel(),
     soundManager: SoundManager,
     boosterstore: BoostStore

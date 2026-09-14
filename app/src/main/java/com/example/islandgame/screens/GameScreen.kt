@@ -165,6 +165,7 @@ fun GameScreen(
 //                modifier = Modifier.fillMaxWidth()
 //            )
 //        }
+
     ) { innerPadding ->
 
         Box(

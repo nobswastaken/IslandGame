@@ -37,7 +37,7 @@ fun HomeScreen(
 
         Column(modifier = Modifier.padding(16.dp).offset(0.dp, -120.dp), horizontalAlignment = Alignment.CenterHorizontally) {
             Image(
-                painter = painterResource(id = R.drawable.islandlogo),
+                painter = painterResource(id = R.drawable.newestlogo),
                 contentDescription = "Island Logo",
                 modifier = Modifier.clip(RoundedCornerShape(16.dp))
             )
@@ -45,7 +45,7 @@ fun HomeScreen(
             Image(
                 painter = painterResource(id = R.drawable.play_button),
                 contentDescription = "Play Button",
-                modifier = Modifier.offset(0.dp, 16.dp).clickable(
+                modifier = Modifier.offset(0.dp, 20.dp).clickable(
                     onClick = { onPlayClick() }
                 )
             )
@@ -68,15 +68,15 @@ fun HomeScreen(
     }
 }
 
-//@Preview
-//@Composable
-//fun HomeScreenPreview(){
-//    IslandGameTheme() {
-//        HomeScreen(
-//            onPlayClick = {},
-//        )
-//    }
-//}
+@Preview
+@Composable
+fun HomeScreenPreview(){
+    IslandGameTheme() {
+        HomeScreen(
+            onPlayClick = {},
+        )
+    }
+}
 
 
 

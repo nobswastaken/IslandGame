@@ -53,6 +53,7 @@ dependencies {
     implementation("androidx.compose.material:material-icons-extended")
     implementation("io.github.vinceglb:confettikit:0.5.1")
     implementation("com.github.gayanvoice:android-animations-kotlin:1.0.1")
+    implementation("com.google.android.libraries.ads.mobile.sdk:ads-mobile-sdk:1.4.0")
     ksp(libs.androidx.room.compiler)
     testImplementation(libs.junit)
     androidTestImplementation(platform(libs.androidx.compose.bom))

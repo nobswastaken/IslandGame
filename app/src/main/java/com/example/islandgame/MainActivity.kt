@@ -9,6 +9,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.navigation.compose.rememberNavController
+import com.example.islandgame.ads.InterstitialAdManager
 import com.example.islandgame.data.AppNavGraph
 import com.example.islandgame.data.BoostStore
 import com.example.islandgame.databasestuff.KeysEntity
@@ -23,11 +24,27 @@ import com.example.islandgame.ui.theme.IslandGameTheme
 import com.example.islandgame.viewmodel.KeyViewmodel
 import com.example.islandgame.viewmodel.ProfileViewmodel
 import com.example.islandgame.viewmodel.SettingsViewmodel
-
+import com.google.android.libraries.ads.mobile.sdk.MobileAds
+import com.google.android.libraries.ads.mobile.sdk.initialization.InitializationConfig
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+        val backgroundScope = CoroutineScope(Dispatchers.IO)
+        val interstitialAdManager = InterstitialAdManager()
+
+        backgroundScope.launch {
+            MobileAds.initialize(
+                this@MainActivity,
+                InitializationConfig.Builder("ca-app-pub-3940256099942544~3347511713").build()
+            ) {
+                interstitialAdManager.startPreloading()
+            }
+        }
 
         val profileRepository = ProfileRepo(applicationContext)
         val profileViewmodel = ProfileViewmodel(profileRepository)
@@ -79,7 +96,8 @@ class MainActivity : ComponentActivity() {
                     boosterstore = boosterstore,
                     keyRepo = keyRepo,
                     keyCount = keys.count,
-                    taskRepo = taskRepo
+                    taskRepo = taskRepo,
+                    interstitialAdManager = interstitialAdManager
                 )
             }
         }

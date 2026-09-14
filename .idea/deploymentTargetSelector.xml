@@ -4,10 +4,10 @@
     <selectionStates>
       <SelectionState runConfigName="app">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2026-09-10T11:18:11.337220100Z">
+        <DropdownSelection timestamp="2026-09-14T22:34:47.652590Z">
           <Target type="DEFAULT_BOOT">
             <handle>
-              <DeviceId pluginId="PhysicalDevice" identifier="serial=R8YY30NL06F" />
+              <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\chelz\.android\avd\OnePlusish.avd" />
             </handle>
           </Target>
         </DropdownSelection>

@@ -1,5 +1,6 @@
 package com.example.islandgame.screens
 
+import android.app.Activity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -11,12 +12,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.islandgame.R
+import com.example.islandgame.ads.InterstitialAdManager
 import com.example.islandgame.components.ArrowButtonRight
 import com.example.islandgame.components.ArrowButtonLeft
 import com.example.islandgame.components.Booster
@@ -47,7 +50,8 @@ fun LevelScreen(
     keyViewModel: KeyViewmodel,
     settingsVM: SettingsViewmodel = viewModel(),
     soundManager: SoundManager,
-    boosterstore: BoostStore
+    boosterstore: BoostStore,
+    interstitialAdManager: InterstitialAdManager
 ) {
     var showSettingsPopup by remember { mutableStateOf(false) }
     var showEditProfilePopup by remember { mutableStateOf(false) }
@@ -63,6 +67,7 @@ fun LevelScreen(
     var levelProgress by remember { mutableStateOf<List<LevelProgressEntity>>(emptyList()) }
 
     var currentPage by remember { mutableStateOf(1) }
+    val context = LocalContext.current
 
     LaunchedEffect(Unit) {
         levelStars = levelProgressRepo
@@ -173,6 +178,20 @@ fun LevelScreen(
                         }
                     )
                 }
+
+                LevelButton(
+                    text = "Test Ad",
+                    onClick = {
+                        val activity = context as? Activity
+
+                        if (activity != null) {
+                            interstitialAdManager.showAd(activity)
+                        }
+                    },
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.width(120.dp)
+                )
 
 
                 Spacer(modifier = Modifier.height(16.dp))

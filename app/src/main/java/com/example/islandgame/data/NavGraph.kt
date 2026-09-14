@@ -12,6 +12,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.example.islandgame.ads.InterstitialAdManager
 import com.example.islandgame.components.Booster
 import com.example.islandgame.repository.KeyRepo
 import com.example.islandgame.repository.LevelProgressRepo
@@ -38,7 +39,8 @@ fun AppNavGraph(
     boosterstore: BoostStore,
     keyRepo: KeyRepo,
     taskRepo: TaskRepo,
-    keyCount: Int
+    keyCount: Int,
+    interstitialAdManager: InterstitialAdManager
     ) {
 
     NavHost(
@@ -95,6 +97,7 @@ fun AppNavGraph(
                 levelProgressRepo = levelProgressRepo,
                 boosterstore = boosterstore,
                 keyViewModel = keyViewModel,
+                interstitialAdManager = interstitialAdManager
             )
         }
 

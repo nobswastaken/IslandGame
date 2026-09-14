@@ -87,6 +87,7 @@ fun GameScreen(
     val scope = rememberCoroutineScope()
     var selectedBooster by remember { mutableStateOf(startingBooster) }
     var bombShockwave by remember { mutableFloatStateOf(0f) }
+    var bombFadeOut by remember { mutableStateOf(false) }
     var showConfetti by remember { mutableStateOf(false) }
     var processedKeys by remember { mutableIntStateOf(0) }
 
@@ -159,11 +160,11 @@ fun GameScreen(
         },
 
 
-        bottomBar = {
-            GameBottomNavbar(
-                modifier = Modifier.fillMaxWidth()
-            )
-        }
+//        bottomBar = {
+//            GameBottomNavbar(
+//                modifier = Modifier.fillMaxWidth()
+//            )
+//        }
     ) { innerPadding ->
 
         Box(
@@ -336,7 +337,7 @@ fun GameScreen(
                         )
 
                         val matchAlpha by animateFloatAsState(
-                            targetValue = if(isMatched) 0f else 1f,
+                            targetValue = if (isMatched && (!engine.usedBomb || bombFadeOut)) 0f else 1f,
                             animationSpec = tween(
                                 durationMillis = 250
                             ),
@@ -391,23 +392,28 @@ fun GameScreen(
                             )
                         }
                     }
-                    LaunchedEffect(engine.isBombExplode) {
-                        if (engine.isBombExplode) {
-                            bombShockwave = 0f
+                LaunchedEffect(engine.isBombExplode) {
+                    if (engine.isBombExplode) {
 
-                            animate(
-                                initialValue = 0f,
-                                targetValue = 1f,
-                                animationSpec = tween(
-                                    durationMillis = 350,
-                                    easing = FastOutSlowInEasing
-                                )
-                            ) { value, _ ->
-                                bombShockwave = value
-                            }
-                            bombShockwave = 0f
+                        bombFadeOut = false
+                        bombShockwave = 0f
+
+                        animate(
+                            initialValue = 0f,
+                            targetValue = 1f,
+                            animationSpec = tween(
+                                durationMillis = 350,
+                                easing = FastOutSlowInEasing
+                            )
+                        ) { value, _ ->
+                            bombShockwave = value
                         }
+
+                        // Shockwave finish
+                        bombShockwave = 0f
+                        bombFadeOut = true
                     }
+                }
 
                 engine.diamondPosition?.let{ (diamondRow, diamondCol) ->
                     if (!engine.usedDiamond) {
@@ -459,7 +465,7 @@ fun GameScreen(
                                         cellSize.toPx() / 2
 
                             val maxRadius =
-                                cellStep.toPx() * 2.2f
+                                cellStep.toPx() * 3.5f
 
                             val radius =
                                 bombShockwave * maxRadius

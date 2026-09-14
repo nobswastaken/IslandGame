@@ -11,7 +11,7 @@ class MusicManager(private val context: Context) {
     fun play(){
         if (mediaPlayer == null) {
             mediaPlayer = MediaPlayer.create(
-                context, R.raw.backgroundmusic
+                context, R.raw.backgmusic2
             )
             mediaPlayer?.isLooping = true
         }

@@ -40,7 +40,8 @@ fun AppNavGraph(
     keyRepo: KeyRepo,
     taskRepo: TaskRepo,
     keyCount: Int,
-    interstitialAdManager: InterstitialAdManager
+    interstitialAdManager: InterstitialAdManager,
+    musicManager: MusicManager
     ) {
 
     NavHost(
@@ -139,7 +140,9 @@ fun AppNavGraph(
                 levelProgressRepo = levelProgressRepo,
                 soundManager = soundManager,
                 boosterstore = boosterstore,
-                keyRepo = keyRepo
+                keyRepo = keyRepo,
+                interstitialAdManager = interstitialAdManager,
+                musicManager = musicManager
             )
         }
     }

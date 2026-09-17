@@ -179,19 +179,19 @@ fun LevelScreen(
                     )
                 }
 
-                LevelButton(
-                    text = "Test Ad",
-                    onClick = {
-                        val activity = context as? Activity
-
-                        if (activity != null) {
-                            interstitialAdManager.showAd(activity)
-                        }
-                    },
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.width(120.dp)
-                )
+//                LevelButton(
+//                    text = "Test Ad",
+//                    onClick = {
+//                        val activity = context as? Activity
+//
+//                        if (activity != null) {
+//                            interstitialAdManager.showAd(activity)
+//                        }
+//                    },
+//                    fontSize = 16.sp,
+//                    fontWeight = FontWeight.Bold,
+//                    modifier = Modifier.width(120.dp)
+//                )
 
 
                 Spacer(modifier = Modifier.height(16.dp))

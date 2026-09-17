@@ -97,7 +97,8 @@ class MainActivity : ComponentActivity() {
                     keyRepo = keyRepo,
                     keyCount = keys.count,
                     taskRepo = taskRepo,
-                    interstitialAdManager = interstitialAdManager
+                    interstitialAdManager = interstitialAdManager,
+                    musicManager = musicManager
                 )
             }
         }

@@ -1,5 +1,6 @@
 package com.example.islandgame.screens
 
+import android.app.Activity
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.VectorConverter
@@ -15,7 +16,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -30,7 +30,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.islandgame.R
-import com.example.islandgame.components.GameBottomNavbar
 import com.example.islandgame.components.GamePlay
 import com.example.islandgame.data.Gems
 import androidx.compose.runtime.LaunchedEffect
@@ -43,8 +42,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.times
 import com.example.islandgame.components.Booster
 import com.example.islandgame.popups.LevelCompletePopup
@@ -62,11 +61,11 @@ import io.github.vinceglb.confettikit.core.Position
 import io.github.vinceglb.confettikit.core.Spread
 import io.github.vinceglb.confettikit.core.emitter.Emitter
 import io.github.vinceglb.confettikit.core.models.Size
-import java.util.concurrent.TimeUnit
-import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
 import androidx.compose.ui.unit.Dp
+import com.example.islandgame.ads.InterstitialAdManager
 import com.example.islandgame.repository.KeyRepo
+import com.example.islandgame.sounds.MusicManager
 
 @Composable
 fun GameScreen(
@@ -78,7 +77,10 @@ fun GameScreen(
     soundManager: SoundManager,
     startingBooster: Booster?,
     boosterstore: BoostStore,
-    keyRepo: KeyRepo
+    keyRepo: KeyRepo,
+    interstitialAdManager: InterstitialAdManager,
+    musicManager: MusicManager
+
 ) {
     val levelConfig = levels.first { it.levelNumber == levelNumber }
     val engine = remember(levelNumber, startingBooster) { GamePlay(levelConfig = levelConfig, startingBooster = startingBooster) }
@@ -90,6 +92,7 @@ fun GameScreen(
     var bombFadeOut by remember { mutableStateOf(false) }
     var showConfetti by remember { mutableStateOf(false) }
     var processedKeys by remember { mutableIntStateOf(0) }
+    val context = LocalContext.current
 
 
     LaunchedEffect(startingBooster) {
@@ -132,6 +135,17 @@ fun GameScreen(
                 stars = stars
             )
             progressSaved = true
+
+            if(levelNumber % 3 == 0){
+                val activity = context as? Activity
+
+                if(activity != null){
+                    interstitialAdManager.showAd(
+                        activity = activity,
+                        musicManager = musicManager
+                    )
+                }
+            }
         }
     }
 

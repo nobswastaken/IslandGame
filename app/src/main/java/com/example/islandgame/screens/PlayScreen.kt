@@ -66,8 +66,9 @@ fun PlayScreen(
     var showKeysPopup by remember { mutableStateOf(false) }
     var showTaskPopup by remember { mutableStateOf(false) }
     var showPrelevelPopup by remember { mutableStateOf(false) }
-    var nextLevel by remember { mutableStateOf(1) }
     var selectedBooster by remember { mutableStateOf<Booster?>(null) }
+
+    var nextLevel by remember { mutableStateOf(1) }
     var selectedLevel by remember { mutableStateOf(1) }
 
     val username by profileViewModel.username.collectAsState()
@@ -203,7 +204,7 @@ fun PlayScreen(
                     levelConfig = levelConfig,
                     onPlayClick = {
                         showPrelevelPopup = false
-                        onThisLevelClick(selectedLevel,selectedBooster)
+                        onThisLevelClick(nextLevel,selectedBooster)
                     },
                     selectedBooster = selectedBooster,
                     onBoosterSelected = { booster ->

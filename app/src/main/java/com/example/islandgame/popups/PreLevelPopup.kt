@@ -28,6 +28,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.islandgame.R
@@ -35,6 +36,7 @@ import com.example.islandgame.ads.RewardedAdManager
 import com.example.islandgame.components.Boost
 import com.example.islandgame.components.Booster
 import com.example.islandgame.data.BoostStore
+import com.example.islandgame.data.Gems
 import com.example.islandgame.data.LevelConfig
 import com.example.islandgame.sounds.SoundManager
 
@@ -137,7 +139,7 @@ fun PreLevelPopup(
                         Image(
                             painter = painterResource(id = levelConfig.targetGem.drawableId),
                             contentDescription = null,
-                            modifier = Modifier.size(40.dp)
+                            modifier = Modifier.size(24.dp)
                         )
                         Text(
                             text = "${levelConfig.targetRequired}",
@@ -177,7 +179,7 @@ fun PreLevelPopup(
                             contentDescription = "Bomb booster",
                             isSelected = selectedBooster == Booster.BOMB,
                             count = boosterstore.getCount(Booster.BOMB),
-                            size = 56.dp,
+                            size = 48.dp,
                             onClick = {
                                 if (boosterstore.getCount(Booster.BOMB) > 0) {
 
@@ -199,7 +201,7 @@ fun PreLevelPopup(
                             contentDescription = "Potion booster",
                             isSelected = selectedBooster == Booster.POTION,
                             count = boosterstore.getCount(Booster.POTION),
-                            size = 56.dp,
+                            size = 48.dp,
                             onClick = {
                                 if (boosterstore.getCount(Booster.POTION) > 0) {
 
@@ -221,7 +223,7 @@ fun PreLevelPopup(
                             contentDescription = "Diamond booster",
                             isSelected = selectedBooster == Booster.DIAMOND,
                             count = boosterstore.getCount(Booster.DIAMOND),
-                            size = 56.dp,
+                            size = 48.dp,
                             onClick = {
                                 if (boosterstore.getCount(Booster.DIAMOND) > 0) {
 
@@ -247,8 +249,9 @@ fun PreLevelPopup(
                     contentDescription = "Play Button",
                     modifier = Modifier
                         .align(Alignment.BottomCenter)
-                        .size(60.dp)
+                        .size(50.dp)
                         .offset(y = (-40).dp)
+                        .padding(top = 4.dp)
                         .clickable { onPlayClick() }
                 )
             }
@@ -293,5 +296,29 @@ fun PreLevelPopup(
             )
         }
     }
+}
+
+@Preview
+@Composable
+fun PrelevelPreview(){
+
+    val previewLevel = LevelConfig(
+        levelNumber = 5,
+        targetGem = Gems.Pink_Gem,
+        targetRequired = 20,
+        moves = 25
+    )
+
+    PreLevelPopup(
+        levelConfig = previewLevel,
+        onPlayClick = {},
+        onDismiss = {},
+        onBoosterSelected = {},
+        selectedBooster = Booster.DIAMOND,
+        boosterstore = BoostStore(),
+        soundManager = SoundManager(LocalContext.current),
+        rewardedAdManager = RewardedAdManager(),
+        stars = 2
+    )
 }
 

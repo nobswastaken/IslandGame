@@ -71,7 +71,7 @@ fun Boost(
             Image(
                 painter = painterResource(id = drawableId),
                 contentDescription = contentDescription,
-                modifier = Modifier.size(44.dp)
+                modifier = Modifier.size(32.dp)
             )
         }
 

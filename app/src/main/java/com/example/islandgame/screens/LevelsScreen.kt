@@ -125,7 +125,7 @@ fun LevelScreen(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                val levelsperPage = 12
+                val levelsperPage = 20
 
                 val currentPageLevels = levels
                     .drop((currentPage - 1) * levelsperPage)

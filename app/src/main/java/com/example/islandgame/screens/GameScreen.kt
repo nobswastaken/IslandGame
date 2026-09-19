@@ -97,11 +97,11 @@ fun GameScreen(
     val context = LocalContext.current
 
 
-    LaunchedEffect(startingBooster) {
-        startingBooster?. let{
-            engine.selectBooster(it)
-        }
-    }
+//    LaunchedEffect(startingBooster) {
+//        startingBooster?. let{
+//            engine.selectBooster(it)
+//        }
+//    }
 
     LaunchedEffect(engine.collectedKeys) {
         while (processedKeys < engine.collectedKeys) {
@@ -443,6 +443,11 @@ fun GameScreen(
                                     x = diamondCol * cellStep,
                                     y = diamondRow * cellStep
                                 )
+                                .clickable(
+                                    enabled = !engine.isAnimating && !engine.usedDiamond
+                                ) {
+                                    engine.selectBooster(Booster.DIAMOND)
+                                }
                         )
                     }
                 }

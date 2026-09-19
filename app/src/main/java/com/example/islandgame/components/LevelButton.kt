@@ -44,7 +44,7 @@ fun LevelButton(
         modifier = modifier.background(btngradient, shape = RoundedCornerShape(4.dp)),
         colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
         shape = RoundedCornerShape(12.dp),
-        contentPadding = PaddingValues(horizontal = 16.dp)
+        contentPadding = PaddingValues(horizontal = 12.dp)
     ) {
             Text(
                 text = text,

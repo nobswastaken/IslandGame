@@ -1,5 +1,6 @@
 package com.example.islandgame.popups
 
+import android.app.Activity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -16,15 +17,21 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.islandgame.R
+import com.example.islandgame.ads.RewardedAdManager
 import com.example.islandgame.components.Boost
 import com.example.islandgame.components.Booster
 import com.example.islandgame.data.BoostStore
@@ -41,8 +48,15 @@ fun PreLevelPopup(
     boosterstore: BoostStore,
     soundManager: SoundManager,
     modifier: Modifier = Modifier,
+    rewardedAdManager: RewardedAdManager,
     stars: Int
 ) {
+    var showRewardPopup by remember { mutableStateOf(false) }
+    var boosterToReward by remember { mutableStateOf<Booster?>(null) }
+
+    val context = LocalContext.current
+
+
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -166,11 +180,16 @@ fun PreLevelPopup(
                             size = 56.dp,
                             onClick = {
                                 if (boosterstore.getCount(Booster.BOMB) > 0) {
+
                                     if (selectedBooster == Booster.BOMB) {
                                         onBoosterSelected(null)
                                     } else {
                                         onBoosterSelected(Booster.BOMB)
                                     }
+
+                                } else {
+                                    boosterToReward = Booster.BOMB
+                                    showRewardPopup = true
                                 }
                             }
                         )
@@ -183,11 +202,16 @@ fun PreLevelPopup(
                             size = 56.dp,
                             onClick = {
                                 if (boosterstore.getCount(Booster.POTION) > 0) {
+
                                     if (selectedBooster == Booster.POTION) {
                                         onBoosterSelected(null)
                                     } else {
                                         onBoosterSelected(Booster.POTION)
                                     }
+
+                                } else {
+                                    boosterToReward = Booster.POTION
+                                    showRewardPopup = true
                                 }
                             }
                         )
@@ -200,11 +224,16 @@ fun PreLevelPopup(
                             size = 56.dp,
                             onClick = {
                                 if (boosterstore.getCount(Booster.DIAMOND) > 0) {
+
                                     if (selectedBooster == Booster.DIAMOND) {
                                         onBoosterSelected(null)
                                     } else {
                                         onBoosterSelected(Booster.DIAMOND)
                                     }
+
+                                } else {
+                                    boosterToReward = Booster.DIAMOND
+                                    showRewardPopup = true
                                 }
                             }
                         )
@@ -223,6 +252,45 @@ fun PreLevelPopup(
                         .clickable { onPlayClick() }
                 )
             }
+        }
+
+        if (showRewardPopup && boosterToReward != null) {
+
+            BoosterRewardPopup(
+                booster = boosterToReward!!,
+
+                onWatchAdClick = {
+
+                    val activity = context as? Activity
+
+                    if (activity != null) {
+
+                        rewardedAdManager.showAd(
+                            activity = activity,
+
+                            onRewardEarned = {
+                                boosterstore.add(boosterToReward!!)
+                            },
+
+                            onAdFinished = {
+                                showRewardPopup = false
+                                boosterToReward = null
+                            },
+
+                            onAdUnavailable = {
+                                // something
+                            }
+                        )
+                    }
+                },
+
+                onDismiss = {
+                    showRewardPopup = false
+                    boosterToReward = null
+                },
+
+                soundManager = soundManager
+            )
         }
     }
 }

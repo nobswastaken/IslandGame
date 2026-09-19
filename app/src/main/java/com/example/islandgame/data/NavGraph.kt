@@ -13,6 +13,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.islandgame.ads.InterstitialAdManager
+import com.example.islandgame.ads.RewardedAdManager
 import com.example.islandgame.components.Booster
 import com.example.islandgame.repository.KeyRepo
 import com.example.islandgame.repository.LevelProgressRepo
@@ -26,6 +27,7 @@ import com.example.islandgame.sounds.SoundManager
 import com.example.islandgame.viewmodel.KeyViewmodel
 import com.example.islandgame.viewmodel.ProfileViewmodel
 import com.example.islandgame.viewmodel.SettingsViewmodel
+import com.google.android.libraries.ads.mobile.sdk.rewarded.RewardedSignalRequest
 import kotlin.let
 
 @Composable
@@ -41,7 +43,8 @@ fun AppNavGraph(
     taskRepo: TaskRepo,
     keyCount: Int,
     interstitialAdManager: InterstitialAdManager,
-    musicManager: MusicManager
+    musicManager: MusicManager,
+    rewardedAdManager: RewardedAdManager
     ) {
 
     NavHost(
@@ -76,7 +79,7 @@ fun AppNavGraph(
                 keyViewModel = keyViewModel,
                 taskRepo = taskRepo,
                 keyRepo = keyRepo,
-
+                rewardedAdManager = rewardedAdManager
             )
         }
 
@@ -98,7 +101,8 @@ fun AppNavGraph(
                 levelProgressRepo = levelProgressRepo,
                 boosterstore = boosterstore,
                 keyViewModel = keyViewModel,
-                interstitialAdManager = interstitialAdManager
+                interstitialAdManager = interstitialAdManager,
+                rewardedAdManager = rewardedAdManager
             )
         }
 
@@ -142,7 +146,8 @@ fun AppNavGraph(
                 boosterstore = boosterstore,
                 keyRepo = keyRepo,
                 interstitialAdManager = interstitialAdManager,
-                musicManager = musicManager
+                musicManager = musicManager,
+                rewardedAdManager = rewardedAdManager
             )
         }
     }

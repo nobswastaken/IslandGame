@@ -64,6 +64,7 @@ import io.github.vinceglb.confettikit.core.models.Size
 import kotlin.time.Duration.Companion.seconds
 import androidx.compose.ui.unit.Dp
 import com.example.islandgame.ads.InterstitialAdManager
+import com.example.islandgame.ads.RewardedAdManager
 import com.example.islandgame.repository.KeyRepo
 import com.example.islandgame.sounds.MusicManager
 
@@ -79,6 +80,7 @@ fun GameScreen(
     boosterstore: BoostStore,
     keyRepo: KeyRepo,
     interstitialAdManager: InterstitialAdManager,
+    rewardedAdManager: RewardedAdManager,
     musicManager: MusicManager
 
 ) {
@@ -430,7 +432,7 @@ fun GameScreen(
                     }
                 }
 
-                engine.diamondPosition?.let{ (diamondRow, diamondCol) ->
+                engine.diamondPosition?.let { (diamondRow, diamondCol) ->
                     if (!engine.usedDiamond) {
                         Image(
                             painter = painterResource(id = R.drawable.diamond),
@@ -441,11 +443,11 @@ fun GameScreen(
                                     x = diamondCol * cellStep,
                                     y = diamondRow * cellStep
                                 )
-                            )
-                        }
+                        )
                     }
+                }
 
-                engine.potionPosition?.let{ (potionRow, potionCol) ->
+                engine.potionPosition?.let { (potionRow, potionCol) ->
                     if (!engine.usedPotion) {
                         Image(
                             painter = painterResource(id = R.drawable.potion),
@@ -456,6 +458,16 @@ fun GameScreen(
                                     x = potionCol * cellStep,
                                     y = potionRow * cellStep
                                 )
+                                .clickable(
+                                    enabled = !engine.isAnimating && !engine.usedPotion
+                                ) {
+                                    scope.launch {
+                                        engine.usePotion(
+                                            row = potionRow,
+                                            col = potionCol
+                                        )
+                                    }
+                                }
                         )
                     }
                 }
@@ -585,7 +597,8 @@ fun GameScreen(
                         onNextLevelClick(selectedBooster)
                     },
                     soundManager = soundManager,
-                    boosterstore = boosterstore
+                    boosterstore = boosterstore,
+                    rewardedAdManager = rewardedAdManager
                 )
             }
         }

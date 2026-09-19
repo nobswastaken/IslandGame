@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.islandgame.R
 import com.example.islandgame.ads.InterstitialAdManager
+import com.example.islandgame.ads.RewardedAdManager
 import com.example.islandgame.components.ArrowButtonRight
 import com.example.islandgame.components.ArrowButtonLeft
 import com.example.islandgame.components.Booster
@@ -51,7 +52,8 @@ fun LevelScreen(
     settingsVM: SettingsViewmodel = viewModel(),
     soundManager: SoundManager,
     boosterstore: BoostStore,
-    interstitialAdManager: InterstitialAdManager
+    interstitialAdManager: InterstitialAdManager,
+    rewardedAdManager: RewardedAdManager
 ) {
     var showSettingsPopup by remember { mutableStateOf(false) }
     var showEditProfilePopup by remember { mutableStateOf(false) }
@@ -214,7 +216,8 @@ fun LevelScreen(
             onDismiss = { showPrelevelPopup = false },
             stars = 0,
             soundManager = soundManager,
-            boosterstore = boosterstore
+            boosterstore = boosterstore,
+            rewardedAdManager = rewardedAdManager
         )
     }
 

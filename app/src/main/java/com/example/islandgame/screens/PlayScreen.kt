@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.islandgame.R
+import com.example.islandgame.ads.RewardedAdManager
 import com.example.islandgame.components.Booster
 import com.example.islandgame.components.BottomNavbar
 import com.example.islandgame.popups.EditProfilePopup
@@ -58,7 +59,8 @@ fun PlayScreen(
     keyViewModel: KeyViewmodel,
     settingsVM: SettingsViewmodel,
     levelProgressRepo: LevelProgressRepo,
-    boosterstore: BoostStore
+    boosterstore: BoostStore,
+    rewardedAdManager: RewardedAdManager
 ) {
 
     var showSettingsPopup by remember { mutableStateOf(false) }
@@ -213,7 +215,8 @@ fun PlayScreen(
                     onDismiss = { showPrelevelPopup = false },
                     stars = 0,
                     soundManager = soundManager,
-                    boosterstore = boosterstore
+                    boosterstore = boosterstore,
+                    rewardedAdManager = rewardedAdManager
                 )
             }
 

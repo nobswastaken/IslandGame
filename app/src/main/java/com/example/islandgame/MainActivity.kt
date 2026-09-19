@@ -10,6 +10,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.navigation.compose.rememberNavController
 import com.example.islandgame.ads.InterstitialAdManager
+import com.example.islandgame.ads.RewardedAdManager
 import com.example.islandgame.data.AppNavGraph
 import com.example.islandgame.data.BoostStore
 import com.example.islandgame.databasestuff.KeysEntity
@@ -36,6 +37,7 @@ class MainActivity : ComponentActivity() {
 
         val backgroundScope = CoroutineScope(Dispatchers.IO)
         val interstitialAdManager = InterstitialAdManager()
+        val rewardedAdManager = RewardedAdManager()
 
         backgroundScope.launch {
             MobileAds.initialize(
@@ -43,6 +45,7 @@ class MainActivity : ComponentActivity() {
                 InitializationConfig.Builder("ca-app-pub-3940256099942544~3347511713").build()
             ) {
                 interstitialAdManager.startPreloading()
+                rewardedAdManager.startPreloading()
             }
         }
 
@@ -98,7 +101,8 @@ class MainActivity : ComponentActivity() {
                     keyCount = keys.count,
                     taskRepo = taskRepo,
                     interstitialAdManager = interstitialAdManager,
-                    musicManager = musicManager
+                    musicManager = musicManager,
+                    rewardedAdManager = rewardedAdManager
                 )
             }
         }

@@ -37,4 +37,12 @@ class BoostStore {
             }
         }
     }
+
+    fun add(booster: Booster) {
+        when (booster) {
+            Booster.BOMB -> bombCount++
+            Booster.POTION -> potionCount++
+            Booster.DIAMOND -> diamondCount++
+        }
+    }
 }

@@ -38,6 +38,7 @@ import com.example.islandgame.components.Booster
 import com.example.islandgame.data.BoostStore
 import com.example.islandgame.data.Gems
 import com.example.islandgame.data.LevelConfig
+import com.example.islandgame.sounds.MusicManager
 import com.example.islandgame.sounds.SoundManager
 
 @Composable
@@ -49,6 +50,7 @@ fun PreLevelPopup(
     selectedBooster: Booster?,
     boosterstore: BoostStore,
     soundManager: SoundManager,
+    musicManager: MusicManager,
     modifier: Modifier = Modifier,
     rewardedAdManager: RewardedAdManager,
     stars: Int
@@ -270,6 +272,7 @@ fun PreLevelPopup(
 
                         rewardedAdManager.showAd(
                             activity = activity,
+                            musicManager = musicManager,
 
                             onRewardEarned = {
                                 boosterstore.add(boosterToReward!!)
@@ -281,7 +284,8 @@ fun PreLevelPopup(
                             },
 
                             onAdUnavailable = {
-                                // something
+                                showRewardPopup = false
+                                boosterToReward = null
                             }
                         )
                     }
@@ -318,7 +322,8 @@ fun PrelevelPreview(){
         boosterstore = BoostStore(),
         soundManager = SoundManager(LocalContext.current),
         rewardedAdManager = RewardedAdManager(),
-        stars = 2
+        stars = 2,
+        musicManager = MusicManager(LocalContext.current)
     )
 }
 

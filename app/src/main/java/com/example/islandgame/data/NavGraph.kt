@@ -79,7 +79,8 @@ fun AppNavGraph(
                 keyViewModel = keyViewModel,
                 taskRepo = taskRepo,
                 keyRepo = keyRepo,
-                rewardedAdManager = rewardedAdManager
+                rewardedAdManager = rewardedAdManager,
+                musicManager = musicManager
             )
         }
 
@@ -102,7 +103,8 @@ fun AppNavGraph(
                 boosterstore = boosterstore,
                 keyViewModel = keyViewModel,
                 interstitialAdManager = interstitialAdManager,
-                rewardedAdManager = rewardedAdManager
+                rewardedAdManager = rewardedAdManager,
+                musicManager = musicManager
             )
         }
 

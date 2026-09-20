@@ -89,19 +89,13 @@ fun GameScreen(
     var progressSaved by remember { mutableStateOf(false) }
     var showPrelevelPopup by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
-    var selectedBooster by remember { mutableStateOf(startingBooster) }
+    var selectedBooster by remember { mutableStateOf<Booster?>(null) }
     var bombShockwave by remember { mutableFloatStateOf(0f) }
     var bombFadeOut by remember { mutableStateOf(false) }
     var showConfetti by remember { mutableStateOf(false) }
     var processedKeys by remember { mutableIntStateOf(0) }
     val context = LocalContext.current
 
-
-//    LaunchedEffect(startingBooster) {
-//        startingBooster?. let{
-//            engine.selectBooster(it)
-//        }
-//    }
 
     LaunchedEffect(engine.collectedKeys) {
         while (processedKeys < engine.collectedKeys) {
@@ -603,7 +597,8 @@ fun GameScreen(
                     },
                     soundManager = soundManager,
                     boosterstore = boosterstore,
-                    rewardedAdManager = rewardedAdManager
+                    rewardedAdManager = rewardedAdManager,
+                    musicManager = musicManager
                 )
             }
         }

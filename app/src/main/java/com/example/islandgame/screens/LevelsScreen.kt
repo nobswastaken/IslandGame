@@ -36,6 +36,7 @@ import com.example.islandgame.data.BoostStore
 import com.example.islandgame.data.levels
 import com.example.islandgame.databasestuff.LevelProgressEntity
 import com.example.islandgame.repository.LevelProgressRepo
+import com.example.islandgame.sounds.MusicManager
 import com.example.islandgame.sounds.SoundManager
 import com.example.islandgame.viewmodel.KeyViewmodel
 import com.example.islandgame.viewmodel.ProfileViewmodel
@@ -51,6 +52,7 @@ fun LevelScreen(
     keyViewModel: KeyViewmodel,
     settingsVM: SettingsViewmodel = viewModel(),
     soundManager: SoundManager,
+    musicManager: MusicManager,
     boosterstore: BoostStore,
     interstitialAdManager: InterstitialAdManager,
     rewardedAdManager: RewardedAdManager
@@ -217,7 +219,8 @@ fun LevelScreen(
             stars = 0,
             soundManager = soundManager,
             boosterstore = boosterstore,
-            rewardedAdManager = rewardedAdManager
+            rewardedAdManager = rewardedAdManager,
+            musicManager = musicManager
         )
     }
 

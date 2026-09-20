@@ -1,6 +1,7 @@
 package com.example.islandgame.ads
 
 import android.app.Activity
+import com.example.islandgame.sounds.MusicManager
 import com.google.android.libraries.ads.mobile.sdk.common.FullScreenContentError
 import com.google.android.libraries.ads.mobile.sdk.rewarded.RewardedAdEventCallback
 import com.google.android.libraries.ads.mobile.sdk.rewarded.RewardedAdPreloader
@@ -30,7 +31,8 @@ class RewardedAdManager {
         activity: Activity,
         onRewardEarned: () -> Unit,
         onAdFinished: () -> Unit,
-        onAdUnavailable: () -> Unit
+        onAdUnavailable: () -> Unit,
+        musicManager: MusicManager
     ) {
 
         val ad = RewardedAdPreloader.pollAd(AD_UNIT_ID)
@@ -40,21 +42,34 @@ class RewardedAdManager {
             return
         }
 
+        var rewardEarned = false
+
         ad.adEventCallback = object : RewardedAdEventCallback {
 
+            override fun onAdShowedFullScreenContent() {
+                musicManager.pause()
+            }
+
+
             override fun onAdDismissedFullScreenContent() {
+                musicManager.play()
                 onAdFinished()
             }
 
             override fun onAdFailedToShowFullScreenContent(
                 fullScreenContentError: FullScreenContentError
             ) {
-                onAdFinished()
+                musicManager.play()
+                onAdUnavailable()
             }
         }
 
-        ad.show(activity) { rewardItem ->
-            onRewardEarned()
+        ad.show(activity) {
+
+            if (!rewardEarned) {
+                rewardEarned = true
+                onRewardEarned()
+            }
         }
     }
 }

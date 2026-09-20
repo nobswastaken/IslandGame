@@ -42,6 +42,7 @@ import com.example.islandgame.data.levels
 import com.example.islandgame.repository.KeyRepo
 import com.example.islandgame.repository.LevelProgressRepo
 import com.example.islandgame.repository.TaskRepo
+import com.example.islandgame.sounds.MusicManager
 import com.example.islandgame.sounds.SoundManager
 import com.example.islandgame.viewmodel.KeyViewmodel
 import com.example.islandgame.viewmodel.ProfileViewmodel
@@ -53,6 +54,7 @@ fun PlayScreen(
     onLevelClick: () -> Unit,
     onThisLevelClick: (Int, Booster?) -> Unit,
     soundManager: SoundManager,
+    musicManager: MusicManager,
     profileViewModel: ProfileViewmodel,
     keyRepo: KeyRepo,
     taskRepo: TaskRepo,
@@ -216,7 +218,8 @@ fun PlayScreen(
                     stars = 0,
                     soundManager = soundManager,
                     boosterstore = boosterstore,
-                    rewardedAdManager = rewardedAdManager
+                    rewardedAdManager = rewardedAdManager,
+                    musicManager = musicManager
                 )
             }
 

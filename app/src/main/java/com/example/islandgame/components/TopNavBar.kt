@@ -41,7 +41,7 @@ fun TopNavBar(
         )
 
         Row(
-            modifier = Modifier.fillMaxWidth().padding(top = 24.dp),
+            modifier = Modifier.fillMaxWidth().padding(top = 40.dp),
             horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -65,10 +65,13 @@ fun TopNavBar(
     }
 }
 
-//@Preview
-//@Composable
-//fun TopNavBarPreview(){
-//    IslandGameTheme() {
-//        TopNavBar()
-//    }
-//}
+@Preview
+@Composable
+fun TopNavBarPreview(){
+    IslandGameTheme() {
+        TopNavBar(
+            onEditProfileClick = {},
+            keyCount = 2
+        )
+    }
+}

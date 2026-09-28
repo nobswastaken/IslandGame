@@ -31,6 +31,14 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 class MainActivity : ComponentActivity() {
+
+    private lateinit var musicManager: MusicManager
+
+    override fun onStop() {
+        super.onStop()
+        musicManager.pause()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
